@@ -50,12 +50,12 @@ public class EjemploFrameApp extends java.awt.Frame {
      */
     public static void main(String args[]) throws InterruptedException {
 
-        final int  ancho=400, alto=200;
+        final int  ancho=700, alto=500;
 
         EjemploFrameApp elframe = new EjemploFrameApp();
         VistaCanvas vista = new VistaCanvas(ancho, alto);
 
-        elframe.setSize(ancho, alto);
+        elframe.setSize(1000, 700);
         //elframe.setBackground(Color.red);
         elframe.add(vista);
 

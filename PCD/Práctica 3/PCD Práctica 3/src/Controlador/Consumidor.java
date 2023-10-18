@@ -27,7 +27,6 @@ public class Consumidor implements Runnable {
             } catch (Exception ex) {
                 System.out.println("Error con el consumidor de nombre: " + Thread.currentThread().getName() + " con mensaje " + ex.getMessage());
             }
-            p.muestraPila();
 
         }
     }

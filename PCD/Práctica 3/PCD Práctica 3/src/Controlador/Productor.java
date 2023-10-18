@@ -32,7 +32,6 @@ public class Productor extends Thread {
             } catch (Exception ex) {
                 System.out.println("Error con el productor de nombre: "+Thread.currentThread().getName()+" con mensaje "+ex.getMessage());
             }
-            p.muestraPila();
 
         }
     }
