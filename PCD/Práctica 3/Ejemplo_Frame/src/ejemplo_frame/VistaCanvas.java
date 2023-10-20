@@ -47,7 +47,7 @@ public class VistaCanvas extends Canvas {
         og.setFont(f1);
         og.setColor(Color.red);
         og.drawString("PILA", 320, 530);
-        int capacidad = 3;
+        int capacidad = 7;
         int y = 500;
         int yLetras = 485;
         //Pinta cuadrado de informacion
@@ -62,7 +62,7 @@ public class VistaCanvas extends Canvas {
             capacidad--;
             yLetras -= 50;
         }
-        og.drawString("Cima ==> ", 155, 485);
+        og.drawString("Cima => ", 155, 485);
         Font f2 = new Font("Helvetica", Font.ITALIC + Font.BOLD, 15);
         og.setFont(f2);
 

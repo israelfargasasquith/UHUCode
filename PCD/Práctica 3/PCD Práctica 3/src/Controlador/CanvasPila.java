@@ -18,10 +18,19 @@ public class CanvasPila extends Canvas {
 
     private int alto;
     private int ancho;
+    private int capacidad;
+    private int cima;
+    private int numElementos;
+    private Object[] datos;
+    private String mensaje;
 
-    public CanvasPila(int alto, int ancho) {
+    public CanvasPila(int alto, int ancho, int capacidad) {
         this.alto = alto;
         this.ancho = ancho;
+        this.capacidad = capacidad;
+        cima = -1;
+        mensaje = "";
+        numElementos = 0;
         setBackground(Color.LIGHT_GRAY);
         setSize(alto, ancho);
         setVisible(true);
@@ -34,18 +43,44 @@ public class CanvasPila extends Canvas {
         Image buffer = createImage(alto, ancho);
         Graphics tmp = buffer.getGraphics();
 
-        tmp.setFont(f);
-        tmp.setColor(Color.BLACK);
-        tmp.drawLine(alto/2, 0, alto/2, ancho);
-        tmp.drawImage(buffer, 0, 0, null);
-        //og.fillOval(20, 30, 20, 20);
-        
-        //og.drawString("Valor de contador 1 --> " + contadores[0], 50, 50);
-        //og.setColor(Color.blue);
-        //og.fillOval(20, 80, 20, 20);
-        //og.drawString("Valor de contador 2 --> " + contadores[1], 50, 100);
-        //og.drawImage(offscreen, 0, 0, null);
+        Font f1 = new Font("Helvetica", Font.ITALIC + Font.BOLD, 20);
 
+        tmp.setFont(f1);
+        tmp.setColor(Color.red);
+        tmp.drawString("PILA", 320, 530);
+        int y = 500;
+        int yLetras = 485;
+        int pos = 0;
+        while (capacidad > 0) {
+            tmp.drawLine(250, y, 450, y);//Linea horizontal abajo
+            tmp.drawLine(250, y, 250, y - 50);//Linea vertical izquierda
+            tmp.drawLine(450, y, 450, y - 50);//Linea vertical derecha
+            y -= 50;
+            tmp.drawLine(250, y, 450, y);//Linea horizontal arriba
+            tmp.drawString("Vacío", 320, yLetras);
+            tmp.drawString("" + pos, 460, yLetras);
+
+            pos++;
+            capacidad--;
+            yLetras -= 50;
+        }
+        //tmp.drawString("Cima => ", 155, 485);
+        Font f2 = new Font("Helvetica", Font.ITALIC + Font.BOLD, 15);
+        tmp.setFont(f2);
+
+        //Pinta cuadrado de informacion
+        tmp.drawLine(550, 425, 800, 425);//Linea horizontal abajo
+        tmp.drawLine(550, 325, 800, 325);//Linea horizontal arriba
+        tmp.drawLine(550, 425, 550, 325);//Linea vertical izquierda
+        tmp.drawLine(800, 425, 800, 325);//Linea vertical derecha
+        tmp.drawString("* Panel de informacion de la pila *", 560, 350);
+        tmp.drawString("1. NumElementos => "+ numElementos, 560, 380);
+        tmp.drawString("2. Cima => "+ cima, 560, 410);
+        tmp.drawString("Mensaje: " +mensaje, 560, 445);
+
+        tmp.drawImage(buffer, 0, 0, null);
+
+        g.drawImage(buffer, 0, 0, null);
         g.drawImage(buffer, 0, 0, null);
 
     }
@@ -56,7 +91,6 @@ public class CanvasPila extends Canvas {
     }
 
     public void avisa(String mensaje) {
-        
 
     }
 
