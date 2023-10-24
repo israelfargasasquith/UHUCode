@@ -8,7 +8,11 @@ import Controlador.ControlaPuntos;
 import Modelo.Punto;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.xml.catalog.CatalogManager;
 
 /**
@@ -17,14 +21,15 @@ import javax.xml.catalog.CatalogManager;
  */
 public class VistaPrincipal extends javax.swing.JFrame {
 
-    private ControlaPuntos cp;
-    private Graphics gp;
+    private ControlaPuntos controlaPuntos;
+    private Graphics graficos;
+    private ArrayList<Punto> lPuntos;
 
-    public VistaPrincipal(ControlaPuntos cp) {
-        this.cp = cp;
+    public VistaPrincipal(ControlaPuntos controlaPuntos) {
+        this.controlaPuntos = controlaPuntos;
         initComponents();
-        gp = jPanelPuntos.getGraphics(); //puede dar errores a lo mejor al hacer casting?
-        jPanelPuntos.paintComponents(gp);
+        graficos = jPanelPuntos.getGraphics();
+        jPanelPuntos.paintComponents(graficos);
     }
 
     /**
@@ -56,7 +61,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         buttonDibuja = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(970, 650));
+        setMinimumSize(new java.awt.Dimension(1050, 750));
+        setPreferredSize(new java.awt.Dimension(1050, 750));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanelPuntos.setBackground(new java.awt.Color(255, 255, 255));
@@ -66,14 +72,14 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jPanelPuntos.setLayout(jPanelPuntosLayout);
         jPanelPuntosLayout.setHorizontalGroup(
             jPanelPuntosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 546, Short.MAX_VALUE)
+            .addGap(0, 646, Short.MAX_VALUE)
         );
         jPanelPuntosLayout.setVerticalGroup(
             jPanelPuntosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 376, Short.MAX_VALUE)
+            .addGap(0, 526, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanelPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 0, 550, 380));
+        getContentPane().add(jPanelPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 10, 650, 530));
 
         jLabel1.setText("Indica el número de puntos aleatorios ");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
@@ -115,10 +121,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
         textAreaMensajes.setRows(5);
         jScrollPane1.setViewportView(textAreaMensajes);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 390, 530, 150));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 550, 530, 150));
 
         jLabel2.setText("Mensajes:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 550, -1, -1));
         getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 230, 10));
 
         jLabel4.setText("Generar fichero con valores aleatorios");
@@ -141,44 +147,53 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonGenerarPuntosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGenerarPuntosActionPerformed
-        if (textNumPuntos.getText().isBlank() || Integer.parseInt(textNumPuntos.getText()) < 0) { // controlar que sean solo numeros enteros
-            System.out.println("Error: pon una cantidad de puntos entre 0-1000");
+        if (textNumPuntos.getText().isBlank() || Integer.parseInt(textNumPuntos.getText()) < 0 || Integer.parseInt(textNumPuntos.getText()) > 10000) { // controlar que sean solo numeros enteros
+            System.out.println("Error: pon una cantidad de puntos entre 0-10000");
         } else {
-            ArrayList<Punto> lp = cp.generaPuntosAleatorios(Integer.parseInt(textNumPuntos.getText()), 10,
+            lPuntos = controlaPuntos.generaPuntosAleatorios(Integer.parseInt(textNumPuntos.getText()), 10,
                     jPanelPuntos.getWidth() - 10, 10, jPanelPuntos.getHeight() - 10);
-            gp.drawLine(0, jPanelPuntos.getHeight() / 2, jPanelPuntos.getWidth(), jPanelPuntos.getHeight() / 2);
-            gp.drawLine(jPanelPuntos.getWidth() / 2, 0, jPanelPuntos.getWidth() / 2, jPanelPuntos.getHeight());
-            gp.drawLine(jPanelPuntos.getWidth() / 2, 0, jPanelPuntos.getWidth() / 2, jPanelPuntos.getHeight());
-            Font f = new Font("Serif", Font.BOLD, 12);
-            gp.setFont(f);
-            gp.drawString("X", jPanelPuntos.getWidth()-15, (jPanelPuntos.getHeight() / 2) - 5);
-            gp.drawString("Y", (jPanelPuntos.getWidth() / 2)+5, 15);
-            for (Punto punto : lp) {
-                gp.drawOval((int) punto.getX(), (int) punto.getY(), 7, 7);
-                gp.fillOval((int) punto.getX(), (int) punto.getY(), 7, 7);
 
-            }
+            representaPuntos();
+
         }
 
     }//GEN-LAST:event_buttonGenerarPuntosActionPerformed
+
 
     private void buttonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSalirActionPerformed
         dispose();
     }//GEN-LAST:event_buttonSalirActionPerformed
 
     private void buttonAbrirMenuFicherosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAbrirMenuFicherosActionPerformed
-        //try {
-//            ArrayList<Punto> lPuntos;
-//            String path = "./dataset_amc/berlin52.tsp/berlin52.tsp";
-//            lPuntos = cp.generaPuntosFichero(path);
-//            for (Punto lPunto : lPuntos) {
-//                gp.drawOval((int)lPunto.getX(), (int)lPunto.getY(), 1, 1);
-//            }
-//        } catch (Exception ex) {
-//            System.out.println("Error en el boton de generar puntos");
-//        }
+        JFileChooser fileChooser = new JFileChooser();
+        int seleccion = fileChooser.showOpenDialog(this);
+
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            try {
+                lPuntos = controlaPuntos.generaPuntosFichero(fileChooser.getSelectedFile().getPath());
+                lPuntos = controlaPuntos.factorConversion(lPuntos, jPanelPuntos.getWidth(), jPanelPuntos.getHeight());
+                representaPuntos();
+            } catch (Exception ex) {
+                System.out.println("Error con el generaPuntosFichero: " + ex.getMessage());
+            }
+        }
     }//GEN-LAST:event_buttonAbrirMenuFicherosActionPerformed
 
+    
+    private void representaPuntos() {
+        
+        graficos.drawLine(0, jPanelPuntos.getHeight() / 2, jPanelPuntos.getWidth(), jPanelPuntos.getHeight() / 2);
+        graficos.drawLine(jPanelPuntos.getWidth() / 2, 0, jPanelPuntos.getWidth() / 2, jPanelPuntos.getHeight());
+        graficos.drawLine(jPanelPuntos.getWidth() / 2, 0, jPanelPuntos.getWidth() / 2, jPanelPuntos.getHeight());
+        Font f = new Font("Serif", Font.BOLD, 12);
+        graficos.setFont(f);
+        graficos.drawString("X", jPanelPuntos.getWidth() - 15, (jPanelPuntos.getHeight() / 2) - 5);
+        graficos.drawString("Y", (jPanelPuntos.getWidth() / 2) + 5, 15);
+        for (Punto punto : lPuntos) {
+            graficos.drawOval((int) punto.getX(), (int) punto.getY(), 7, 7);
+            graficos.fillOval((int) punto.getX(), (int) punto.getY(), 7, 7);
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -203,4 +218,5 @@ public class VistaPrincipal extends javax.swing.JFrame {
     public javax.swing.JTextArea textAreaMensajes;
     public javax.swing.JTextField textNumPuntos;
     // End of variables declaration//GEN-END:variables
+
 }
