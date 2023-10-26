@@ -4,6 +4,7 @@
  */
 package Controlador;
 
+import Modelo.ParPuntos;
 import Modelo.Punto;
 import java.io.File;
 import java.util.ArrayList;
@@ -16,11 +17,12 @@ import java.util.Scanner;
  */
 public class ControlaPuntos {
 
-    private int numPuntosFichero = 0;
+    private int numPuntos = 0;
 
     public ArrayList<Punto> generaPuntosAleatorios(int numPuntos, double rangoMinX, double rangoMaxX, double rangoMinY, double rangoMaxY) {
         Random ran = new Random(System.currentTimeMillis());
         ArrayList<Punto> lPuntos = new ArrayList<>();
+        this.numPuntos = numPuntos;
         Punto p;
         for (int i = 0; i < numPuntos; i++) {
             p = new Punto(ran.nextDouble(rangoMinX, rangoMaxX), ran.nextDouble(rangoMinY, rangoMaxY));
@@ -29,6 +31,7 @@ public class ControlaPuntos {
         for (Punto punto : lPuntos) {
             System.out.println("Punto con id: " + punto.getId() + " X(" + punto.getX() + ") Y(" + punto.getY() + ")");
         }
+        System.out.println("Numero puntos: " + numPuntos);
         return lPuntos;
     }
 
@@ -58,8 +61,8 @@ public class ControlaPuntos {
             puntos.add(new Punto(Double.parseDouble(nodo[1]), Double.parseDouble(nodo[2]), Integer.parseInt(nodo[0])));
         }
 
-        numPuntosFichero = puntos.get(puntos.size() - 1).getId();
-        System.out.println("Numero de puntos = " + numPuntosFichero);
+        numPuntos = puntos.get(puntos.size() - 1).getId();
+        System.out.println("Numero de puntos = " + numPuntos);
         return puntos;
     }
 
@@ -76,16 +79,39 @@ public class ControlaPuntos {
                 yMax = lPunto.getY();
             }
         }
-        double factorConversionX = (double) (tamañoVistaX-10.0) / xMax;
-        double factorConversionY = (double) (tamañoVistaY-10.0) / yMax;
-        System.out.println("Factor x: "+factorConversionX +" Factor y: "+factorConversionY);
+        double factorConversionX = (double) (tamañoVistaX - 10.0) / xMax;
+        double factorConversionY = (double) (tamañoVistaY - 10.0) / yMax;
+        System.out.println("Factor x: " + factorConversionX + " Factor y: " + factorConversionY);
         for (Punto lPunto : lPuntos) {
-            lPuntosReescalados.add(new Punto(factorConversionX*lPunto.getX(), factorConversionY*lPunto.getY(), lPunto.getId()));
-            System.out.println("Valor del punto original-> id: "+lPunto.getId() +" x: "+lPunto.getX()+ " y: "+lPunto.getY()
-            + "\n Valor del punto reescalado-> id: "+lPunto.getId() +" x: "+lPunto.getX()*factorConversionX+ " y: "+lPunto.getY()*factorConversionY);
+            lPuntosReescalados.add(new Punto(factorConversionX * lPunto.getX(), factorConversionY * lPunto.getY(), lPunto.getId()));
+            System.out.println("Valor del punto original-> id: " + lPunto.getId() + " x: " + lPunto.getX() + " y: " + lPunto.getY()
+                    + "\n Valor del punto reescalado-> id: " + lPunto.getId() + " x: " + lPunto.getX() * factorConversionX + " y: " + lPunto.getY() * factorConversionY);
         }
-        
+
         return lPuntosReescalados;
+    }
+
+    public ParPuntos exhaustivo(ArrayList<Punto> lPuntos) {
+        ParPuntos minimos = new ParPuntos();
+        double distanciaMinima = Double.MAX_VALUE;
+        double distanciaTemp;
+        for (int i = 0; i < numPuntos - 1; i++) {
+            for (int j = i; j < numPuntos - 1; j++) {
+                distanciaTemp = Math.sqrt(Math.pow((lPuntos.get(j).getX() - lPuntos.get(j + 1).getX()), 2.0)
+                        + Math.pow((lPuntos.get(j).getY() - lPuntos.get(j + 1).getY()), 2.0));
+                System.out.println("DistanciaTmp = "+distanciaTemp +" DistaciaMin = "+distanciaMinima);
+                if (distanciaMinima > distanciaTemp) {
+                    distanciaMinima = distanciaTemp;
+                    minimos.setA(lPuntos.get(j));
+                    minimos.setB(lPuntos.get(j + 1));
+                }
+            }
+        }
+        System.out.println("DistanciaMinima actual = " + distanciaMinima + " con los puntos P1: id = "
+                + minimos.getA().getId() + " X1 = " + minimos.getA().getX() + " Y1 = " + minimos.getA().getY()
+                + " P2: id = " + minimos.getB().getId() + " X2 = " + minimos.getB().getX() + " Y2 = "
+                + minimos.getB().getY());
+        return minimos;
     }
 
     public void quicksort(int A[], int izq, int der) {
