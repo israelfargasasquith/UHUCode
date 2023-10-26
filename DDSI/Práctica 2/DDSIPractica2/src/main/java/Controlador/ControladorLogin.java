@@ -19,20 +19,23 @@ public class ControladorLogin {
     public ControladorLogin() {
         vMensajes = new VistaMensajes();
         conectarBD();
-        desconectarBD();
+        
+    }
+    
+    public Conexion getConexion(){
+        return conexion;
     }
 
-    private Conexion conectarBD() {
+    public void conectarBD() {
         try {
             conexion = new Conexion("mariadb", "172.18.1.241", "mariadb", "DDSI_057", "DDSI_057");
             vMensajes.mensajeConsola("Conexion correcta con mariaDB");
         } catch (Exception ex) {
             vMensajes.mensajeConsola("Error en conectarBD: "+ex.getMessage());
         }
-        return conexion;
     }
 
-    private void desconectarBD() {
+    public void desconectarBD() {
         try {
             conexion.desconectar();
             vMensajes.mensajeConsola("Desconexion correcta");

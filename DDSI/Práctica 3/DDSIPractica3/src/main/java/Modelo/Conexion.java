@@ -21,10 +21,10 @@ public class Conexion {
         this.servicioBD = servicioBD;
         if (servicioBD.equalsIgnoreCase("Oracle")) {
             conexion = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@172.17.20.39:1521:etsi", usuario, password);
+                    "jdbc:"+sgbd+":thin:@"+ip+":1521:"+servicioBD+"", usuario, password);
         } else if (servicioBD.equalsIgnoreCase("MariaDB")) {
             conexion = DriverManager.getConnection(
-                    "jdbc:mariadb://172.18.1.241:3306/"+usuario, usuario, password);
+                    "jdbc:"+sgbd+"://172.18.1.241:3306/" + usuario, usuario, password);
         } else {
             throw new Exception("Error, servicio de BD desconocido");
         }
@@ -39,5 +39,4 @@ public class Conexion {
             conexion.close();
         }
     }
-
 }

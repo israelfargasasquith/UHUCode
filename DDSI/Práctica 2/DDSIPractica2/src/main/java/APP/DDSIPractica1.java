@@ -5,6 +5,7 @@
 package APP;
 
 import Controlador.ControladorLogin;
+import Controlador.ControladorPrincipal;
 
 /**
  *
@@ -14,5 +15,8 @@ public class DDSIPractica1 {
 
     public static void main(String[] args) {
         ControladorLogin cLogin = new ControladorLogin();
+        ControladorPrincipal cPrincipal = new ControladorPrincipal(cLogin.getConexion());
+        
+        cLogin.desconectarBD();
     }
 }
