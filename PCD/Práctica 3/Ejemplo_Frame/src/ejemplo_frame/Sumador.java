@@ -25,7 +25,7 @@ public class Sumador implements Runnable {
     public void run() {
 
         try {
-            for (int i = 1; i <= 1000; i++) {
+            for (int i = 1; i <= 10000; i++) {
                 c1.Incrementa(cual);
                 System.out.println(Thread.currentThread().getName() + " incrementa " + cual);
                 Thread.sleep(5);

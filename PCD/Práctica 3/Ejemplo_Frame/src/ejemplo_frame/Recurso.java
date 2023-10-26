@@ -23,6 +23,7 @@ public class Recurso {
      */
     public synchronized void Incrementa(int cual) {
         contadores[cual]++;        
+        System.out.println("El contador ["+cual+"] vale-> "+contadores[cual]);
         canvas.representa(contadores);
     }
 

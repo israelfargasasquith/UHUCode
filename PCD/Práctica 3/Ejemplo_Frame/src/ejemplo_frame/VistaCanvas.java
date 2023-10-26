@@ -21,7 +21,7 @@ public class VistaCanvas extends Canvas {
 
     public VistaCanvas(int ancho, int alto) {
         setSize(new Dimension(alto, ancho));
-        this.setBackground(Color.cyan);
+        this.setBackground(Color.LIGHT_GRAY);
         repaint();
     }
 
@@ -35,6 +35,11 @@ public class VistaCanvas extends Canvas {
     }
 
     @Override
+    public void update(Graphics g) {
+        paint(g);
+    }
+
+    @Override
     public void paint(Graphics g) {
 
         // Se crea un buffer intermedio para que montar la salida completa
@@ -42,63 +47,59 @@ public class VistaCanvas extends Canvas {
         Image offscreen = createImage(getWidth(), getHeight());
         Graphics og = offscreen.getGraphics();
 
-        Font f1 = new Font("Helvetica", Font.ITALIC + Font.BOLD, 20);
-
+        Font f1 = new Font("Impact", Font.ITALIC | Font.BOLD, 20);
+        Font f2 = new Font("Comic Sans MS", Font.ITALIC, 20);
+        
         og.setFont(f1);
         og.setColor(Color.red);
-        og.drawString("PILA", 320, 530);
-        int capacidad = 7;
-        int y = 500;
-        int yLetras = 485;
-        //Pinta cuadrado de informacion
-
-        while (capacidad > 0) {
-            og.drawLine(250, y, 450, y);//Linea horizontal abajo
-            og.drawLine(250, y, 250, y - 50);//Linea vertical izquierda
-            og.drawLine(450, y, 450, y - 50);//Linea vertical derecha
-            y -= 50;
-            og.drawLine(250, y, 450, y);//Linea horizontal arriba
-            og.drawString("Prueba", 320, yLetras);
-            capacidad--;
-            yLetras -= 50;
-        }
-        og.drawString("Cima => ", 155, 485);
-        Font f2 = new Font("Helvetica", Font.ITALIC + Font.BOLD, 15);
+        og.drawRect(20, 35, 15, 15);
+        og.fillRect(20, 35, 15, 15);
+        og.drawString("Valor de contador 1 --> " + contadores[0], 50, 50);
+        og.setColor(Color.blue);
+        og.fillOval(20, 80, 20, 20);
         og.setFont(f2);
-
-        og.drawLine(550, 425, 800, 425);//Linea horizontal abajo
-        og.drawLine(550, 325, 800, 325);//Linea horizontal arriba
-        og.drawLine(550, 425, 550, 325);//Linea vertical izquierda
-        og.drawLine(800, 425, 800, 325);//Linea vertical derecha
-        og.drawString("* Panel de informacion de la pila *", 560, 350);
-        og.drawString("1. NumElementos => ", 560, 380);
-        og.drawString("2. Cima => ", 560, 410);
-        og.drawString("Mensaje: ", 560, 445);
-//        og.drawLine(250, 450, 450, 450);//Linea horizontal arriba
-//        og.drawLine(250, 500, 250, 450);//Linea vertical izquierda
-//        og.drawLine(450, 500, 450, 450);//Linea vertical derecha
-
-//        og.drawLine(250, 450, 450, 450); Una caja justo encima
-//        og.drawLine(250, 400, 450, 400);
-//        og.drawLine(250, 450, 250, 400);
-//        og.drawLine(450, 450, 450, 400);
-        // og.drawLine(0, 0, 650, 400);
-        //og.drawString("Valor de contador 1 --> " + contadores[0], 50, 50);
-        //og.setColor(Color.blue);
-        //og.fillOval(20, 80, 20, 20);
-        //og.drawString("Valor de contador 2 --> " + contadores[1], 50, 100);
-        og.drawImage(offscreen, 0, 0, null);
+        og.drawString("Valor de contador 2 --> " + contadores[1], 50, 100);
+//        og.drawImage(offscreen, 0, 0, null);
 
         g.drawImage(offscreen, 0, 0, null);
+
+        //        //Pinta cuadrado de informacion ESTO ES OTRA COSA DE LA P3
+//
+//        while (capacidad > 0) {
+//            og.drawLine(250, y, 450, y);//Linea horizontal abajo
+//            og.drawLine(250, y, 250, y - 50);//Linea vertical izquierda
+//            og.drawLine(450, y, 450, y - 50);//Linea vertical derecha
+//            y -= 50;
+//            og.drawLine(250, y, 450, y);//Linea horizontal arriba
+//            og.drawString("Prueba", 320, yLetras);
+//            capacidad--;
+//            yLetras -= 50;
+//        }
+//        og.drawString("Cima => ", 155, 485);
+//        Font f2 = new Font("Helvetica", Font.ITALIC + Font.BOLD, 15);
+//        og.setFont(f2);
+//
+//        og.drawLine(550, 425, 800, 425);//Linea horizontal abajo
+//        og.drawLine(550, 325, 800, 325);//Linea horizontal arriba
+//        og.drawLine(550, 425, 550, 325);//Linea vertical izquierda
+//        og.drawLine(800, 425, 800, 325);//Linea vertical derecha
+//        og.drawString("* Panel de informacion de la pila *", 560, 350);
+//        og.drawString("1. NumElementos => ", 560, 380);
+//        og.drawString("2. Cima => ", 560, 410);
+//        og.drawString("Mensaje: ", 560, 445);
+////        og.drawLine(250, 450, 450, 450);//Linea horizontal arriba
+////        og.drawLine(250, 500, 250, 450);//Linea vertical izquierda
+////        og.drawLine(450, 500, 450, 450);//Linea vertical derecha
+//
+////        og.drawLine(250, 450, 450, 450); Una caja justo encima
+////        og.drawLine(250, 400, 450, 400);
+////        og.drawLine(250, 450, 250, 400);
+////        og.drawLine(450, 450, 450, 400);
+        // og.drawLine(0, 0, 650, 400);
     }
 
     /* El update original del canvas, borra el canvas y llama a paint. Si queremos 
      sobreescribir  lo que hay pintado, sobrecargamos update y hacemos que llame 
      paint. Así no borra lo anterior, y no se produce parpadeo
      */
-    @Override
-    public void update(Graphics g) {
-        paint(g);
-    }
-
 }

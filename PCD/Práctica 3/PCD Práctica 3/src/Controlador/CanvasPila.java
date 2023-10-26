@@ -37,6 +37,13 @@ public class CanvasPila extends Canvas {
         repaint();
     }
 
+    public void actualiza(int cima, int numElementos, Object[] datos){
+        this.datos = datos;
+        this.cima = cima;
+        this.numElementos = numElementos;
+        repaint();
+    }
+
     @Override
     public void paint(Graphics g) {
         Font f = new Font("Helvetica", Font.ITALIC + Font.BOLD, 20);
@@ -48,6 +55,7 @@ public class CanvasPila extends Canvas {
         tmp.setFont(f1);
         tmp.setColor(Color.red);
         tmp.drawString("PILA", 320, 530);
+        capacidad = 3;
         int y = 500;
         int yLetras = 485;
         int pos = 0;
@@ -64,7 +72,7 @@ public class CanvasPila extends Canvas {
             capacidad--;
             yLetras -= 50;
         }
-        //tmp.drawString("Cima => ", 155, 485);
+        tmp.drawString("Cima => ", 155, 485);
         Font f2 = new Font("Helvetica", Font.ITALIC + Font.BOLD, 15);
         tmp.setFont(f2);
 
@@ -74,9 +82,9 @@ public class CanvasPila extends Canvas {
         tmp.drawLine(550, 425, 550, 325);//Linea vertical izquierda
         tmp.drawLine(800, 425, 800, 325);//Linea vertical derecha
         tmp.drawString("* Panel de informacion de la pila *", 560, 350);
-        tmp.drawString("1. NumElementos => "+ numElementos, 560, 380);
-        tmp.drawString("2. Cima => "+ cima, 560, 410);
-        tmp.drawString("Mensaje: " +mensaje, 560, 445);
+        tmp.drawString("1. NumElementos => " + numElementos, 560, 380);
+        tmp.drawString("2. Cima => " + cima, 560, 410);
+        tmp.drawString("Mensaje: " + mensaje, 560, 445);
 
         tmp.drawImage(buffer, 0, 0, null);
 
@@ -91,10 +99,7 @@ public class CanvasPila extends Canvas {
     }
 
     public void avisa(String mensaje) {
-
+        this.mensaje = "Mensaje: "+mensaje;
     }
 
-    public void representa(Object[] buff, int cima, int numEle) {
-
-    }
 }

@@ -17,10 +17,10 @@ public class PilaLenta implements IPila {
     private int capacidad;
     private int numElementos;
     private Object[] datos;
-    private CanvasPila representacion;
+    private CanvasPila canvas;
 
-    public PilaLenta(int capacidad, CanvasPila representacion) {
-        this.representacion = representacion;
+    public PilaLenta(int capacidad, CanvasPila canvas) {
+        this.canvas = canvas;
         this.capacidad = capacidad;
         cima = -1;
         numElementos = 0;
@@ -49,8 +49,9 @@ public class PilaLenta implements IPila {
             numElementos++;
             sleep(100);
             datos[cima] = insertar;
+            canvas.actualiza(cima, numElementos, datos);
         } else {
-            representacion.avisa("Error al intentar apilar el objeto: " + insertar + ", la pila esta llena");
+            canvas.avisa("Error al intentar apilar el objeto: " + insertar + ", la pila esta llena");
             throw new Exception("");
         }
     }
@@ -63,9 +64,10 @@ public class PilaLenta implements IPila {
             sleep(100);
             cima--;
             sleep(100);
+            canvas.actualiza(cima, numElementos, datos);
             return datos[cima + 1];
         } else {
-            representacion.avisa("Error al intentar desapilar, la pila esta vacia");
+            canvas.avisa("Error al intentar desapilar, la pila esta vacia");
             throw new Exception("");
         }
     }

@@ -33,6 +33,7 @@ public class EjemploFrameApp extends java.awt.Frame {
                 exitForm(evt);
             }
         });
+        setLayout(null);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -50,13 +51,15 @@ public class EjemploFrameApp extends java.awt.Frame {
      */
     public static void main(String args[]) throws InterruptedException {
 
-        final int  ancho=700, alto=500;
+        final int  ancho=500, alto=500;
 
         EjemploFrameApp elframe = new EjemploFrameApp();
         VistaCanvas vista = new VistaCanvas(ancho, alto);
 
-        elframe.setSize(1000, 700);
-        //elframe.setBackground(Color.red);
+        elframe.setSize(ancho, alto);
+        elframe.setLocationRelativeTo(null);
+        elframe.setTitle("Ejemplo frame");
+        elframe.setBackground(Color.red);
         elframe.add(vista);
 
         elframe.setVisible(true);

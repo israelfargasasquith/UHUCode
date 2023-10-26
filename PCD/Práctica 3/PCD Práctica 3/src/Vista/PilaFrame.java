@@ -48,7 +48,7 @@ public class PilaFrame extends java.awt.Frame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        final int alto = 950, ancho = 650, capacidad = 5;
+        final int alto = 950, ancho = 650, capacidad = 7;
         PilaFrame pf = new PilaFrame();
         CanvasPila vista = new CanvasPila(alto, ancho,capacidad );
         pf.setSize(alto,ancho);
