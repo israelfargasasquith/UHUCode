@@ -11,7 +11,7 @@ package ejemplo_frame;
 public class Recurso {
 
     private final int[] contadores = {0, 0};
-    VistaCanvas canvas;
+    private VistaCanvas canvas;
 
     public Recurso(VistaCanvas vista){
         canvas=vista;

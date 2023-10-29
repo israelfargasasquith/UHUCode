@@ -35,6 +35,13 @@ public class PilaLenta implements IPila {
         return numElementos == 0;
     }
 
+    public void muestraPila() {
+        System.out.println("\nMostramos la pila completa a continuacion:");
+        for (int j = 0; j < numElementos; j++) {
+            System.out.println("Datos[" + j + "] = " + datos[j]);
+        }
+    }
+
     @Override
     public int getNumElementos() {
         return numElementos;
@@ -42,6 +49,17 @@ public class PilaLenta implements IPila {
 
     @Override
     public synchronized void apila(Object insertar) throws java.lang.Exception {
+        int intentos = 0;
+
+        while (pilaLlena() && intentos < 3) {
+            System.out.println("Soy el " + Thread.currentThread().getName() + ",(pilaLlena = " + pilaLlena() + ")"
+                    + " espero, intentos =  " + intentos);
+            canvas.avisa("Soy el " + Thread.currentThread().getName() + ",(pilaLlena = " + pilaLlena() + ")"
+                    + " espero, intentos =  " + intentos);
+            wait();
+            intentos++;
+        }
+
         if (!pilaLlena()) {
             sleep(100);
             cima++;
@@ -50,26 +68,41 @@ public class PilaLenta implements IPila {
             sleep(100);
             datos[cima] = insertar;
             canvas.actualiza(cima, numElementos, datos);
+            notifyAll();
         } else {
-            canvas.avisa("Error al intentar apilar el objeto: " + insertar + ", la pila esta llena");
-            throw new Exception("");
+            throw new Exception("He usado " + intentos + " intentos y me he hartado... Me voy");
         }
     }
 
     @Override
     public synchronized Object desapila() throws java.lang.Exception {
+        int intentos = 0;
+        Object devuelve = null;
+
+        while (pilaVacia() && intentos < 3) {
+            System.out.println("Soy el " + Thread.currentThread().getName() + ", (pilaVacia = " + pilaVacia() + ") "
+                    + " espero, intentos =  " + intentos);
+            canvas.avisa("Soy el " + Thread.currentThread().getName() + ", (pilaVacia = " + pilaVacia() + ") "
+                    + " espero, intentos =  " + intentos);
+            wait();
+            intentos++;
+        }
+
         if (!pilaVacia()) {
+
             sleep(100);
             numElementos--;
             sleep(100);
             cima--;
             sleep(100);
+            devuelve = datos[cima + 1];
             canvas.actualiza(cima, numElementos, datos);
-            return datos[cima + 1];
+            notifyAll();
         } else {
-            canvas.avisa("Error al intentar desapilar, la pila esta vacia");
-            throw new Exception("");
+            throw new Exception("He usado " + intentos + " intentos y me he hartado... Me voy");
         }
+        return devuelve;
+
     }
 
     @Override
@@ -77,6 +110,7 @@ public class PilaLenta implements IPila {
         if (!pilaVacia()) {
             return datos[cima];
         } else {
+            // canvas.avisa("Error al intentar ver la cima, la pila esta vacia");
             throw new Exception("Error en funcion primero: la pila esta vacia");
         }
 

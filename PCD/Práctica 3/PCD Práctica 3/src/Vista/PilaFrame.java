@@ -5,7 +5,11 @@
 package Vista;
 
 import Controlador.CanvasPila;
+import Controlador.Consumidor;
+import Controlador.Productor;
+import Modelo.PilaLenta;
 import java.awt.Color;
+import static java.lang.Thread.sleep;
 
 /**
  *
@@ -50,11 +54,57 @@ public class PilaFrame extends java.awt.Frame {
     public static void main(String args[]) {
         final int alto = 950, ancho = 650, capacidad = 7;
         PilaFrame pf = new PilaFrame();
-        CanvasPila vista = new CanvasPila(alto, ancho,capacidad );
-        pf.setSize(alto,ancho);
+        CanvasPila vista = new CanvasPila(alto, ancho, capacidad);
+        PilaLenta recurso = new PilaLenta(capacidad, vista);
+
+        pf.setSize(alto, ancho);
+        pf.setTitle("Práctica 4 Israel Fargas");
         pf.setBackground(Color.LIGHT_GRAY);
         pf.add(vista);
         pf.setVisible(true);
+
+
+        Productor p1 = new Productor(recurso,vista);
+        Productor p2 = new Productor(recurso,vista);
+        Productor p3 = new Productor(recurso, vista);
+        Productor p4 = new Productor(recurso, vista);
+
+        Consumidor t1 = new Consumidor(recurso, vista);
+        Thread c1 = new Thread(t1);
+        try {
+            p1.start();
+            p2.start();
+            p3.start();
+            p4.start();
+            c1.start();
+            c1.join();
+        } catch (Exception ex) {
+            System.out.println("Error al lanzar los hilos concurrentes con mensaje: " + ex.getMessage());
+        }
+        try {
+            sleep(900);
+
+        } catch (Exception ex) {
+            System.out.println("Error con el sleep de la main");
+        }
+        try {
+            for (int i = 0; i < 3; i++) {
+                synchronized (recurso) {
+                    recurso.notifyAll();
+                }
+                sleep(900);
+            }
+
+            p1.join();
+            p2.join();
+            p3.join();
+            p4.join();
+        } catch (Exception ex) {
+            System.out.println("Error en el sleep del notifiAll de la main o en los joins " + ex.getMessage());
+        }
+        pf.dispose();
+        System.exit(0);
+
     }
 
 
