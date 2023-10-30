@@ -39,6 +39,9 @@ import javax.swing.event.AncestorListener;
  *
  * @author marin
  */
+//public enum Algoritmos{ una clase para los enumerados??
+//    EXAHUSTIVO, PODA, DIVIDEYVENCERAS, DIVIDEYVENCERASMEJORADO
+//}
 public class ControladorPuntos implements ActionListener {
 
     private VistaPuntosAleatorios vp = null;
@@ -66,7 +69,9 @@ public class ControladorPuntos implements ActionListener {
         vp.BotonVolver.addActionListener(this);
         vprin.BotonTodosAleatorios.addActionListener(this);
 
-        // vp.BotonFichero.addActionListener(this);
+        vPuntosFichero.jButtonEligeFichero.addActionListener(this);
+        vPuntosFichero.jButtonGeneraFichero.addActionListener(this);
+        vPuntosFichero.jButtonVolverFicheros.addActionListener(this);
     }
 
     @Override
@@ -79,6 +84,9 @@ public class ControladorPuntos implements ActionListener {
             }
             case "Análisis de un fichero existente":
                 vprin.setVisible(false);
+                vPuntosFichero.setSize(800, 550);
+                vPuntosFichero.setLocationRelativeTo(null);
+                vPuntosFichero.setResizable(false);
                 vPuntosFichero.setVisible(true);
                 break;
             case "Volver": {
@@ -96,27 +104,21 @@ public class ControladorPuntos implements ActionListener {
                 if (seleccion == JFileChooser.APPROVE_OPTION) {
                     try {
                         ArrayList<Punto> lPuntos = p.generaPuntosFichero(fileChooser.getSelectedFile().getPath());
-                        
-//                        lPuntos = p.factorConversion(lPuntos, vPuntosFichero.jPanelPuntosFichero.getWidth(),
-//                                vPuntosFichero.jPanelPuntosFichero.getHeight());
-
-//                        graficos.drawLine(0, jPanelPuntos.getHeight() / 2, jPanelPuntos.getWidth(), jPanelPuntos.getHeight() / 2);
-//                        graficos.drawLine(jPanelPuntos.getWidth() / 2, 0, jPanelPuntos.getWidth() / 2, jPanelPuntos.getHeight());
-//                        graficos.drawLine(jPanelPuntos.getWidth() / 2, 0, jPanelPuntos.getWidth() / 2, jPanelPuntos.getHeight());
-//                        Font f = new Font("Serif", Font.BOLD, 12);
-//                        graficos.setFont(f);
-//                        graficos.drawString("X", jPanelPuntos.getWidth() - 15, (jPanelPuntos.getHeight() / 2) - 5);
-//                        graficos.drawString("Y", (jPanelPuntos.getWidth() / 2) + 5, 15);
-//                        for (Punto punto : lPuntos) {
-//                            graficos.drawOval((int) punto.getX(), (int) punto.getY(), 7, 7);
-//                            graficos.fillOval((int) punto.getX(), (int) punto.getY(), 7, 7);
-//
-//                        }
+                        vPuntosFichero.setLPuntos(lPuntos);
 
                     } catch (Exception ex) {
                         System.out.println("Error con el generaPuntosFichero: " + ex.getMessage());
                     }
                 }
+                break;
+                
+            case "CalcularMasCercanoFichero":
+                
+                break;
+
+            case "Volver desde fichero":
+                vPuntosFichero.dispose();
+                vprin.setVisible(true);
                 break;
 
             case "Generar Fichero Aleatorio":

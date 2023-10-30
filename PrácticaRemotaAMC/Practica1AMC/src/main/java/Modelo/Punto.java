@@ -112,30 +112,7 @@ public class Punto {
         return puntos;
     }
 
-    public ArrayList<Punto> factorConversion(ArrayList<Punto> lPuntos, int tamañoVistaX, int tamañoVistaY) {
-        ArrayList<Punto> lPuntosReescalados = new ArrayList<>();
-        //Primero cogemos el valor maximo del fichero para X y para Y
-        double xMax = -1, yMax = -1;
-        for (Punto lPunto : lPuntos) {
-            System.out.println("El valor de xMax es: " + xMax + " y el de yMax es: " + yMax);
-            if (xMax < lPunto.getX()) {
-                xMax = lPunto.getX();
-            }
-            if (yMax < lPunto.getY()) {
-                yMax = lPunto.getY();
-            }
-        }
-        double factorConversionX = (double) (tamañoVistaX - 10.0) / xMax;
-        double factorConversionY = (double) (tamañoVistaY - 10.0) / yMax;
-        System.out.println("Factor x: " + factorConversionX + " Factor y: " + factorConversionY);
-        for (Punto lPunto : lPuntos) {
-            lPuntosReescalados.add(new Punto(factorConversionX * lPunto.getX(), factorConversionY * lPunto.getY(), lPunto.getId()));
-            System.out.println("Valor del punto original-> id: " + lPunto.getId() + " x: " + lPunto.getX() + " y: " + lPunto.getY()
-                    + "\n Valor del punto reescalado-> id: " + lPunto.getId() + " x: " + lPunto.getX() * factorConversionX + " y: " + lPunto.getY() * factorConversionY);
-        }
-
-        return lPuntosReescalados;
-    }
+   
 
     /**
      * Este metodo se encarga de calcular la distancia entre dos puntos pasados
