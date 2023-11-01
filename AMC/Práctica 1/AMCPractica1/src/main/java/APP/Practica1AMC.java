@@ -4,6 +4,7 @@
 package APP;
 
 import Controlador.ControlaPuntos;
+import Modelo.Algoritmos;
 import Modelo.Punto;
 import Vistas.VistaPrincipal;
 import java.io.File;
@@ -26,5 +27,9 @@ public class Practica1AMC {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+//        ControlaPuntos cp = new ControlaPuntos();
+//        ArrayList<Punto> lPunto = cp.generaPuntosAleatorios(10, 10, 100, 10, 100);
+//        Algoritmos a = new Algoritmos();
+//        a.exhaustivo(lPunto);
     }
 }
