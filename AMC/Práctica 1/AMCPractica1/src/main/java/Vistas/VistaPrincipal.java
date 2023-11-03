@@ -5,7 +5,10 @@
 package Vistas;
 
 import Controlador.ControlaPuntos;
+import Modelo.Algoritmos;
+import Modelo.ParPuntos;
 import Modelo.Punto;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.io.File;
@@ -24,12 +27,18 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private ControlaPuntos controlaPuntos;
     private Graphics graficos;
     private ArrayList<Punto> lPuntos;
+    private Algoritmos algoritmos;
+    private ParPuntos cercanos;
 
     public VistaPrincipal(ControlaPuntos controlaPuntos) {
         this.controlaPuntos = controlaPuntos;
+        this.algoritmos = new Algoritmos();
         initComponents();
         graficos = jPanelPuntos.getGraphics();
         jPanelPuntos.paintComponents(graficos);
+        for (Algoritmos.AlgoritmosEnum a:Algoritmos.AlgoritmosEnum.values()) {
+            jComboAlgoritmos.addItem(a.name());
+        }
     }
 
     /**
@@ -53,20 +62,20 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         textAreaMensajes = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         buttonGenerarFichero = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JSeparator();
         buttonDibuja = new javax.swing.JButton();
-        jSeparator5 = new javax.swing.JSeparator();
-        jLabel6 = new javax.swing.JLabel();
+        jButtonCalcula = new javax.swing.JButton();
         jComboAlgoritmos = new javax.swing.JComboBox<>();
-        jButtonCalculaDistancia = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jSeparator7 = new javax.swing.JSeparator();
+        jSeparator8 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1050, 750));
-        setPreferredSize(new java.awt.Dimension(1050, 750));
+        setPreferredSize(new java.awt.Dimension(1050, 850));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanelPuntos.setBackground(new java.awt.Color(255, 255, 255));
@@ -76,14 +85,14 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jPanelPuntos.setLayout(jPanelPuntosLayout);
         jPanelPuntosLayout.setHorizontalGroup(
             jPanelPuntosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 646, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanelPuntosLayout.setVerticalGroup(
             jPanelPuntosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 526, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanelPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 10, 650, 530));
+        getContentPane().add(jPanelPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, 650, 530));
 
         jLabel1.setText("Indica el número de puntos aleatorios ");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
@@ -105,11 +114,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
             }
         });
         getContentPane().add(buttonSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 710, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 230, 10));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 230, 10));
         getContentPane().add(textNumPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 160, -1));
 
         jLabel3.setText("Generar desde fichero");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
 
         buttonAbrirMenuFicheros.setText("Abrir");
         buttonAbrirMenuFicheros.setActionCommand("GenerarFichero");
@@ -118,50 +127,63 @@ public class VistaPrincipal extends javax.swing.JFrame {
                 buttonAbrirMenuFicherosActionPerformed(evt);
             }
         });
-        getContentPane().add(buttonAbrirMenuFicheros, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
+        getContentPane().add(buttonAbrirMenuFicheros, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
         getContentPane().add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 230, 10));
 
         textAreaMensajes.setColumns(20);
         textAreaMensajes.setRows(5);
         jScrollPane1.setViewportView(textAreaMensajes);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 550, 530, 150));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 580, 530, 150));
 
         jLabel2.setText("Mensajes:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 550, -1, -1));
-        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 230, 10));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 560, -1, -1));
 
         jLabel4.setText("Generar fichero con valores aleatorios");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, -1, -1));
 
-        jLabel5.setText("Elije algoritmo para calcular distancia mínima");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, -1, -1));
+        jLabel5.setText("Dibujar gráficas");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 580, -1, 20));
 
         buttonGenerarFichero.setText("Generar");
         buttonGenerarFichero.setActionCommand("GenerarFichero");
         buttonGenerarFichero.setHideActionText(true);
-        getContentPane().add(buttonGenerarFichero, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, -1, -1));
-        getContentPane().add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 410, 230, 10));
+        buttonGenerarFichero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGenerarFicheroActionPerformed(evt);
+            }
+        });
+        getContentPane().add(buttonGenerarFichero, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 520, -1, -1));
+        getContentPane().add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 560, 230, 10));
 
         buttonDibuja.setText("Dibuja");
         buttonDibuja.setActionCommand("DibujaGraphics");
-        getContentPane().add(buttonDibuja, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 640, -1, -1));
-        getContentPane().add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 690, 230, 10));
-
-        jLabel6.setText("Dibujar gráficas");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 600, -1, -1));
-
-        jComboAlgoritmos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Exhaustivo" }));
-        getContentPane().add(jComboAlgoritmos, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, -1, -1));
-
-        jButtonCalculaDistancia.setText("Calcula");
-        jButtonCalculaDistancia.setActionCommand("calculaDistancia");
-        jButtonCalculaDistancia.addActionListener(new java.awt.event.ActionListener() {
+        buttonDibuja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCalculaDistanciaActionPerformed(evt);
+                buttonDibujaActionPerformed(evt);
             }
         });
-        getContentPane().add(jButtonCalculaDistancia, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 530, -1, -1));
+        getContentPane().add(buttonDibuja, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 620, -1, 20));
+
+        jButtonCalcula.setText("Calcula");
+        jButtonCalcula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCalculaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButtonCalcula, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, -1, -1));
+
+        jComboAlgoritmos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboAlgoritmosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jComboAlgoritmos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 150, -1));
+
+        jLabel6.setText("Elige un algoritmo:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, -1, -1));
+        getContentPane().add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 670, 230, 10));
+        getContentPane().add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 230, 10));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -174,9 +196,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
                     jPanelPuntos.getWidth() - 10, 10, jPanelPuntos.getHeight() - 10);
 
             representaPuntos();
-
         }
-
     }//GEN-LAST:event_buttonGenerarPuntosActionPerformed
 
 
@@ -199,10 +219,29 @@ public class VistaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_buttonAbrirMenuFicherosActionPerformed
 
-    private void jButtonCalculaDistanciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculaDistanciaActionPerformed
-        controlaPuntos.exhaustivo(lPuntos);
-    }//GEN-LAST:event_jButtonCalculaDistanciaActionPerformed
+    private void buttonDibujaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDibujaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonDibujaActionPerformed
 
+    private void jComboAlgoritmosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboAlgoritmosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboAlgoritmosActionPerformed
+
+    private void jButtonCalculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculaActionPerformed
+        cercanos = algoritmos.exhaustivo(lPuntos);
+        representaLineaMasCercanos();
+    }//GEN-LAST:event_jButtonCalculaActionPerformed
+
+    private void buttonGenerarFicheroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGenerarFicheroActionPerformed
+        
+        
+    }//GEN-LAST:event_buttonGenerarFicheroActionPerformed
+
+    private void representaLineaMasCercanos(){
+        graficos.setColor(Color.red);
+        graficos.drawLine((int)cercanos.getA().getX(), (int)cercanos.getA().getY(), (int)cercanos.getB().getX(), (int)cercanos.getB().getY());
+        graficos.setColor(Color.black);
+    }
     private void representaPuntos() {
 
         graficos.drawLine(0, jPanelPuntos.getHeight() / 2, jPanelPuntos.getWidth(), jPanelPuntos.getHeight() / 2);
@@ -227,7 +266,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
     public javax.swing.JButton buttonGenerarFichero;
     public javax.swing.JButton buttonGenerarPuntos;
     public javax.swing.JButton buttonSalir;
-    public javax.swing.JButton jButtonCalculaDistancia;
+    public javax.swing.JButton jButtonCalcula;
     public javax.swing.JComboBox<String> jComboAlgoritmos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -238,10 +277,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
     public javax.swing.JPanel jPanelPuntos;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
     public javax.swing.JTextArea textAreaMensajes;
     public javax.swing.JTextField textNumPuntos;
     // End of variables declaration//GEN-END:variables
