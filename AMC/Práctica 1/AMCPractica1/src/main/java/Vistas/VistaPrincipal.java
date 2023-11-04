@@ -36,8 +36,9 @@ public class VistaPrincipal extends javax.swing.JFrame {
         initComponents();
         graficos = jPanelPuntos.getGraphics();
         jPanelPuntos.paintComponents(graficos);
-        for (Algoritmos.AlgoritmosEnum a:Algoritmos.AlgoritmosEnum.values()) {
-            jComboAlgoritmos.addItem(a.name());
+        String tmp;
+        for (Algoritmos.AlgoritmosEnum eAlgoritmos : Algoritmos.AlgoritmosEnum.values()) {
+            jComboAlgoritmos.addItem(eAlgoritmos.name());
         }
     }
 
@@ -228,20 +229,31 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboAlgoritmosActionPerformed
 
     private void jButtonCalculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculaActionPerformed
-        cercanos = algoritmos.exhaustivo(lPuntos);
+        switch (jComboAlgoritmos.getSelectedIndex()) {
+            case Algoritmos.AlgoritmosEnum.EXHAUSTIVO.name():
+                cercanos = algoritmos.exhaustivo(lPuntos);
+
+                break;
+            case Algoritmos.AlgoritmosEnum.PODA.name():
+                cercanos = algoritmos.poda(lPuntos); AQUI TE QUEDASTE ISRA, HAY QUE IMPLEMTNARLO Y VER LOS ERRORES
+                break;
+            case Algoritmos.AlgoritmosEnum.DIVIDEYVENCERAS.name():
+                break;
+        }
         representaLineaMasCercanos();
     }//GEN-LAST:event_jButtonCalculaActionPerformed
 
     private void buttonGenerarFicheroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGenerarFicheroActionPerformed
-        
-        
+
+
     }//GEN-LAST:event_buttonGenerarFicheroActionPerformed
 
-    private void representaLineaMasCercanos(){
+    private void representaLineaMasCercanos() {
         graficos.setColor(Color.red);
-        graficos.drawLine((int)cercanos.getA().getX(), (int)cercanos.getA().getY(), (int)cercanos.getB().getX(), (int)cercanos.getB().getY());
+        graficos.drawLine((int) cercanos.getA().getX(), (int) cercanos.getA().getY(), (int) cercanos.getB().getX(), (int) cercanos.getB().getY());
         graficos.setColor(Color.black);
     }
+
     private void representaPuntos() {
 
         graficos.drawLine(0, jPanelPuntos.getHeight() / 2, jPanelPuntos.getWidth(), jPanelPuntos.getHeight() / 2);
