@@ -5,27 +5,33 @@
 package Modelo;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author 34667
  */
-@MappedSuperclass
+@Entity
 @Table(name = "SOCIO")
-@XmlRootElement
 @NamedQueries({
-    @NameQuery()
-})
-
+    @NamedQuery(name = "Socio.findAll", query = "SELECT s FROM Socio s"),
+    @NamedQuery(name = "Socio.findByNumeroSocio", query = "SELECT s FROM Socio s WHERE s.numeroSocio = :numeroSocio"),
+    @NamedQuery(name = "Socio.findByNombre", query = "SELECT s FROM Socio s WHERE s.nombre = :nombre"),
+    @NamedQuery(name = "Socio.findByDni", query = "SELECT s FROM Socio s WHERE s.dni = :dni"),
+    @NamedQuery(name = "Socio.findByFechaNacimiento", query = "SELECT s FROM Socio s WHERE s.fechaNacimiento = :fechaNacimiento"),
+    @NamedQuery(name = "Socio.findByTelefono", query = "SELECT s FROM Socio s WHERE s.telefono = :telefono"),
+    @NamedQuery(name = "Socio.findByCorreo", query = "SELECT s FROM Socio s WHERE s.correo = :correo"),
+    @NamedQuery(name = "Socio.findByFechaEntrada", query = "SELECT s FROM Socio s WHERE s.fechaEntrada = :fechaEntrada"),
+    @NamedQuery(name = "Socio.findByCategoria", query = "SELECT s FROM Socio s WHERE s.categoria = :categoria")})
 public class Socio implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,8 +57,8 @@ public class Socio implements Serializable {
     @Basic(optional = false)
     @Column(name = "categoria")
     private Character categoria;
-    @ManyToMany(mappedBy = "socioSet")
-    private Set<Actividad> actividadSet;
+    @ManyToMany(mappedBy = "socios")
+    private Set<Actividad> actividades = new HashSet<Actividad>();
 
     public Socio() {
     }
@@ -133,13 +139,12 @@ public class Socio implements Serializable {
         this.categoria = categoria;
     }
 
-    @XmlTransient
-    public Set<Actividad> getActividadSet() {
-        return actividadSet;
+    public Set<Actividad> getActividades() {
+        return actividades;
     }
 
-    public void setActividadSet(Set<Actividad> actividadSet) {
-        this.actividadSet = actividadSet;
+    public void setActividades(Set<Actividad> actividades) {
+        this.actividades = actividades;
     }
 
     @Override

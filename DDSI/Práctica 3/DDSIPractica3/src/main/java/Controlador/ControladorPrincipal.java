@@ -4,10 +4,21 @@
  */
 package Controlador;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
 /**
  *
  * @author 34667
  */
 public class ControladorPrincipal {
+    private Session sesion;
+    private  Transaction transacion;
+    
+    public ControladorPrincipal(SessionFactory sesion){
+        this.sesion =  sesion.openSession();
+        transacion = this.sesion.beginTransaction();
+    }
     
 }

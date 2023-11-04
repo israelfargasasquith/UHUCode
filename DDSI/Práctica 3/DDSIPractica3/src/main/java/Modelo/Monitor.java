@@ -5,23 +5,32 @@
 package Modelo;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author 34667
  */
-@MappedSuperclass
+@Entity
 @Table(name = "MONITOR")
-@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Monitor.findAll", query = "SELECT m FROM Monitor m"),
+    @NamedQuery(name = "Monitor.findByCodMonitor", query = "SELECT m FROM Monitor m WHERE m.codMonitor = :codMonitor"),
+    @NamedQuery(name = "Monitor.findByNombre", query = "SELECT m FROM Monitor m WHERE m.nombre = :nombre"),
+    @NamedQuery(name = "Monitor.findByDni", query = "SELECT m FROM Monitor m WHERE m.dni = :dni"),
+    @NamedQuery(name = "Monitor.findByTelefono", query = "SELECT m FROM Monitor m WHERE m.telefono = :telefono"),
+    @NamedQuery(name = "Monitor.findByCorreo", query = "SELECT m FROM Monitor m WHERE m.correo = :correo"),
+    @NamedQuery(name = "Monitor.findByFechaEntrada", query = "SELECT m FROM Monitor m WHERE m.fechaEntrada = :fechaEntrada"),
+    @NamedQuery(name = "Monitor.findByNick", query = "SELECT m FROM Monitor m WHERE m.nick = :nick")})
 public class Monitor implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,7 +54,7 @@ public class Monitor implements Serializable {
     @Column(name = "nick")
     private String nick;
     @OneToMany(mappedBy = "monitorResponsable")
-    private Set<Actividad> actividadSet;
+    private Set<Actividad> actividadesResponsable = new HashSet<Actividad>();
 
     public Monitor() {
     }
@@ -59,6 +68,15 @@ public class Monitor implements Serializable {
         this.nombre = nombre;
         this.dni = dni;
         this.fechaEntrada = fechaEntrada;
+    }
+     public Monitor(String codMonitor, String nombre, String dni, String telefono, String correo, String fechaEntrada, String nick) {
+        this.codMonitor = codMonitor;
+        this.nombre = nombre;
+        this.dni = dni;
+        this.telefono = telefono;
+        this.correo = correo;
+        this.fechaEntrada = fechaEntrada;
+        this.nick = nick;
     }
 
     public String getCodMonitor() {
@@ -117,13 +135,12 @@ public class Monitor implements Serializable {
         this.nick = nick;
     }
 
-    @XmlTransient
-    public Set<Actividad> getActividadSet() {
-        return actividadSet;
+    public Set<Actividad> getActividadesResponsable() {
+        return actividadesResponsable;
     }
 
-    public void setActividadSet(Set<Actividad> actividadSet) {
-        this.actividadSet = actividadSet;
+    public void setActividadesResponsable(Set<Actividad> actividadesResponsable) {
+        this.actividadesResponsable = actividadesResponsable;
     }
 
     @Override

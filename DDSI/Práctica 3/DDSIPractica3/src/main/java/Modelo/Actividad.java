@@ -5,26 +5,32 @@
 package Modelo;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author 34667
  */
-@MappedSuperclass
+@Entity
 @Table(name = "ACTIVIDAD")
-@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Actividad.findAll", query = "SELECT a FROM Actividad a"),
+    @NamedQuery(name = "Actividad.findByIdActividad", query = "SELECT a FROM Actividad a WHERE a.idActividad = :idActividad"),
+    @NamedQuery(name = "Actividad.findByNombre", query = "SELECT a FROM Actividad a WHERE a.nombre = :nombre"),
+    @NamedQuery(name = "Actividad.findByDescripcion", query = "SELECT a FROM Actividad a WHERE a.descripcion = :descripcion"),
+    @NamedQuery(name = "Actividad.findByPrecioBaseMes", query = "SELECT a FROM Actividad a WHERE a.precioBaseMes = :precioBaseMes")})
 public class Actividad implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,7 +50,7 @@ public class Actividad implements Serializable {
         @JoinColumn(name = "idActividad", referencedColumnName = "idActividad")}, inverseJoinColumns = {
         @JoinColumn(name = "numeroSocio", referencedColumnName = "numeroSocio")})
     @ManyToMany
-    private Set<Socio> socioSet;
+    private Set<Socio> socios = new HashSet<Socio>();
     @JoinColumn(name = "monitorResponsable", referencedColumnName = "codMonitor")
     @ManyToOne
     private Monitor monitorResponsable;
@@ -94,13 +100,12 @@ public class Actividad implements Serializable {
         this.precioBaseMes = precioBaseMes;
     }
 
-    @XmlTransient
-    public Set<Socio> getSocioSet() {
-        return socioSet;
+    public Set<Socio> getSocios() {
+        return socios;
     }
 
-    public void setSocioSet(Set<Socio> socioSet) {
-        this.socioSet = socioSet;
+    public void setSocios(Set<Socio> socios) {
+        this.socios = socios;
     }
 
     public Monitor getMonitorResponsable() {
