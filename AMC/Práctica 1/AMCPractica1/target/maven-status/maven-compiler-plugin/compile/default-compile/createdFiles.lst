@@ -1,4 +1,3 @@
-Controlador\ControlaPuntos.class
-APP\Practica1AMC.class
-Vistas\VistaPrincipal.class
 Modelo\Punto.class
+APP\Practica1AMC.class
+Controlador\ControlaPuntos.class
