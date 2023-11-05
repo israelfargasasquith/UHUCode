@@ -14,10 +14,10 @@ public class VistaLogin {
     private Scanner lector = new Scanner(System.in);
     
     public String mensajeBienvenida(){
-        System.out.println("****** Bienvenido al gestor del Gym Siempre en Forma ******"
-                + "Elija con que servidor quiere trabajar:"
-                + "1.- MariaDB"
-                + "2.- Oracle");
+        System.out.println("****** Bienvenido al gestor del Gym Siempre en Forma ******\n"
+                + "Escriba el nombre del servidor con el que quiere trabajar:\n"
+                + "1.- MariaDB\n"
+                + "2.- Oracle\n");
         return lector.next();
     }
     

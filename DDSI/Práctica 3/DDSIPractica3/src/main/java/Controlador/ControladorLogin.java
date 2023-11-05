@@ -21,26 +21,35 @@ public class ControladorLogin {
     private String servidor;
 
     public ControladorLogin() {
+        vLogin = new VistaLogin();
         solicitaServidor();
         conectaBD();
-        ControladorPrincipal controladorP = new ControladorPrincipal(sesion);
+        //ControladorPrincipal controladorP = new ControladorPrincipal(sesion);
+        desconectarBD();
     }
-    
-    public void solicitaServidor(){
+
+    public void solicitaServidor() {
         servidor = vLogin.mensajeBienvenida();
     }
 
     private void conectaBD() {
+        System.out.println("*********************Ahora abrimos*********************");
         try {
             if (servidor.equalsIgnoreCase("Oracle")) {
                 sesion = HibernateUtilOracle.getSessionFactory();
             } else if (servidor.equalsIgnoreCase("MariaDB")) {
                 sesion = HibernateUtilMariaDB.getSessionFactory();
             }
-            vLogin = new VistaLogin();
             vLogin.mensajeConsola("Conexion correcta con Hibernate al servidor " + servidor);
         } catch (ExceptionInInitializerError ex) {
             vLogin.mensajeConsola("Error en la conexion, revise el fichero .cfg.xml: " + ex.getMessage());
+        }
+    }
+
+    private void desconectarBD() {
+        System.out.println("*********************Ahora cerramos*********************");
+        if (sesion != null) {
+            sesion.close();
         }
     }
 }
