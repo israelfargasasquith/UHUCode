@@ -4,50 +4,63 @@
  */
 package Controlador;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author 34667
  */
 public class Centro {
 
-    private boolean MLibre = true;
-    private boolean FLibre = true;
-    private boolean VLibre = true;
+    private boolean masajistaLibre = true;
+    private boolean fisioterapeutaLibre = true;
+    private boolean vestuarioLibre = true;
+    private CanvasCentroMasajes canvas;
+    
+    public Centro(CanvasCentroMasajes canvas) {
+        this.canvas = canvas;
+    }
 
     synchronized public void entraMasaje() throws InterruptedException {
-        while (!MLibre) {
+        while (!masajistaLibre) {
             wait();
         }
-        MLibre = false;
+        masajistaLibre = false;
+        //canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre, Thread.currentThread().threadId()s);
     }
 
     synchronized public void saleMasaje() throws InterruptedException {
-        while (!VLibre) {
+        while (!vestuarioLibre) {
             wait();
         }
-        MLibre = true;
-        VLibre = false;
+        masajistaLibre = true;
+        vestuarioLibre = false;
+       // canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre,Thread.currentThread().threadId());
         notifyAll();
     }
 
     synchronized public void entraRehabilita() throws InterruptedException {
-        while (!FLibre) {
+        while (!fisioterapeutaLibre) {
             wait();
         }
-        FLibre = false;
+        fisioterapeutaLibre = false;
+        //canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre,Thread.currentThread().threadId());
+
     }
 
     synchronized public void saleRehabilita() throws InterruptedException {
-        while (!VLibre) {
+        while (!vestuarioLibre) {
             wait();
         }
-        FLibre = true;
-        VLibre = false;
+        fisioterapeutaLibre = true;
+        vestuarioLibre = false;
+        //canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre,Thread.currentThread().threadId());
         notifyAll();
     }
 
     synchronized public void termina() {
-        VLibre = true;
+        vestuarioLibre = true;
+       // canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre,Thread.currentThread().threadId());
         notifyAll();
     }
 
