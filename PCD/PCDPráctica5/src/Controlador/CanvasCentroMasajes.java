@@ -35,11 +35,10 @@ public class CanvasCentroMasajes extends Canvas {
         this.alto = alto;
         this.ancho = ancho;
         this.lClientes = lClientes;
-        String pathBase = "C:\\Users\\34667\\Desktop\\Prácticas\\PCD\\Práctica 5\\PCDPráctica5\\src\\Imagenes";
-        clienteMasaje = ImageIO.read(new File(pathBase + "\\clienteMasaje.jpg"));
-        clienteRehabilitacion = ImageIO.read(new File(pathBase + "\\dolorEspalda.jpg"));
-        masajista = ImageIO.read(new File(pathBase + "\\masaje.png"));
-        fisio = ImageIO.read(new File(pathBase + "\\fisio.jpg"));
+        clienteMasaje = ImageIO.read(new File( "src\\Imagenes\\clienteMasaje.jpg"));
+//        clienteRehabilitacion = ImageIO.read(new File(pathBase + "\\dolorEspalda.jpg"));
+//        masajista = ImageIO.read(new File(pathBase + "\\masaje.png"));
+//        fisio = ImageIO.read(new File(pathBase + "\\fisio.jpg"));
 //        this.lMasaje = lMasaje;
 //        this.lRehabilita = this.lRehabilita;
         setBackground(Color.LIGHT_GRAY);
@@ -78,15 +77,15 @@ public class CanvasCentroMasajes extends Canvas {
         tmp.fillRect(650, 200, 250, 250); //Vestuario
         tmp.fillRect(20, 280, 500, 100); //Acabados
 
-        tmp.drawImage(fisio, 485, 110, 35, 100, this);
+        tmp.drawImage(clienteMasaje, 485, 110, 80, 100, this);
 
-        for (Thread lCliente : lClientes) {
-            if (lCliente.getClass().equals(ClienteMasaje.class)) {
-
-            } else if (lCliente.getClass().equals(ClienteRehabilita.class)) {
-                //pintar uno que quiere rehabilita
-            }
-        }
+//        for (Thread lCliente : lClientes) {
+//            if (lCliente.getClass().equals(ClienteMasaje.class)) {
+//
+//            } else if (lCliente.getClass().equals(ClienteRehabilita.class)) {
+//                //pintar uno que quiere rehabilita
+//            }
+//        }
 
         tmp.drawImage(buffer, 0, 0, null); //pintamos la imagen de buffer en el frame para evitar parpadeos
         g.drawImage(buffer, 0, 0, null);
