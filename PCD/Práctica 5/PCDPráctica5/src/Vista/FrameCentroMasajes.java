@@ -19,17 +19,11 @@ import java.util.Random;
  */
 public class FrameCentroMasajes extends java.awt.Frame {
 
-    private Random r;
-    private ArrayList<Thread> lClientes;
-    private CanvasCentroMasajes vista;
-
     /**
      * Creates new form FrameCentroMasajes
      */
-    public FrameCentroMasajes(CanvasCentroMasajes vista) {
-        Random r = new Random(System.nanoTime());
-        ArrayList<Thread> lClientes = new ArrayList<>();
-        this.vista = vista;
+    public FrameCentroMasajes() {
+
         initComponents();
     }
 
@@ -62,34 +56,54 @@ public class FrameCentroMasajes extends java.awt.Frame {
      */
     public static void main(String args[]) {
         final int alto = 950, ancho = 650;
-        CanvasCentroMasajes vista = new CanvasCentroMasajes(alto, ancho);
-        Centro centro = new Centro(vista);
-        FrameCentroMasajes vCentro = new FrameCentroMasajes(vista);
+        Random r = new Random(System.nanoTime());
+        ArrayList<Thread> lClientes = new ArrayList<>();
+//        ArrayList<ClienteMasaje> lMasaje = new ArrayList<>();
+//        ArrayList<ClienteRehabilita> lRehabilita = new ArrayList<>();
+        CanvasCentroMasajes canvas = new CanvasCentroMasajes(alto, ancho, lClientes);//, lMasaje, lRehabilita);
+        Centro recurso = new Centro(canvas);
+        FrameCentroMasajes vCentro = new FrameCentroMasajes();
 
         vCentro.setSize(alto, ancho);
-        vCentro.setTitle("Práctica 5 Israel Fargas");
+
+        vCentro.setResizable(
+                false);
+
+        vCentro.setTitle(
+                "Práctica 5 Israel Fargas"
+                + "");
         vCentro.setBackground(Color.LIGHT_GRAY);
-        vCentro.add(vista);
-        vCentro.setVisible(true);
-    }
 
-    public void generador() throws InterruptedException { //Genera todos los hilos
+        vCentro.add(canvas);
 
-        for (int i = 0; i < 10; i++) {
+        vCentro.setVisible(
+                true);
 
-            if (r.nextInt(1, 101) > 60) { //genera un clienteMasaje
-                lClientes.add(new ClienteMasaje());
-            } else { //genera un clienteRehabilita
-                lClientes.add(new Thread(new ClienteRehabilita()));
+        try {
+
+            for (int i = 0;
+                    i < 10; i++) {
+
+                if (r.nextInt(1, 101) > 60) { //genera un clienteMasaje
+                    ClienteMasaje masajeTemp = new ClienteMasaje(recurso);
+                    //lMasaje.add(masajeTemp);
+                    lClientes.add(masajeTemp);
+                } else { //genera un clienteRehabilita
+                    ClienteRehabilita rehabilitaTmp = new ClienteRehabilita(recurso);
+                    lClientes.add(new Thread(rehabilitaTmp));
+                    //lRehabilita.add(rehabilitaTmp);
+                }
+                sleep(200 / r.nextInt(1, 3));
             }
-            sleep(200 / r.nextInt(1, 3));
-        }
-
-        for (Thread cliente : lClientes) {
-            cliente.join();
+            for (Thread cliente : lClientes) {
+                cliente.join();
+            }
+        } catch (InterruptedException ex) {
+            System.out.println("Error con los sleeps o con los join: " + ex.getMessage());
         }
 
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

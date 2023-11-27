@@ -4,6 +4,8 @@
  */
 package Controlador;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author 34667
@@ -14,7 +16,7 @@ public class Centro {
     private boolean fisioterapeutaLibre = true;
     private boolean vestuarioLibre = true;
     private CanvasCentroMasajes canvas;
-
+    
     public Centro(CanvasCentroMasajes canvas) {
         this.canvas = canvas;
     }
@@ -23,8 +25,8 @@ public class Centro {
         while (!masajistaLibre) {
             wait();
         }
-        canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre);
         masajistaLibre = false;
+        //canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre, Thread.currentThread().threadId()s);
     }
 
     synchronized public void saleMasaje() throws InterruptedException {
@@ -33,7 +35,7 @@ public class Centro {
         }
         masajistaLibre = true;
         vestuarioLibre = false;
-        canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre);
+       // canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre,Thread.currentThread().threadId());
         notifyAll();
     }
 
@@ -42,7 +44,7 @@ public class Centro {
             wait();
         }
         fisioterapeutaLibre = false;
-        canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre);
+        //canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre,Thread.currentThread().threadId());
 
     }
 
@@ -52,13 +54,13 @@ public class Centro {
         }
         fisioterapeutaLibre = true;
         vestuarioLibre = false;
-        canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre);
+        //canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre,Thread.currentThread().threadId());
         notifyAll();
     }
 
     synchronized public void termina() {
         vestuarioLibre = true;
-        canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre);
+       // canvas.actualiza(masajistaLibre, fisioterapeutaLibre, vestuarioLibre,Thread.currentThread().threadId());
         notifyAll();
     }
 
