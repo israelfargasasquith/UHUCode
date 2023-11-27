@@ -1,17 +1,14 @@
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Modelo\Socio.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Vista\VistaMonitores.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Vista\VistaPrincipal.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Controlador\ControladorPrincipal.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Vista\VistaActividades.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Config\HibernateUtilOracle.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Modelo\Actividad.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Modelo\ActividadDAO.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Controlador\ControladorLogin.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\APP\DDSIPractica3.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Vista\VistaLogin.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Modelo\MonitorDAO.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Modelo\Conexion.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Modelo\SocioDAO.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Config\HibernateUtilMariaDB.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Modelo\Monitor.java
-D:\Uni\Prácticas\DDSI Prácticas\Práctica 3\DDSIPractica3\src\main\java\Vista\VistaSocios.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Vista\VistaLogin.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Vista\VistaPrincipal.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Config\HibernateUtilOracle.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\APP\DDSIPractica3.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Modelo\ActividadDAO.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Controlador\ControladorLogin.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Modelo\Monitor.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Modelo\Actividad.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Modelo\MonitorDAO.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Config\HibernateUtilMariaDB.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Modelo\Socio.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Controlador\ControladorPrincipal.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Modelo\SocioDAO.java
+C:\Users\34667\Desktop\Prácticas\DDSI\Práctica 3\DDSIPractica3\src\main\java\Modelo\Conexion.java

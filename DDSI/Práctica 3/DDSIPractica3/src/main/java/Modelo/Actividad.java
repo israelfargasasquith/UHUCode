@@ -62,10 +62,21 @@ public class Actividad implements Serializable {
         this.idActividad = idActividad;
     }
 
+    
     public Actividad(String idActividad, String nombre, int precioBaseMes) {
         this.idActividad = idActividad;
         this.nombre = nombre;
         this.precioBaseMes = precioBaseMes;
+    }
+    
+    public void altaSocio(Socio socio){
+        this.socios.add(socio);
+        socio.getActividades().add(this);
+    }
+    
+    public void bajaSocio(Socio socio) {
+        this.socios.remove(socio);
+        socio.getActividades().remove(this);
     }
 
     public String getIdActividad() {
@@ -140,5 +151,7 @@ public class Actividad implements Serializable {
     public String toString() {
         return "Modelo.Actividad[ idActividad=" + idActividad + " ]";
     }
+
+    
     
 }

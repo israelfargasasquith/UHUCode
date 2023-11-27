@@ -15,7 +15,7 @@ public class VistaLogin {
     
     public String mensajeBienvenida(){
         System.out.println("****** Bienvenido al gestor del Gym Siempre en Forma ******\n"
-                + "Escriba el nombre del servidor con el que quiere trabajar:\n"
+                + "Elija con que servidor quiere trabajar:\n"
                 + "1.- MariaDB\n"
                 + "2.- Oracle\n");
         return lector.next();

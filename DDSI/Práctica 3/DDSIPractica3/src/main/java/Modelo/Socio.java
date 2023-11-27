@@ -67,6 +67,17 @@ public class Socio implements Serializable {
         this.numeroSocio = numeroSocio;
     }
 
+    public Socio(String numeroSocio, String nombre, String dni, String fechaNacimiento, String telefono, String correo, String fechaEntrada, Character categoria) {
+        this.numeroSocio = numeroSocio;
+        this.nombre = nombre;
+        this.dni = dni;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+        this.correo = correo;
+        this.fechaEntrada = fechaEntrada;
+        this.categoria = categoria;
+    }
+    
     public Socio(String numeroSocio, String nombre, String dni, String fechaEntrada, Character categoria) {
         this.numeroSocio = numeroSocio;
         this.nombre = nombre;
