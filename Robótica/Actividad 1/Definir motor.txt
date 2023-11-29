@@ -1,0 +1,27 @@
+Definir motor
+
+Reset Encoder
+
+t[1]=0;
+
+Giro[1] <- leer encoder
+
+referencia[1]=90
+
+error[1]=referencia[1]-Giro[1] 
+
+while t[i]<tf
+
+	i++
+
+	Giro[i] <- leer encoder
+
+	referencia[i]=90
+
+	error[i]=referencia[i]-Giro[i] 
+
+	% aqui va el controlador
+
+
+end
+	
