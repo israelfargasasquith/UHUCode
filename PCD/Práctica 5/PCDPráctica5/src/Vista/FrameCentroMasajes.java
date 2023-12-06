@@ -9,7 +9,9 @@ import Controlador.Centro;
 import Modelo.ClienteMasaje;
 import Modelo.ClienteRehabilita;
 import java.awt.Color;
+import java.io.IOException;
 import static java.lang.Thread.sleep;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -55,53 +57,49 @@ public class FrameCentroMasajes extends java.awt.Frame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        final int alto = 950, ancho = 650;
-        Random r = new Random(System.nanoTime());
-        ArrayList<Thread> lClientes = new ArrayList<>();
-//        ArrayList<ClienteMasaje> lMasaje = new ArrayList<>();
-//        ArrayList<ClienteRehabilita> lRehabilita = new ArrayList<>();
-        CanvasCentroMasajes canvas = new CanvasCentroMasajes(alto, ancho, lClientes);//, lMasaje, lRehabilita);
-        Centro recurso = new Centro(canvas);
-        FrameCentroMasajes vCentro = new FrameCentroMasajes();
-
-        vCentro.setSize(alto, ancho);
-
-        vCentro.setResizable(
-                false);
-
-        vCentro.setTitle(
-                "Práctica 5 Israel Fargas"
-                + "");
-        vCentro.setBackground(Color.LIGHT_GRAY);
-
-        vCentro.add(canvas);
-
-        vCentro.setVisible(
-                true);
-
         try {
+            final int ancho = 900, alto = 1200;
+            Random r = new Random(System.nanoTime());
+            ArrayList<Thread> lClientes = new ArrayList<>();
 
-            for (int i = 0;
-                    i < 10; i++) {
+            CanvasCentroMasajes canvas = new CanvasCentroMasajes(alto, ancho);
+            Centro recurso = new Centro(canvas);
+            FrameCentroMasajes vCentro = new FrameCentroMasajes();
 
-                if (r.nextInt(1, 101) > 60) { //genera un clienteMasaje
-                    ClienteMasaje masajeTemp = new ClienteMasaje(recurso);
-                    //lMasaje.add(masajeTemp);
+            vCentro.setSize(alto, ancho);
+            vCentro.setResizable(false);
+            vCentro.setTitle("Práctica 5 Israel Fargas");
+            vCentro.setBackground(Color.LIGHT_GRAY);
+            vCentro.add(canvas);
+            vCentro.setVisible(true);
+            sleep(1000);
+           
+            for (int i = 0; i < 10; i++) {
+
+                if (r.nextInt(1, 101) < 60) { //genera un clienteMasaje
+                    ClienteMasaje masajeTemp = new ClienteMasaje(recurso,""+i);
                     lClientes.add(masajeTemp);
                 } else { //genera un clienteRehabilita
-                    ClienteRehabilita rehabilitaTmp = new ClienteRehabilita(recurso);
+                    ClienteRehabilita rehabilitaTmp = new ClienteRehabilita(recurso,""+i);
                     lClientes.add(new Thread(rehabilitaTmp));
-                    //lRehabilita.add(rehabilitaTmp);
+                    
                 }
-                sleep(200 / r.nextInt(1, 3));
+                lClientes.get(i).start();
+                sleep( r.nextInt(1, 3)*1000);
             }
+            int i = 1;
             for (Thread cliente : lClientes) {
                 cliente.join();
+                System.out.println("Han acabado " + i++ + "/10");
             }
+            System.out.println("Se acabo.");
+            canvas.repaint();
+            sleep(5000);
+            System.exit(0);
+
         } catch (InterruptedException ex) {
             System.out.println("Error con los sleeps o con los join: " + ex.getMessage());
         }
-
     }
 
 
