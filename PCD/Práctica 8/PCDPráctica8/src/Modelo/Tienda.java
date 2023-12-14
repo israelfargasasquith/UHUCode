@@ -7,38 +7,69 @@ package Modelo;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  *
  * @author 34667
  */
 public class Tienda {
-    private int nPagando; //numero de personas que estan pagando en ese momento
+
+    private int cajasLibres;
     private int nEsperandoEfectivo;
-    //Lock l;
-//    Condition caja[];
-    
-    public Tienda(){
-        nPagando =0;
+    private boolean hayPagandoEfectivo;
+    private Lock l;
+    private Condition cEsperaEfectivo;
+    private Condition cEsperaTarjeta;
+
+    public Tienda() {
         nEsperandoEfectivo = 0;
-//        l = new ReentrantLock();
-//        for (int i = 0; i < 4; i++) {
-//            
-//        }
-    } AQUI TE QUEDASTE ISRA, TIENES QUE VER LAS OTRAS PRÁCTICAS Y PLANTEAR MEJOR EL PROBLEMA DE LA TIENDA ESTA
-    
-    public void entraTarjeta() {
-        while(nPagando ==4 || nEsperandoEfectivo > 0){
-            wait();
+        cajasLibres = 4;
+        hayPagandoEfectivo = false;
+        l = new ReentrantLock();
+        cEsperaEfectivo = l.newCondition();
+        cEsperaTarjeta = l.newCondition();
+    }
+
+    public void entraEfectivo() throws InterruptedException {
+
+        l.lock();
+        try {
+            nEsperandoEfectivo++;
+            while (cajasLibres == 0 || hayPagandoEfectivo) {
+                cEsperaEfectivo.await();
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Error en entraEfectivo: " + e.getMessage());
+        } finally {
+            l.unlock();
         }
-        nPagando++;
-            System.out.println("Ha entrado a pagar el hilo "+Thread.currentThread().getName());
+
+    }
+    
+    public void saleEfectivo(){
+        cajasLibres++;
+        hayPagandoEfectivo=false;
+        if(nEsperandoEfectivo>0){
+            cEsperaEfectivo.signal();
+        }else{
+            cEsperaTarjeta.signal();
+        }
+    }
+    
+    public void entraTarjeta() throws InterruptedException{
+        while(cajasLibres == 0){
+            cEsperaTarjeta.await();
+        }
+        cajasLibres--;
     }
     
     public void saleTarjeta(){
-         
-        nPagando--;
+        cajasLibres++;
+        if(nEsperandoEfectivo>0 && !hayPagandoEfectivo){
+            cEsperaEfectivo.signal();
+        }else{
+            cEsperaTarjeta.signal();
+        }
     }
-    
-    
 }

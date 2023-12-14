@@ -4,8 +4,16 @@
  */
 package Vista;
 
+import Modelo.ClienteEfectivo;
+import Modelo.ClienteTarjeta;
+import Modelo.Tienda;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  *
@@ -47,11 +55,46 @@ public class VistaDecatlon extends java.awt.Frame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        ExecutorService poolEfectivo = Executors.newFixedThreadPool(10); //Cola hilos efectivo
-        ExecutorService poolTarjeta = Executors.newFixedThreadPool(10);//Cola hilos tarjeta
-        
-        
+    public static void main(String args[]) throws InterruptedException, ExecutionException {
+        ExecutorService poolEfectivo = Executors.newFixedThreadPool(3); //Cola hilos efectivo
+        ExecutorService poolTarjeta = Executors.newFixedThreadPool(3);//Cola hilos tarjeta
+
+        ArrayList<Future<Integer>> tiempoTarjeta = new ArrayList<>();
+        ArrayList<Future<Integer>> tiempoEfectivo = new ArrayList<>();
+
+        Random rand = new Random(System.nanoTime());
+        Tienda recurso = new Tienda();
+
+        for (int i = 0; i < 10; i++) {
+            if (rand.nextBoolean()) {
+                tiempoTarjeta.add(poolTarjeta.submit(new ClienteTarjeta(recurso, i)));
+            } else {
+                tiempoEfectivo.add(poolEfectivo.submit(new ClienteEfectivo(recurso, i)));
+            }
+            Thread.sleep(500);
+        }
+
+       
+
+        int tiempoTotalTarjeta = 0;
+        int tiempoTotalEfectivo = 0;
+
+        for (int i = 0; i < tiempoTarjeta.size(); i++) {
+            System.out.println("Size tarjeta-> " + tiempoTarjeta.size());
+            System.out.println("El tiempoTarjeta a sumar es de " + tiempoTarjeta.get(i).get() + " milisegundos");
+            tiempoTotalTarjeta += tiempoTarjeta.get(i).get();
+        }
+        for (int i = 0; i < tiempoEfectivo.size(); i++) {
+            System.out.println("Size efectivo-> " + tiempoEfectivo.size());
+            System.out.println("El tiempoEfectivo a sumar es de " + tiempoEfectivo.get(i).get() + " milisegundos");
+            tiempoTotalEfectivo += tiempoEfectivo.get(i).get();
+        }
+        poolEfectivo.shutdown(); EXPLOTA POR CONCURRENCIA
+        poolTarjeta.shutdown();
+
+        System.out.println("El tiempo total en pagar con Tarjeta es de: " + tiempoTotalTarjeta + "\n El tiempo total en pagar con Efectivo es de: " + tiempoTotalEfectivo);
+        System.exit(0);
+
     }
 
 

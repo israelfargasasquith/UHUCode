@@ -25,21 +25,39 @@ public class EjemploThPool {
      */
     public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-        ExecutorService pool = Executors.newFixedThreadPool(3);
-        ArrayList<Future<Integer>> res = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            res.add(pool.submit(new ConRetorno(i+10)));
+        ExecutorService poolRetorno = Executors.newFixedThreadPool(3);
+        ExecutorService poolSinRetorno = Executors.newFixedThreadPool(3);
+        ArrayList<Future<Integer>> retornoSuma = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            retornoSuma.add(poolRetorno.submit(new ConRetorno(i + 10)));
+            poolSinRetorno.submit(new SinRetorno(i));
             // pool.submit(new SinRetorno(i)); //Pone la tarea t en la cola de tareas del threadPool
             //res[i] = pool.submit(new ConRetorno(10 + i)); //Estas tareas devuelven un Integer y se pueden mezclar en el pool
             //Future indica donde va a poner el resultado cuando acabe el hilo, el resultado se recupera con res.get, da igual que lo hagamos 
-            //andtes o despues del shutdown
+            //antes o despues del shutdown
         }
 
-        pool.shutdown();
-        for (int i = 0; i < res.size(); i++) {
-            System.out.println("Size->"+res.size());
+//         ExecutorService pool = Executors.newFixedThreadPool(3); esto sin pruebas
+//        ArrayList<Future<Integer>> res = new ArrayList<>();
+//        for (int i = 0; i < 15; i++) {
+//            res.add(pool.submit(new ConRetorno(i+10)));
+//            // pool.submit(new SinRetorno(i)); //Pone la tarea t en la cola de tareas del threadPool
+//            //res[i] = pool.submit(new ConRetorno(10 + i)); //Estas tareas devuelven un Integer y se pueden mezclar en el pool
+//            //Future indica donde va a poner el resultado cuando acabe el hilo, el resultado se recupera con res.get, da igual que lo hagamos 
+//            //antes o despues del shutdown
+//        }
+//  pool.shutdown();
+//        for (int i = 0; i < res.size(); i++) {
+//            System.out.println("Size->"+res.size());
+//            //System.out.println("El resultado es " + res[i].get());
+//            System.out.println("El resultado es " + res.get(i).get());
+//        }
+        poolRetorno.shutdown();
+        poolSinRetorno.shutdown();
+        for (int i = 0; i < retornoSuma.size(); i++) {
+            System.out.println("Size->" + retornoSuma.size());
             //System.out.println("El resultado es " + res[i].get());
-            System.out.println("El resultado es " + res.get(i).get());
+            System.out.println("El resultado es " + retornoSuma.get(i).get());
         }
     }
 
@@ -58,7 +76,7 @@ class SinRetorno implements Runnable {
         for (int i = 0; i < 3; i++) {
             System.out.println("Soy la tarea " + id + " y la ejecuta el hilo con id " + Thread.currentThread().getName());
             try {
-                sleep(1000);
+                sleep(2000);
             } catch (Exception e) {
             }
         }
@@ -78,7 +96,7 @@ class ConRetorno implements Callable<Integer> {
         for (int i = 0; i < 3; i++) {
             System.out.println("Soy la tarea " + id + " y la ejecuta el hilo con id " + Thread.currentThread().getName());
             try {
-                sleep(1000);
+                sleep(2000);
             } catch (Exception e) {
             }
         }
