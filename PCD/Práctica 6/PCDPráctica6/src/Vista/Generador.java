@@ -12,8 +12,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -65,35 +63,41 @@ public class Generador extends java.awt.Frame {
 
         try {
             final int alto = 800, ancho = 550;
+            
             Generador vista = new Generador();
+            vista.setSize(1000, 750);
             CavasCongreso cv = new CavasCongreso(ancho, alto);
+            Random r = new Random(System.nanoTime());
             Semaphore papelera, salaCafe, salaLeche, maquinaLeche, maquinaCafe;
-            int cantidadLeche = 10;
-            int cantidadCafe = 10;
+           
             papelera = new Semaphore(1);
-            maquinaLeche = new Semaphore(1);
-            maquinaCafe = new Semaphore(1);
+            maquinaLeche = new Semaphore(10);
+            maquinaCafe = new Semaphore(10);
+            
             salaCafe = new Semaphore(3);
             salaLeche = new Semaphore(3);
-            Random r = new Random(System.nanoTime());
-            Camarero c = new Camarero(cv);
+            
+            Camarero c = new Camarero(cv,maquinaLeche, maquinaCafe);
+            
             ArrayList<Thread> lClientes = new ArrayList<>();
-
-            vista.add(cv);
-            vista.setVisible(true);
+            vista.add(cv); 
+            vista.setVisible(true); 
             vista.setLocationRelativeTo(null);
             c.start();
 
             for (int i = 0; i < 30; i++) {
                 if (r.nextBoolean()) {
-                    lClientes.add(new Cortado(salaCafe, salaLeche, papelera, maquinaLeche, maquinaCafe, cv));
+                    lClientes.add(new Cortado(salaCafe, salaLeche, papelera, maquinaLeche, maquinaCafe, cv, i));
                 } else {
-                    lClientes.add(new Thread(new Manchado(salaCafe, salaLeche, papelera, maquinaLeche, maquinaCafe, cv)));
+                    lClientes.add(new Thread(new Manchado(salaCafe, salaLeche, papelera, maquinaLeche, maquinaCafe, cv, i)));
                 }
+                lClientes.get(i).start();
                 Thread.sleep(Duration.ofSeconds((long) 0.5));
             }
-
+            int i=0;
             for (Thread lCliente : lClientes) {
+                i++;
+                System.out.println("Se recoge a cliente "+(i+1)+" de /30");
                 lCliente.join();
             }
             c.interrupt();

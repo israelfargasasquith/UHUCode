@@ -12,8 +12,6 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -103,13 +101,24 @@ public class CavasCongreso extends Canvas {
 
         super.setSize(ancho, alto);
         super.setBackground(Color.white);
+//  try {
+//            manchadoimg = ImageIO.read(new File("src\\Imagenes\\manchado.jpg"));
+//            cortadoimg = ImageIO.read(new File("src\\Imagenes\\cortado.jpg"));
+//            camareroimg = ImageIO.read(new File("src\\Imagenes\\camarero.gif"));
+//            papeleraimg = ImageIO.read(new File("src\\Imagenes\\papelera.jpg"));
+//            cafeteraimg = ImageIO.read(new File("src\\Imagenes\\cafetera1.jpg"));
+//            lecheraimg = ImageIO.read(new File("src\\Imagenes\\lechera.jpg"));
+//  } catch (IOException ex) {
+//            System.out.println("Error con los archivos: " + ex.getMessage());
+//        }
+        manchadoimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Imagenes/manchado.png"));
+        cortadoimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Imagenes/cortado.png"));
+        camareroimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Imagenes/camarero.gif"));
+        papeleraimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Imagenes/papelera.png"));
+        cafeteraimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Imagenes/cafetera1.png"));
+        lecheraimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Imagenes/lechera.png"));
 
-        manchadoimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("Imagenes/manchado.png"));
-        cortadoimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("Imagenes/cortado.png"));
-        camareroimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("Imagenes/camarero.gif"));
-        papeleraimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("Imagenes/papelera.png"));
-        cafeteraimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("Imagenes/cafetera1.png"));
-        lecheraimg = Toolkit.getDefaultToolkit().getImage(getClass().getResource("Imagenes/lechera.png"));
+
 
         MediaTracker dibu = new MediaTracker(this);
         dibu.addImage(manchadoimg, 0);
@@ -321,7 +330,7 @@ public class CavasCongreso extends Canvas {
         //salacafe
         gbuf.setColor(Color.white);
         gbuf.fillRect(possalacafe[0], possalacafe[1], possalacafe[2], possalacafe[3]);
-        gbuf.drawImage(cafeteraimg, possalacafe[0] , possalacafe[1], anchoicon, altoicon, null);
+        gbuf.drawImage(cafeteraimg, possalacafe[0], possalacafe[1], anchoicon, altoicon, null);
         gbuf.setColor(Color.red);
         for (int i = 0; i < salacafe.size(); i++) {
             if (salacafe.get(i).getTipo() == 'C') {
@@ -396,14 +405,14 @@ public class CavasCongreso extends Canvas {
 
             if (papelera.get(i).getTipo() == 'C') {
                 gbuf.setColor(Color.red);
-                gbuf.drawImage(cortadoimg, pospapelera[0] , pospapelera[1] + 12, anchoicon, altoicon, null);
+                gbuf.drawImage(cortadoimg, pospapelera[0], pospapelera[1] + 12, anchoicon, altoicon, null);
                 gbuf.drawString(papelera.get(i).getId() + "-" + papelera.get(i).getLeche() + "-" + papelera.get(i).getCafe(),
-                        pospapelera[0] , pospapelera[1] + 12);
+                        pospapelera[0], pospapelera[1] + 12);
             } else {
                 gbuf.setColor(Color.blue);
-                gbuf.drawImage(manchadoimg, pospapelera[0] , pospapelera[1] + 12, anchoicon, altoicon, null);
+                gbuf.drawImage(manchadoimg, pospapelera[0], pospapelera[1] + 12, anchoicon, altoicon, null);
                 gbuf.drawString(papelera.get(i).getId() + "-" + papelera.get(i).getLeche() + "-" + papelera.get(i).getCafe(),
-                        pospapelera[0] , pospapelera[1] + 12);
+                        pospapelera[0], pospapelera[1] + 12);
             }
         }
         gbuf.drawImage(papeleraimg, pospapelera[0] + 20, pospapelera[1] + 30, anchoicon * 3, altoicon, null);
