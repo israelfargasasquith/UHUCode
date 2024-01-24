@@ -1,0 +1,26 @@
+
+1º:En relación a las rutinas de servicio a la interrupción:
+
+Interrupciones: Definición de interrupción. Definición y organización de la tabla
+de vectores de interrupción. Definición de una rutina de interrupción. Número
+de interrupciones diferentes que pueden ser atendidas según la tabla de
+vectores de interrupción. Número máximo de posiciones de la tabla de vectores 
+de interrupción.
+
+2º:En relación a los programas residentes:
+
+Programas residentes: Definición de programa residente. Estructura de un
+programa residente.
+Ficheros .COM: Definición de fichero .COM. Estructura de un fichero .ASM para
+que pueda ser ensamblado como .COM.
+
+3º:En relación a la memoria de vídeo:
+
+¿Qué es la memoria de video?; ¿Qué es el modo gráfico?; ¿Qué es el modo
+texto?.
+¿Cómo se accede a la memoria de vídeo en modo gráfico?.
+¿Cómo está organizada la memoria de vídeo en modo gráfico (relación entre lo
+que se escribe en memoria y lo que aparece en pantalla)?.
+¿Cómo se accede a la memoria de vídeo en modo texto?.
+¿Cómo está organizada la memoria de vídeo en modo texto (relación entre lo
+que se escribe en memoria y lo que aparece en pantalla)?.
