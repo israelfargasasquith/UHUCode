@@ -1,0 +1,55 @@
+@options
+@packages
+-classpath
+'C:/Users/marin/.m2/repository/org/netbeans/external/AbsoluteLayout/RELEASE150/AbsoluteLayout-RELEASE150.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'15'
+-sourcepath
+'C:/Users/marin/Desktop/INGLES/Practica2_AMC/Practica2_AMC/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2023. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/marin/Desktop/INGLES/Practica2_AMC/Practica2_AMC/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Practica2_AMC 1.0-SNAPSHOT API'
+-linkoffline
+'https://docs.oracle.com/en/java/javase/15/docs/api' 'C:/Users/marin/Desktop/INGLES/Practica2_AMC/Practica2_AMC/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'Practica2_AMC 1.0-SNAPSHOT API'
+Aplicacion
+Controlador
+Modelo
+Vista
+C:\Users\marin\.m2\repository\org\netbeans\external\AbsoluteLayout\RELEASE150\AbsoluteLayout-RELEASE150.jar = 1687720665642
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\src\main\java = 1703242391377
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\allclasses-index.html = 1703249390870
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\allpackages-index.html = 1703249390872
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\copy.svg = 1703249390907
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\element-list = 1703249390753
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\help-doc.html = 1703249390902
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\index-all.html = 1703249390889
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\index.html = 1703249390857
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\jquery-ui.overrides.css = 1703249390918
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\member-search-index.js = 1703249390876
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\module-search-index.js = 1703249390873
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\overview-summary.html = 1703249390894
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\overview-tree.html = 1703249390854
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\package-search-index.js = 1703249390874
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\script.js = 1703249390904
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\search-page.js = 1703249390909
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\search.html = 1703249390891
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\search.js = 1703249390908
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\serialized-form.html = 1703249390804
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\stylesheet.css = 1703249390904
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\tag-search-index.js = 1703249390876
+C:\Users\marin\Desktop\INGLES\Practica2_AMC\Practica2_AMC\target\site\apidocs\type-search-index.js = 1703249390875
