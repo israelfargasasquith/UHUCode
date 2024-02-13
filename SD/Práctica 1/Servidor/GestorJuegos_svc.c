@@ -1,0 +1,1 @@
+../IDL/GestorJuegos_svc.c
