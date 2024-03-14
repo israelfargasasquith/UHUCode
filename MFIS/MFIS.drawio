@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-03-14T17:04:49.310Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="63HRkOCE_-84IK2jtTNI" version="24.0.5" type="github">
+<mxfile host="app.diagrams.net" modified="2024-03-14T17:06:17.641Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="74xyGaZokv_5AA46rX6C" version="24.0.5" type="github">
   <diagram name="Página-1" id="LdLXde8z1BE4xetksOMD">
     <mxGraphModel dx="2514" dy="2087" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -44,6 +44,16 @@
             <mxPoint x="8" y="-8" as="offset" />
           </mxGeometry>
         </mxCell>
+        <mxCell id="MYcb5Nsn5vaMIgrUeCR2-46" value="1..1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MYcb5Nsn5vaMIgrUeCR2-36">
+          <mxGeometry x="-0.7133" relative="1" as="geometry">
+            <mxPoint x="20" y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MYcb5Nsn5vaMIgrUeCR2-50" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MYcb5Nsn5vaMIgrUeCR2-36">
+          <mxGeometry x="0.9309" y="-2" relative="1" as="geometry">
+            <mxPoint x="-13" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="hpnSp_jx-Zh7qwqXJHI1-4" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;Entity&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;CuerpoPolicía&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- NúmeroDeMiembro: int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- Zona: Dirección&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ AtiendeLlamada()&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="-240" y="100" width="190" height="140" as="geometry" />
         </mxCell>
@@ -59,6 +69,16 @@
         <mxCell id="MYcb5Nsn5vaMIgrUeCR2-40" value="Leen" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MYcb5Nsn5vaMIgrUeCR2-35">
           <mxGeometry x="-0.7108" y="-3" relative="1" as="geometry">
             <mxPoint x="-6" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MYcb5Nsn5vaMIgrUeCR2-48" value="1..1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MYcb5Nsn5vaMIgrUeCR2-35">
+          <mxGeometry x="-0.8881" y="-3" relative="1" as="geometry">
+            <mxPoint y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MYcb5Nsn5vaMIgrUeCR2-49" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MYcb5Nsn5vaMIgrUeCR2-35">
+          <mxGeometry x="0.8759" y="4" relative="1" as="geometry">
+            <mxPoint x="-14" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="96839O5GG2vvCgcMlOU8-3" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;Entity&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;CuerpoBomberos&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- NúmeroDeMiembros: int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- Zona:Dirección&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ AtiendeLlama()&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" parent="1" vertex="1">
@@ -97,6 +117,16 @@
         <mxCell id="MYcb5Nsn5vaMIgrUeCR2-38" value="Leen" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MYcb5Nsn5vaMIgrUeCR2-37">
           <mxGeometry x="0.1649" y="-1" relative="1" as="geometry">
             <mxPoint x="67" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MYcb5Nsn5vaMIgrUeCR2-47" value="1..1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MYcb5Nsn5vaMIgrUeCR2-37">
+          <mxGeometry x="-0.9677" relative="1" as="geometry">
+            <mxPoint x="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MYcb5Nsn5vaMIgrUeCR2-51" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MYcb5Nsn5vaMIgrUeCR2-37">
+          <mxGeometry x="0.9176" relative="1" as="geometry">
+            <mxPoint x="-20" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="MYcb5Nsn5vaMIgrUeCR2-7" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;Personal Medico&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;border-color: var(--border-color); margin: 0px 0px 0px 4px;&quot;&gt;- Tipo: enum&amp;lt;String&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- Especialidad: String&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- ZonaActuacion: List&amp;lt;Integer&amp;gt;&amp;nbsp;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ getTipo(): String&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ getEspecialidad(): String&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ getZonaActuacion(): List&amp;lt;String&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ setTipo(tipo: String): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ setEspecialidad(especialidad: String): void&lt;/p&gt;&lt;p style=&quot;border-color: var(--border-color); margin: 0px 0px 0px 4px;&quot;&gt;+ setZonaActuacion(zones: List&amp;lt;Integer&amp;gt;): void&lt;/p&gt;&lt;p style=&quot;border-color: var(--border-color); margin: 0px 0px 0px 4px;&quot;&gt;+ addZonaActuacion(zone: Integer): boolean&lt;/p&gt;&lt;p style=&quot;border-color: var(--border-color); margin: 0px 0px 0px 4px;&quot;&gt;+ modifyZonaActuacion(zone: Integer): boolean&lt;/p&gt;&lt;p style=&quot;border-color: var(--border-color); margin: 0px 0px 0px 4px;&quot;&gt;+ modifyZonaActuacionIndex(index: Integer): boolean&lt;/p&gt;&lt;p style=&quot;border-color: var(--border-color); margin: 0px 0px 0px 4px;&quot;&gt;+ removeZonaActuacion(zone: Integer): boolean&lt;/p&gt;&lt;p style=&quot;border-color: var(--border-color); margin: 0px 0px 0px 4px;&quot;&gt;+ removeZonaActuacionIndex(index: Integer): boolean&lt;/p&gt;&lt;span style=&quot;color: rgba(0, 0, 0, 0); font-family: monospace; font-size: 0px;&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-top%3A4px%3Btext-align%3Acenter%3B%26quot%3B%26gt%3B%26lt%3Bi%26gt%3B%26amp%3Blt%3B%26amp%3Blt%3Bentity%26amp%3Bgt%3B%26amp%3Bgt%3B%26lt%3B%2Fi%26gt%3B%26lt%3Bbr%26gt%3B%26lt%3Bb%26gt%3BTurista%26lt%3B%2Fb%26gt%3B%26lt%3B%2Fp%26gt%3B%26lt%3Bhr%20size%3D%26quot%3B1%26quot%3B%26gt%3B%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-left%3A4px%3B%26quot%3B%26gt%3B%2B%20field1%3A%20Type%26lt%3Bbr%26gt%3B%2B%20field2%3A%20Type%26lt%3B%2Fp%26gt%3B%26lt%3Bhr%20size%3D%26quot%3B1%26quot%3B%26gt%3B%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-left%3A4px%3B%26quot%3B%26gt%3B%2B%20method1(Type)%3A%20Type%26lt%3Bbr%26gt%3B%2B%20method2(Type%2C%20Type)%3A%20Type%26lt%3B%2Fp%26gt%3B%22%20style%3D%22verticalAlign%3Dtop%3Balign%3Dleft%3Boverflow%3Dfill%3BfontSize%3D12%3BfontFamily%3DHelvetica%3Bhtml%3D1%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%2240%22%20y%3D%2280%22%20width%3D%22190%22%20height%3D%22140%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;rounded=0;" vertex="1" parent="1">
@@ -155,6 +185,21 @@
         </mxCell>
         <mxCell id="MYcb5Nsn5vaMIgrUeCR2-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.009;entryY=0.555;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" edge="1" parent="1" source="hpnSp_jx-Zh7qwqXJHI1-3" target="hpnSp_jx-Zh7qwqXJHI1-1">
           <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MYcb5Nsn5vaMIgrUeCR2-52" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MYcb5Nsn5vaMIgrUeCR2-33">
+          <mxGeometry x="-0.8927" y="3" relative="1" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MYcb5Nsn5vaMIgrUeCR2-53" value="1..1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MYcb5Nsn5vaMIgrUeCR2-33">
+          <mxGeometry x="0.8765" y="-2" relative="1" as="geometry">
+            <mxPoint x="-6" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MYcb5Nsn5vaMIgrUeCR2-54" value="Registra" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MYcb5Nsn5vaMIgrUeCR2-33">
+          <mxGeometry x="0.0164" relative="1" as="geometry">
+            <mxPoint y="-18" as="offset" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="MYcb5Nsn5vaMIgrUeCR2-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.442;entryY=1.034;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" edge="1" parent="1" source="MYcb5Nsn5vaMIgrUeCR2-27" target="hpnSp_jx-Zh7qwqXJHI1-1">
           <mxGeometry relative="1" as="geometry" />
