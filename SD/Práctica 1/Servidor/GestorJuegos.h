@@ -1,1 +1,0 @@
-../IDL/GestorJuegos.h
