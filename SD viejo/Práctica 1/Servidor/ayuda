@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <time.h>
+
+typedef enum {
+    FACIL,
+    MEDIO,
+    DIFICIL
+} Dificultad;
+
+typedef struct {
+    char tablero[9][9];
+    Dificultad dificultad;
+    int codigo;
+} Sudoku;
+
+bool isSafe(char sudoku[9][9], int row, int col, char num) {
+    // Verificar si el número ya está presente en la fila
+    for (int i = 0; i < 9; i++) {
+        if (sudoku[row][i] == num) {
+            return false;
+        }
+    }
+
+    // Verificar si el número ya está presente en la columna
+    for (int i = 0; i < 9; i++) {
+        if (sudoku[i][col] == num) {
+            return false;
+        }
+    }
+
+    // Verificar si el número ya está presente en el bloque 3x3
+    int startRow = row - (row % 3);
+    int startCol = col - (col % 3);
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (sudoku[startRow + i][startCol + j] == num) {
+                return false;
+            }
+        }
+    }
+
+    return true;  // El número es seguro de colocar en esta posición
+}
+
+bool fillSudoku(char sudoku[9][9], int row, int col) {
+    if (row == 9) {
+        return true;  // Se ha completado el Sudoku
+    }
+
+    if (col == 9) {
+        return fillSudoku(sudoku, row + 1, 0);  // Moverse a la siguiente fila
+    }
+
+    if (sudoku[row][col] != ' ') {
+        return fillSudoku(sudoku, row, col + 1);  // La celda ya está ocupada, pasar a la siguiente
+    }
+
+    // Probar los números del 1 al 9
+    for (char num = '1'; num <= '9'; num++) {
+        if (isSafe(sudoku, row, col, num)) {
+            sudoku[row][col] = num;
+
+            if (fillSudoku(sudoku, row, col + 1)) {
+                return true;  // Se encontró una solución
+            }
+
+            sudoku[row][col] = ' ';  // No se encontró una solución, restablecer la celda
+        }
+    }
+
+    return false;  // No se encontró ninguna solución
+}
+
+void generateSudoku(Sudoku* sudoku) {
+    srand(time(NULL));  // Inicializar la semilla del generador de números aleatorios
+
+    // Inicializar el Sudoku con espacios vacíos
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            sudoku->tablero[i][j] = ' ';
+        }
+    }
+
+    fillSudoku(sudoku->tablero, 0, 0);
+
+    // Establecer la dificultad y el código del número de Sudoku
+    sudoku->dificultad = (Dificultad)(rand() % 3);
+    sudoku->codigo = rand() % 100 + 1;
+}
+
+void printSudoku(Sudoku sudoku) {
+    printf("Dificultad: ");
+    switch (sudoku.dificultad) {
+        case FACIL:
+            printf("Fácil\n");
+            break;
+        case MEDIO:
+            printf("Medio\n");
+            break;
+        case DIFICIL:
+            printf("Difícil\n");
+            break;
+    }
+
+    printf("Código del número de Sudoku: %d\n", sudoku.codigo);
+
+    printf("Tablero:\n");
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            printf("%c ", sudoku.tablero[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    Sudoku sudoku;
+    generateSudoku(&sudoku);
+
+    printSudoku(sudoku);
+
+    return 0;
+}
+```
+
+En este código, después de generar el Sudoku válido, la función `printSudoku` se encarga de imprimir la dificultad, el código del número de Sudoku y el tablero generado.
+
+Espero que este código te ayude a generar y rellenar Sudokus válidos con diferentes dificultades y códigos de números. ¡Si tienes alguna otra pregunta, no dudes en preguntar!
