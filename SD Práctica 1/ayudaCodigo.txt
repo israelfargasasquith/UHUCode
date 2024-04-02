@@ -1,0 +1,154 @@
+Muy Importante **
+*****************
+Para la entrada de un carácter por teclado utilizar la función __fpurge(stdin) antes de la función scanf. 
+La función __fpurge da un warning en el proceso de compilación pero se puede ignorar sin problemas.
+
+
+
+
+
+
+Para el fichero GestorBiblioteca_cliente.c las siguientes librerías, declaraciones y funciones.
+***********************************************************************************************
+
+
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+#include <stdio.h> 
+#include <ctype.h>
+
+
+#define Cls system("clear")
+#define Pause system("read -p \"Pulsa la tecla return para continuar..... \" a")
+ 
+#define MostrarAviso(Texto) { printf(Texto); Pause; }
+
+
+
+int MenuPrincipal()
+{
+	 int Salida;
+	 do
+	 {
+		Cls;
+		printf(" GESTOR BIBLIOTECARIO 1.0 (M. PRINCIPAL)\n");
+		printf("*****************************************\n");
+		printf("\t1.- M. Administración\n");
+		printf("\t2.- Consulta de libros\n");
+		printf("\t3.- Préstamo de libros\n");
+		printf("\t4.- Devolución de libros\n");
+		printf("\t0.- Salir\n\n");
+		printf(" Elige opción: ");
+		scanf("%d",&Salida);
+		if (Salida<0 || Salida>4)
+			MostrarAviso("\n\n *** Error en la entrada de Datos.***\n\n");
+	 }while (Salida<0 || Salida>4);
+	 return Salida;
+}
+
+
+int MenuAdministracion()
+{
+	 int Salida;
+	 do
+	 {
+		Cls;
+		printf(" GESTOR BIBLIOTECARIO 1.0 (M. ADMINISTRACION)\n");
+		printf("**********************************************\n");
+		printf("\t1.- Cargar datos Biblioteca\n");
+		printf("\t2.- Guardar datos Biblioteca\n");
+		printf("\t3.- Nuevo libro\n");
+		printf("\t4.- Comprar libros\n");
+		printf("\t5.- Retirar libros\n");
+		printf("\t6.- Ordenar libros\n");
+		printf("\t7.- Buscar libros\n");
+		printf("\t8.- Listar libros\n");
+		printf("\t0.- Salir\n\n");
+		printf(" Elige opción: ");
+		scanf("%d",&Salida);
+		if (Salida<0 || Salida>8)
+			MostrarAviso("\n\n *** Error en la entrada de Datos.***\n\n");
+	 }while (Salida<0 || Salida>8);
+	 return Salida;
+}
+
+void Formatea(char *Salida, const char *p, int ancho,char Caracter)
+{
+	Cadena vacia;
+	int len=ancho-strlen(p);
+	int l=0,c=0;
+	
+	while (p[l]!='\0')
+	{
+		if ((unsigned char)p[l]>128)
+			c++;
+		l++;
+	}
+	len+=c/2;
+	
+	
+	if (len<0)
+		len=0;
+	for (int i=0;i<len; i++)
+		vacia[i]=Caracter;
+	vacia[len]='\0';
+	
+	sprintf(Salida,"%s%s",p,vacia);
+}
+
+void MostrarLibro(TLibro *L, int Pos, bool_t Cabecera)
+{
+	Cadena T,A,B,PI;
+	if (Cabecera==TRUE)
+	{
+		printf("%-*s%-*s%-*s%*s%*s%*s\n",5,"POS",58,"TITULO",18,"ISBN",4,"DIS",4,"PRE",4,"RES");
+		printf("     %-*s%-*s%-*s\n",30,"AUTOR",28,"PAIS (IDIOMA)",12,"AÑO");
+		Formatea(B,"*",93,'*');
+		printf("%s\n",B);
+	}
+	Formatea(T,L->Titulo,58,' ');
+	Formatea(A,L->Autor,30,' ');
+	strcpy(B,L->Pais);
+	strcat(B," (");
+	strcat(B,L->Idioma);
+	strcat(B,")");
+	Formatea(PI,B,28,' ');
+	printf("%-5d%s%-*s%*d%*d%*d\n",Pos+1, T, 18,L->Isbn,4,L->NoLibros, 4,L->NoPrestados, 4, L->NoListaEspera);
+	printf("     %s%s%-*d\n",A ,PI,12, L->Anio);
+}
+
+
+
+Para el fichero GestorBiblioteca_server.c la siguiente función 
+***************************************************************
+
+bool_t EsMenor(int P1, int P2, int Campo)
+{
+	bool_t salida=FALSE;
+	TLibro L1=Biblioteca[P1];
+	TLibro L2=Biblioteca[P2];
+	
+	switch(Campo)
+	{
+		case 0: salida=strcmp(L1.Isbn,L2.Isbn)<0?TRUE:FALSE;
+				break; 
+		case 1: salida=strcmp(L1.Titulo,L2.Titulo)<0?TRUE:FALSE;
+				break; 
+		case 2: salida=strcmp(L1.Autor,L2.Autor)<0?TRUE:FALSE;
+				break; 
+		case 3: salida=L1.Anio<L2.Anio?TRUE:FALSE;
+				break; 
+		case 4: salida=strcmp(L1.Pais,L2.Pais)<0?TRUE:FALSE;
+				break; 
+		case 5: salida=strcmp(L1.Idioma,L2.Idioma)<0?TRUE:FALSE;
+				break; 
+		case 6: salida=L1.NoLibros<L2.NoLibros?TRUE:FALSE;
+				break; 
+		case 7: salida=L1.NoPrestados<L2.NoPrestados?TRUE:FALSE;
+				break; 
+		case 8: salida=L1.NoListaEspera<L2.NoListaEspera?TRUE:FALSE;
+				break; 
+	}
+	return salida;
+}
