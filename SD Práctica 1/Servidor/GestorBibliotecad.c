@@ -6,12 +6,13 @@
 
 #include "GestorBiblioteca.h"
 #include <stdbool.h>
+FILE *fdatos = NULL;
 TLibro *Biblioteca = NULL; // Vector dinamico de libros
-int NumLibros = 0;		   // Numero de libros almacenados en el vector
-int Tama = 0;			   // Tamaño del vector dinamico, crece de 4 en 4 libros
-int IdAmin = -1;		   // Copia del idAdmin mandado al usuario
-Cadena NomFichero = "";	   // Copia del nombre del ultimo fichero binario cargado
-int CampoOrdenacion = 0;   // Copia del ultimo campo de ordenacion realizado
+int numLibros = 0;		   // Numero de libros almacenados en el vector
+int tama = 0;			   // Tamaño del vector dinamico, crece de 4 en 4 libros
+int idAdmin = -1;		   // Copia del idAdmin mandado al usuario
+Cadena nomFichero = "";	   // Copia del nombre del ultimo fichero binario cargado
+int campoOrdenacion = 0;   // Copia del ultimo campo de ordenacion realizado
 
 Cadena contraseñaAdmin = "1234";
 
@@ -64,13 +65,14 @@ Este número deberá ser utilizado en todas las operaciones de Administración e
 int *conexion_1_svc(char *argp, struct svc_req *rqstp)
 {
 	static int result;
-	if (IdAmin == -1)
+	if (idAdmin == -1)
 	{
+		printf("\nVamos a intentar iniciar sesion con la contraseña %s", argp);
 		if (strcmp(argp, contraseñaAdmin) == 0)
 		{
-			IdAmin = 1 + rand() % RAND_MAX;
-			printf("\nUn admin ha iniciado sesion con ID %d", IdAmin);
-			result = IdAmin;
+			idAdmin = 1 + rand() % RAND_MAX;
+			printf("\nUn admin ha iniciado sesion con ID %d", idAdmin);
+			result = idAdmin;
 		}
 		else
 		{
@@ -93,7 +95,7 @@ desconexion_1_svc(int *argp, struct svc_req *rqstp)
 {
 	static bool_t result;
 
-	if (IdAmin == *argp)
+	if (idAdmin == *argp)
 	{
 		printf("\nServidor: Se desconecta el Admin de forma correcta");
 		result = true;
@@ -111,9 +113,26 @@ int *cargardatos_1_svc(TConsulta *argp, struct svc_req *rqstp)
 {
 	static int result;
 
-	/*
-	 * insert server code here
-	 */
+	if (argp->Ida > 0 && idAdmin == argp->Ida)
+	{
+		printf("\nIntentamos abrir el fichero %s", argp->Datos);
+		fdatos = fopen(argp->Datos, "r");
+		if (fdatos != NULL)
+		{
+			fread(&numLibros, sizeof(int), 1, fdatos);
+			printf("\nHay %d libros en el fichero y en el array", numLibros);
+			Biblioteca = (TLibro *)malloc(sizeof(TLibro) * numLibros);
+			fread(Biblioteca, sizeof(TLibro), numLibros, fdatos);
+		}
+		else
+		{
+			printf("\nError: El nombre pasado por parametro no es un fichero");
+		}
+	}
+	else
+	{
+		printf("\nServidor error: El IdAdmin no es correcto");
+	}
 
 	return &result;
 }

@@ -224,8 +224,6 @@ Muy Importante **
 *****************
 Para la entrada de un carácter por teclado utilizar la función __fpurge(stdin) antes de la función scanf.
 La función __fpurge da un warning en el proceso de compilación pero se puede ignorar sin problemas.
-
-
 */
 
 int main(int argc, char *argv[])
@@ -261,21 +259,17 @@ int main(int argc, char *argv[])
 		{
 		case 1:
 			Cls;
-			printf("\nVamos a iniciar sesion");
-			printf("\nPor favor inserte la contraseña de Administracion: ");
-			printf("\nVamos a mandar la contraseña %s", constraseña);
-			ISRA MIRA LO DEL PURGE Y QUE PUEDAS METER DATOS, VER POR QUE SE SALTA LO SIGUEINTE
-																 // scanf()
-																 Pause;
+			printf("Por favor inserte la contraseña de administracion: %s", constraseña);
+
 			result = conexion_1(constraseña, clnt);
 			if (result == (int *)NULL)
 			{
-				clnt_perror(clnt, "Cliente: Error en la llamada al procedimiento Sumar");
+				clnt_perror(clnt, "Cliente: Error en la llamada al procedimiento Conexion");
 				printf("Cliente: Resultado de la operación: %d\n", *result);
 				idAdmin = -2;
 				Pause;
 			}
-			break;
+
 			if (idAdmin == -1)
 			{
 				printf("\nCliente: Error, ya hay un admin activo");
@@ -295,7 +289,7 @@ int main(int argc, char *argv[])
 					opcMenuAdmin = MenuAdministracion();
 				} while (opcMenuAdmin != 0);
 			}
-
+			break;
 		default:
 			break;
 		}
