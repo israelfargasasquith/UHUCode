@@ -15,14 +15,26 @@ struct TLibro
     int NoListaEspera;
 };
 typedef struct TLibro TLibro;
+
+struct TConsulta
+{
+    int Ida;
+    Cadena Datos;
+};
+typedef struct TConsulta TConsulta;
 int main()
 {
+    system("clear");
     int numLibros = 0;
+    TConsulta consulta;
+    consulta.Ida = 5;
+    strcpy(consulta.Datos, "hola");
+    printf("\nIda : %d", consulta.Ida);
+    printf("\nNombre %s\n", consulta.Datos);
     FILE *fdatos = fopen("Biblioteca.cdat", "r");
     TLibro *biblioteca = (TLibro *)malloc(sizeof(TLibro));
     fread(&numLibros, sizeof(int), 1, fdatos);
     fread(biblioteca, sizeof(TLibro), 1, fdatos);
-    system("clear");
     printf("Primer dato de la biblioteca \n ISBN: %s \tTitulo: %s \tAutor: %s", biblioteca->Isbn, biblioteca->Titulo, biblioteca->Autor);
     fclose(fdatos);
     free(biblioteca);
