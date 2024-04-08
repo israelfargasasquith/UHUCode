@@ -21,6 +21,10 @@ struct TConsulta
     int Ida;
     Cadena Datos;
 };
+int *Test(int a)
+{
+    return a + 2;
+}
 typedef struct TConsulta TConsulta;
 int main()
 {
@@ -28,14 +32,42 @@ int main()
     int numLibros = 0;
     TConsulta consulta;
     consulta.Ida = 5;
+    int c, b = 1;
+    c = Test(b);
+    printf("\nC -> %d\n", c);
     strcpy(consulta.Datos, "hola");
     printf("\nIda : %d", consulta.Ida);
     printf("\nNombre %s\n", consulta.Datos);
     FILE *fdatos = fopen("Biblioteca.cdat", "r");
     TLibro *biblioteca = (TLibro *)malloc(sizeof(TLibro));
+    TLibro prueba;
+    printf("\nIntroduce el Isbn: ");
+    //__fpurge(stdin);
+    scanf("%s", prueba.Isbn);
+    printf("\nIntroduce el Autor: ");
+    //__fpurge(stdin);
+    scanf("%s", prueba.Autor);
+    printf("\nIntroduce el Titulo: ");
+    //__fpurge(stdin);
+    scanf("%s", prueba.Titulo);
+    printf("\nIntroduce el año: ");
+    scanf("%d", &prueba.Anio);
+    printf("\nIntroduce el Pais: ");
+    //__fpurge(stdin);
+    scanf("%s", prueba.Pais);
+    printf("\nIntroduce el Idioma: ");
+    //__fpurge(stdin);
+    scanf("%s", prueba.Idioma);
+    printf("\nIntroduce el Numero de libros inicial: ");
+    scanf("%d", &prueba.NoLibros);
+    prueba.NoListaEspera = 0;
+    prueba.NoPrestados = 0;
+    printf("\nEl nuevo libro ->\n");
+    printf("\nIsbn: %s\nTitulo: %s\nAutor: %s\\nAño: %d\nPais: %s\nIdioma: %s\nNumeroLibros: %d", prueba.Isbn, prueba.Titulo, prueba.Autor, prueba.Anio, prueba.Pais, prueba.Idioma, prueba.NoLibros);
+
     fread(&numLibros, sizeof(int), 1, fdatos);
     fread(biblioteca, sizeof(TLibro), 1, fdatos);
-    printf("Primer dato de la biblioteca \n ISBN: %s \tTitulo: %s \tAutor: %s", biblioteca->Isbn, biblioteca->Titulo, biblioteca->Autor);
+    printf("\nPrimer dato de la biblioteca \n ISBN: %s \tTitulo: %s \tAutor: %s", biblioteca->Isbn, biblioteca->Titulo, biblioteca->Autor);
     fclose(fdatos);
     free(biblioteca);
     /*Cadena prueba = {1, 2, 3, 4};

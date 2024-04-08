@@ -74,6 +74,7 @@ int *conexion_1_svc(char *argp, struct svc_req *rqstp)
 	static int result;
 	if (idAdmin == -1)
 	{
+		no lhace esto bien, devuelve basura ? 
 		printf("\nVamos a intentar iniciar sesion con la contraseña %s", argp);
 		if (strcmp(argp, contraseñaAdmin) == 0)
 		{
@@ -136,11 +137,13 @@ int *cargardatos_1_svc(TConsulta *argp, struct svc_req *rqstp)
 		else
 		{
 			printf("\nError: El nombre pasado por parametro no es un fichero");
+			result = 0;
 		}
 	}
 	else
 	{
 		printf("\nServidor error: El IdAdmin no es correcto");
+		result = -1;
 	}
 
 	return &result;
@@ -157,12 +160,15 @@ guardardatos_1_svc(int *argp, struct svc_req *rqstp)
 		fdatos = fopen(nomFichero, "w");
 		fwrite(&numLibros, sizeof(int), 1, fdatos);
 		fwrite(Biblioteca, sizeof(TLibro) * numLibros, 1, fdatos);
-		printf("\nSe debe haber guardado bien... Comprueba");
 		fclose(fdatos);
+		printf("\n***Server: Se ha guardado el estado actual de la biblioteca.**");
+		printf("\nSe debe haber guardado bien... Comprueba");
+		result = true;
 	}
 	else
 	{
 		printf("\nServidor: Error al intentar guardar el fichero, el idAdmin no es correcto");
+		result = false;
 	}
 
 	return &result;
@@ -171,10 +177,6 @@ guardardatos_1_svc(int *argp, struct svc_req *rqstp)
 int *nuevolibro_1_svc(TNuevo *argp, struct svc_req *rqstp)
 {
 	static int result;
-
-	/*
-	 * insert server code here
-	 */
 
 	return &result;
 }

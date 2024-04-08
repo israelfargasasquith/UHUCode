@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
 	CLIENT *clnt;
 
 	int opcMenuPrincipal, opcMenuAdmin, idAdmin;
-	Cadena constraseña = "1234";
+	Cadena contraseña = "";
 	Cadena nomFichero = "Biblioteca.cdat";
 	TConsulta tmp;
 	/*
@@ -261,10 +261,12 @@ int main(int argc, char *argv[])
 		{
 		case 1:
 			Cls;
-			printf("Por favor inserte la contraseña de administracion: %s", constraseña);
-
-			idAdmin = conexion_1(constraseña, clnt);
-
+			printf("Por favor inserte la contraseña de administracion: ");
+			scanf("%s", contraseña);
+			idAdmin = conexion_1(contraseña, clnt);
+			printf("\nTenemos de idAdmin %d", idAdmin);
+			fflush(stdout);
+			Pause;
 			if (idAdmin == -1)
 			{
 				printf("\nCliente: Error, ya hay un admin activo");
@@ -279,8 +281,7 @@ int main(int argc, char *argv[])
 			{
 				do
 				{
-					printf("\nCliente: Todo OK, hemos iniciado sesion con el ID %d", idAdmin);
-					Pause;
+					printf("\nCliente: Todo OK, hemos iniciado sesion con el ID %d\n", idAdmin);
 					opcMenuAdmin = MenuAdministracion();
 					switch (opcMenuAdmin)
 					{
@@ -288,8 +289,8 @@ int main(int argc, char *argv[])
 						printf("\nIntroduce el nombre del fichero de datos");
 						printf("\nMetemos de forma automatica %s", nomFichero);
 						tmp.Ida = idAdmin;
-						tmp.Datos = nomFichero;
-						if (CargarDatos(tmp))
+						strcpy(tmp.Datos, nomFichero);
+						if (cargardatos_1(&tmp, clnt))
 						{
 							printf("\nSe ha cargado correctamente el fichero");
 						}
@@ -300,8 +301,44 @@ int main(int argc, char *argv[])
 
 						break;
 					case 2:
+						printf("\nPasamos nuestro IdAdmin para guardar el fichero...");
+
+						if (guardardatos_1(&idAdmin, clnt))
+						{
+							printf("\nSe ha guardado correctamnete");
+						}
+						else
+						{
+							printf("\nHa ocurrido un error al guardar el fichero");
+						}
 						break;
 					case 3:
+						TNuevo nuevoLibro;
+						printf("\nIntroduce el Isbn: ");
+						//__fpurge(stdin);
+						scanf("%s", nuevoLibro.Libro.Isbn);
+						printf("\nIntroduce el Autor: ");
+						//__fpurge(stdin);
+						scanf("%s", nuevoLibro.Libro.Autor);
+						printf("\nIntroduce el Titulo: ");
+						//__fpurge(stdin);
+						scanf("%s", nuevoLibro.Libro.Titulo);
+						printf("\nIntroduce el año: ");
+						scanf("%d", &nuevoLibro.Libro.Anio);
+						printf("\nIntroduce el Pais: ");
+						//__fpurge(stdin);
+						scanf("%s", nuevoLibro.Libro.Pais);
+						printf("\nIntroduce el Idioma: ");
+						//__fpurge(stdin);
+						scanf("%s", nuevoLibro.Libro.Idioma);
+						printf("\nIntroduce el Numero de libros inicial: ");
+						scanf("%d", &nuevoLibro.Libro.NoLibros);
+						nuevoLibro.Libro.NoListaEspera = 0;
+						nuevoLibro.Libro.NoPrestados = 0;
+						printf("\nEl nuevo libro ->\n");
+						printf("\nIsbn: %s\nTitulo: %s\nAutor: %s\\nAño: %d\nPais: %s\nIdioma: %s\nNumeroLibros: %d", nuevoLibro.Libro.Isbn, nuevoLibro.Libro.Titulo, nuevoLibro.Libro.Autor, nuevoLibro.Libro.Anio, nuevoLibro.Libro.Pais, nuevoLibro.Libro.Idioma, nuevoLibro.Libro.NoLibros);
+						nuevoLibro.Ida = idAdmin;
+						printf("*** El libro ha sido añadido correctamente.**");
 						break;
 					case 4:
 						break;
