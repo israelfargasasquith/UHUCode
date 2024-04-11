@@ -13,7 +13,7 @@
 #include <ctype.h>
 
 #define Cls system("clear")
-#define Pause system("read -p \"Pulsa la tecla return para continuar..... \" a")
+#define Pause system("read -p \"\nPulsa la tecla return para continuar..... \" a")
 
 #define MostrarAviso(Texto) \
 	{                       \
@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
 	// gestorbiblioteca_1 (host);
 	CLIENT *clnt;
 
-	int opcMenuPrincipal, opcMenuAdmin, idAdmin;
+	int *result, opcMenuPrincipal, opcMenuAdmin, idAdmin = -1;
 	Cadena contraseña = "";
 	Cadena nomFichero = "Biblioteca.cdat";
 	TConsulta tmp;
@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
 		printf("Host no encontrado, saliendo");
 		exit(1);
 	}
-	printf("Cliente: Tengo conexion, comenzamos\n");
+	printf("\nCliente: Tengo conexion, comenzamos\n");
 	do
 	{
 		opcMenuPrincipal = MenuPrincipal();
@@ -261,20 +261,22 @@ int main(int argc, char *argv[])
 		{
 		case 1:
 			Cls;
-			printf("Por favor inserte la contraseña de administracion: ");
+			printf("\nPor favor inserte la contraseña de administracion: ");
 			scanf("%s", contraseña);
-			idAdmin = conexion_1(contraseña, clnt);
+			result = conexion_1(contraseña, clnt);
+			idAdmin = *result;
 			printf("\nTenemos de idAdmin %d", idAdmin);
 			fflush(stdout);
-			Pause;
 			if (idAdmin == -1)
 			{
 				printf("\nCliente: Error, ya hay un admin activo");
+				fflush(stdout);
 				Pause;
 			}
 			else if (idAdmin == -2)
 			{
 				printf("\nCliente: Error, contraseña equivocada");
+				fflush(stdout);
 				Pause;
 			}
 			else
@@ -290,13 +292,24 @@ int main(int argc, char *argv[])
 						printf("\nMetemos de forma automatica %s", nomFichero);
 						tmp.Ida = idAdmin;
 						strcpy(tmp.Datos, nomFichero);
-						if (cargardatos_1(&tmp, clnt))
+						result = cargardatos_1(&tmp, clnt);
+						if (*result == 1)
 						{
 							printf("\nSe ha cargado correctamente el fichero");
+							fflush(stdout);
+							Pause;
 						}
-						else
+						else if (*result == -1)
 						{
-							printf("\nEl fichero no se ha cargado correctamente");
+							printf("\nEl fichero no se ha cargado correctamente porque ya hay un admin dado de alta o el enviado no es correcto");
+							fflush(stdout);
+							Pause;
+						}
+						else if (*result == 0)
+						{
+							printf("\nEl fichero no se ha cargado correctamente porque ha habido un error de tratamiento de fichero o de memoria dinamica");
+							fflush(stdout);
+							Pause;
 						}
 
 						break;
@@ -306,10 +319,14 @@ int main(int argc, char *argv[])
 						if (guardardatos_1(&idAdmin, clnt))
 						{
 							printf("\nSe ha guardado correctamnete");
+							fflush(stdout);
+							Pause;
 						}
 						else
 						{
 							printf("\nHa ocurrido un error al guardar el fichero");
+							fflush(stdout);
+							Pause;
 						}
 						break;
 					case 3:
@@ -338,7 +355,7 @@ int main(int argc, char *argv[])
 						printf("\nEl nuevo libro ->\n");
 						printf("\nIsbn: %s\nTitulo: %s\nAutor: %s\\nAño: %d\nPais: %s\nIdioma: %s\nNumeroLibros: %d", nuevoLibro.Libro.Isbn, nuevoLibro.Libro.Titulo, nuevoLibro.Libro.Autor, nuevoLibro.Libro.Anio, nuevoLibro.Libro.Pais, nuevoLibro.Libro.Idioma, nuevoLibro.Libro.NoLibros);
 						nuevoLibro.Ida = idAdmin;
-						printf("*** El libro ha sido añadido correctamente.**");
+						printf("\n*** El libro ha sido añadido correctamente.**");
 						break;
 					case 4:
 						break;
@@ -369,7 +386,7 @@ int main(int argc, char *argv[])
 		}
 
 	} while (opcMenuPrincipal != 0);
-	printf("Cliente: hemos terminado, adios");
+	printf("\nCliente: hemos terminado, adios\n");
 
 	exit(0);
 }

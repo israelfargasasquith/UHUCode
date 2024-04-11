@@ -72,9 +72,9 @@ int busquedaLineal(Cadena Isbn)
 int *conexion_1_svc(char *argp, struct svc_req *rqstp)
 {
 	static int result;
+	printf("\nServidor: El valor de admin ahora mismo es de %d", idAdmin);
 	if (idAdmin == -1)
 	{
-		no lhace esto bien, devuelve basura ? 
 		printf("\nVamos a intentar iniciar sesion con la contraseña %s", argp);
 		if (strcmp(argp, contraseñaAdmin) == 0)
 		{
@@ -132,7 +132,9 @@ int *cargardatos_1_svc(TConsulta *argp, struct svc_req *rqstp)
 			Biblioteca = (TLibro *)malloc(sizeof(TLibro) * numLibros);
 			fread(Biblioteca, sizeof(TLibro), numLibros, fdatos);
 			strcpy(nomFichero, argp->Datos);
-			fclose(nomFichero);
+			fclose(fdatos);
+			// falta ordenarlos
+			result = 1;
 		}
 		else
 		{
