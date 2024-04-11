@@ -1,0 +1,1080 @@
+model complete
+
+---- CLASES -----
+
+-- Clases Personas
+
+class Persona
+attributes
+    Id: Integer
+    Nombre : String
+    Edad: Integer
+operations
+    getId() : Integer
+    getNombre() : String
+    getEdad() : Integer
+    setId(nombre: Integer)
+    setNombre(nombre: String)
+    setEdad(edad: Integer)
+end
+
+class Ciudadano < Persona
+attributes
+	Residiencia: Edificio
+    Ocupacion: String
+operations
+	getResidencia(): Edificio
+    getOcupacion(): String
+    setResidencia(residencia: Edificio)
+    setOcupacion(ocupacion: String)
+end
+
+class Turista < Persona
+attributes
+    VisadoValido: Boolean
+    PaisOrigen: String
+    MotivoVisita: String
+operations
+    Turista(visado: Boolean, pais: String, motivo: String)
+    isVisadoValido(): Boolean
+    getPaisOrigen(): String
+    getMotivoVisita(): String
+    setVisadoValido(visado: Boolean)
+    setPaisOrigen(pais: String)
+    setMotivoVisita(motivo: String)
+end
+
+class Trabajador < Ciudadano
+attributes
+    Sueldo: Real
+    Horario: Integer
+	Experiencia: Integer
+operations
+    getSueldo(): Real
+    getHorario():  Integer
+	getExperiencia(): Integer
+    setSueldo(sueldo: Real)
+    setHorario(horario:  Integer)
+	setExperiencia(exp: Integer)
+
+end
+
+class Parado < Ciudadano
+attributes
+    Sueldo: Real
+    fechaVencimiento: Integer
+operations
+    Parado(sueldo: Real, fecha: Integer)
+    getSalario(): Real
+    getFechaVencimiento(): Integer
+    setSueldo(sueldo: Real)
+    setFechaVencimiento(fecha: Integer)
+end
+
+class Pensionista < Ciudadano
+attributes
+    Jubilado: Boolean
+    Pension: Real
+operations
+    Pensionista(jubilado: Boolean, pension: Real)
+    isJubilado(): Boolean
+    getPension(): Real
+    setJubilado(jubilado: Boolean)
+    setPension(pension: Real)
+end
+
+class Politico < Trabajador
+attributes
+    Cargo: String
+operations
+    Politico(cargo: String)
+    getCargo(): String
+    setCargo(cargo: String)
+end
+
+class Ingeniero < Trabajador
+attributes
+    Titulo: String
+    ObrasRealizadas: Integer
+    Trabajando: Boolean
+    LugarTrabajo: Integer
+operations
+    Ingeniero(tituo: String, obras:  String, trabajando: Boolean, lugar: Integer)
+    getTitulo(): String
+    getObrasRealizadas():  Integer
+    isTrabajando(): Boolean
+    getLugarTrabajo(): Integer
+    setTitulo(titulo: String)
+    setObrasRealizadas(obras:  Integer)
+    setTrabajando(trabajando: Boolean)
+    setLugarTrabajo(lugar: Integer)    
+end
+
+class Obrero < Trabajador
+attributes
+    Jefe: Integer
+    Trabajando: Boolean
+    LugarTrabajo: Integer
+operations
+    Obrero(jefe: Integer, trabajando: Boolean, lugar: Integer)
+    getJefe(): Integer
+    isTrabajando(): Boolean
+    getLugarTrabajo(): Integer
+    setJefe(jefe: Integer)
+    setTrabajando(trabajando: Boolean)
+    setLugarTrabajo(lugar: Integer)
+end
+
+class Cientifico < Trabajador
+attributes
+    ProyecoActual: Integer
+    HistorialProyecto:  Integer
+    Especialidad: String
+operations
+    --Cientifico()
+    Cientifico(proyecto: Integer, historial:  Integer, especialidad: String)
+    getProyectoActual(): Integer
+    getHistorialDeInvestigacion():  Integer
+    getEspecialidad(): String
+    setProyectoActual(project:  Integer)
+    setHistorialProyecto(historial:  Integer)
+    setEspecialidad(especialidad: String)
+end
+
+class Proyecto
+attributes
+    Id: Integer
+    Tipo: TipoProyecto
+    FechaInicio: Integer
+    FechaFin: Integer
+    Finalizado: Boolean
+    Recursos:  RecursoNatural
+    PresupuestoInicial: Real
+    CosteFinal: Real
+    Descripcion: String
+operations
+    proyecto(id: Integer, tipo: TipoProyecto, fechaini: Integer, fechafin: Integer, finalizado: Boolean, recursos:  RecursoNatural, presupuesto: Real, coste: Real, descripcion: String)
+    getId(): Integer
+    getTipo(): TipoProyecto
+    getFechaInicio(): Integer
+    getFechaFin(): Integer
+    isFinalizado(): Boolean
+    getRescuros():  RecursoNatural
+    getPresupuesto(): Real
+    getCosteFinal(): Real
+    getDescripcion(): String
+    setId(id: Integer)
+    setTipo(tipo: TipoProyecto)
+    setFechaInicio(fecha: Integer)
+    setFechaFin(fecha: Integer)
+    setFinalizado(finalizado: Boolean)
+    setRescuros(recursos:  RecursoNatural)
+    setPresupuesto(presupuesto: Real)
+    setCosteFinal(costefinal: Real)
+    setDescripcion(descripcion: String)
+    upIntegerFechaFin(): Boolean  -- Actualiza con fecha actual si Finalizado=false && FechaFin < fechaSistema
+    isProyectoRentable(): Boolean --PresupuestoInicial - CosteFinal return true si el valor es positivo
+end
+
+-- Clases Gobierno
+
+class Gobierno_y_Administracion
+attributes
+	Presupuesto: Real
+	AutoridadResponsable: String
+	nHabitantes: Integer
+	DineroRecaudado: Real
+operations
+	Gobierno_y_Administracion()
+	getPresupuesto(): Real
+	SetPresupuesto(presupuesto : Real)
+	getAutoridad(): String
+	setAutoridad(autoridad : String)
+	getNHabitantes(): Integer
+	setNHabitantes(nHabitantes : Integer)
+	getDineroRecaudado(): Real
+	setDineroRecaudado(dinero : Real)
+end
+
+class Leyes
+attributes
+	Nombre: String
+	Fecha: Integer
+	Estado: EstadoLey
+	Ambito: AmbitoLey
+	descripcion: String
+	sancionIncumplimiento: Real
+operations
+	Leyes()
+	getNombre(): String
+	setNombre(nombre : String)
+	getFecha(): Integer
+	setFecha(fecha : Integer)
+	getEstado(): EstadoLey
+	setEstado(estado : EstadoLey)
+	getAmbito(): AmbitoLey
+	setAmbito(ambito : AmbitoLey)
+	getDescripcion(): String
+	setDescripcion(descripcion : String)
+	getSancionIncumplimiento(): Real
+	setSancionIncumplimiento(sancion : Real)
+	AnadirLey(Nombre: String, fecha: Integer, estado: EstadoLey, ambito:AmbitoLey, descripcion: String, sancion: Real)
+	eliminarLey(Nombre : String)
+end
+
+class Impuestos
+attributes
+	id: Integer
+	tipo: TipoImpuesto
+	porcentaje: Real
+operations
+	Impuestos()
+	getTipo(): TipoImpuesto
+	setTipo(tipo : TipoImpuesto)
+	getPorcentaje(): Real
+	setPorcentaje(porcentaje : Real)
+	AnadirImpuesto(id: Integer, tipo: TipoImpuesto, porcentaje: Real)
+	EliminarImpuesto(id : Integer)
+	RecaudarImpuestos(cantidad: Integer, porcentaje: Real)
+end
+
+class Servicios
+attributes
+	id: Integer
+	tipo: TipoServicios
+	DineroDestinado: Real
+	AreaGeografica: String
+operations
+	Servicios()
+	getTipo(): Integer
+	setTipo(tipo : TipoServicios)
+	getId(): Integer
+	setId(id : Integer)
+	getDineroDestinado(): Real
+	setDineroDestinado(dinero: Real)
+	getAreaGeografica(): String
+	setAreaGeografica(area : String)
+	AnadirServicio(tipo: TipoServicios, dinero: Real, Area: String)
+	eliminarServicio(id: Integer)
+end
+
+-- Clases Turismo Emergencias
+
+class CentroEmergencias
+attributes
+	TelefonoContacto : String
+	zona : String
+	empleados : Integer
+operations
+	RecibirLlamadas(motivo : String)
+	AvisarEmergencias(mensaje : String)
+end
+
+class CuerpoBomberos
+attributes
+operations
+	AtiendeLlamada()
+end
+
+class CuerpoPolicia
+attributes
+operations
+	AtiendeLlamada()
+end
+
+class PersonalMedico
+attributes
+operations
+	AtiendeLlamada()
+end
+
+class Bombero < Trabajador
+attributes
+	Rango : RangoBombero
+	Division : String
+	ZonaActuacion : String
+operations
+    getRango(): RangoBombero
+    getDivision(): String
+    getZonaActuacion(): String
+    setRango(rank: RangoBombero)
+    setDivision(division: String)
+    setZonaActuacion(zones: String)
+end
+
+class Policia < Trabajador
+attributes
+	Rango : String
+	nombre : String
+	edad : Integer
+	fechaNacimiento : String
+	Division : String
+	ZonaActuacion : String
+operations
+end
+
+class Medico < Trabajador
+attributes
+	Rango : String
+	nombre : String
+	edad : Integer
+	fechaNacimiento : String
+	Division : String
+	ZonaActuacion : String
+operations
+end
+
+abstract class VehiculoEmergencia
+attributes
+	IdVehiculo : String
+	estado : String
+	cantidadVehiculosTotales : Integer
+operations
+	SolicitarVehiculos() : Boolean
+	EnviarVehiculosAZona(zona : String):Boolean
+	LocalizarVehiculos(): String
+end
+
+class VehiculoMarino < VehiculoEmergencia
+attributes
+	FechaAlta : Integer
+	NumeroPasajeros : Integer
+	CapacidadDeCarga : Real
+	DuracionOxigeno : Real
+	TamDeposito : Real
+operations
+	CargarDepositos() : Boolean
+end
+
+abstract class VehiculoTerrestre < VehiculoEmergencia
+attributes
+	FechaAlta : Integer
+	NumeroPasajeros : Integer
+	CapacidadDeCarga : Real
+	KilometrosParaCambioRuedas : Real
+	TamDeposito : Real
+operations
+	CargarDeposito() : Boolean
+	CambiarRuedas() : Boolean
+end
+
+class Ambulancia < VehiculoTerrestre
+attributes
+	NumVendas : Integer
+	LitrosSuero : Integer
+operations
+	
+	CargarVendas() : Boolean
+	CargarSuero() : Boolean
+end
+
+class CamionBomberos < VehiculoTerrestre
+attributes
+	MetrosManguera : Integer
+	LongitudEscala : Integer
+operations
+	CambiarManguera(nueva : Integer) : Boolean
+end
+
+class CochePolicia < VehiculoTerrestre
+attributes
+	Municion : Integer
+	NumEsposas : Integer
+operations
+	AnadirMunicion(municion : Integer) : Boolean
+	ReponerEsposas(esposas : Integer) : Boolean
+end
+
+class SubmarinoPolicial < VehiculoMarino
+attributes
+	NumEsposas : Integer
+operations
+	ReponerEsposas(numEsposas : Integer) : Boolean
+end
+
+class AmbulanciaSubmarina < VehiculoMarino
+attributes
+	numeroVendas : Integer
+	OxigenoExtra : Integer
+operations
+	ReponerVendasYOxigeno(vendas : Integer, oxigeno : Integer) : Boolean
+end
+
+-- Clases Turismos
+
+class Administrativo < Trabajador
+attributes
+	AreaTrabajo : String
+	NivelAcceso : String
+operations
+end
+
+class Hotel < Edificio
+attributes
+	zona : String
+	numeroHabitaciones : Integer
+	precioPorNoche : Real
+operations
+	AlojarCliente(turista : Turista) : Boolean
+	DesalojarHabitacion(): Integer
+end
+
+class Restaurante< Edificio
+attributes
+	zona : String
+	numeroMesasLibres : Integer
+	carta : String
+operations
+	ReservarMesas(numero : Integer): Boolean
+	LiberarMesas(numero : Integer) : Boolean
+end
+
+class CentroDeOcio < Edificio
+attributes
+	Actividades : Set(Actividades)
+	Sede : Edificio
+	Vehiculos : Bag(Vehiculos)
+operations
+	OrganizarExcursion(participantes : Integer, sitios : Set(SitioDeInteres)): Integer
+	AvisarEmergencias(mensaje : String): Integer
+end
+
+class RegistroEmergencias
+attributes
+	IdRegistro : Integer
+	TlfContacto : Integer
+	Mensaje : String
+	FechaRegistro : String
+	TipoEmergencia : TipoEmergencia
+	Ubicacion : String
+	EstadoRegistro : String
+operations
+	RegistrarEmergencia(TipoEmergencia: TipoEmergencia, ubicacion: String, Mensaje: String): Integer
+	getDetallesRegistro(): String
+	actualizarEstado(estadoRegistro: String): Integer
+	asignarEquipoEmergencias(equipo: String): Integer
+end
+
+class SitioDeInteres
+attributes
+	PrecioVisita : Real
+	Lugar : String
+	Horario : String
+	TelefonoContacto : String
+	SitioLibre : Boolean
+operations
+	VenderEntrada(): Boolean
+end
+
+class Excusion
+attributes
+	PrecioTotal : Real
+	LugarInicio : String
+	LugarFin : String
+	SitiosAVisitar : SitioDeInteres
+operations
+	AnadirExcursionista(turista : Turista): Integer
+end
+
+-- Clase Edificio
+
+class Edificio
+attributes
+	IdEdificio: Integer
+    espacio: Real
+    plantas: Integer
+	precio: Integer
+operations
+	getIdEdificio(): Integer
+    getEspacio(): Real
+    getPlantas(): Integer
+    getPrecio(): Integer
+end
+
+class Via
+attributes
+    Idvias: Integer
+    Longitud: Real
+    tipovia: TipoVia
+operations
+    Vias(id: Integer, longitud: Real, tipo: TipoVia)
+    Mantener(id: Integer, tipo: TipoVia): Boolean
+    getId(): Integer
+    getLongitud(): Integer
+    getTipoVia(): TipoVia
+    setId(id: Integer)
+    setLongitug(longitud: Real)
+    setTipo(tipo: TipoVia)
+end
+
+class Escuela < Edificio
+attributes
+    Id: Integer
+    Tipo: TipoEscuela
+    Via: Integer
+operations
+    Escuela(id: Integer, tipo: TipoEscuela, nprof: Integer, nalum: Integer, via: Integer,  profesores:  Integer,  alumnos:  Integer)
+    getId(): Integer
+    getTipoEscuela(): TipoEscuela
+    getVia(): Integer
+    setId(id: Integer)
+    setTipoEscuela(tipo: TipoEscuela)
+   
+end
+
+class EdificioDepuradoraAgua < Edificio
+attributes
+    Tipo: TratamientoAguas
+    LitrosDisponibles: Real
+    LitrosTratamiento: Real
+operations
+    EdificioDepuradoraAgua(tipo: TratamientoAguas, litrosdisponibles: Real, litrostratamiento: Real)
+    getTipo(): TratamientoAguas
+    getLitrosDisponibles(): Real
+    getLitrosTratamiento(): Real
+    setTipo(tipo: TratamientoAguas)
+    setLitrosDisponibles(litrosdisponibles: Real)
+    setLitrosTratamiento(litrostratamiento: Real)
+    trataraguas(tipo: TratamientoAguas, litros: Real): Boolean
+    liberar(tipo: TratamientoAguas): Boolean
+end
+
+class EstacionBomberos < Edificio
+attributes
+	bomberosEnEstacion : Integer
+operations
+	actualizarBomberosEnEstacion(numero : Integer) : Boolean 
+    EstacionBomberos(nbomberos: Integer, nvehiculos: Integer)
+    Emergencia(bomberos:  Integer, lugar: Via, tipo: Integer): String -- tipo¿?
+end
+
+class Comisaria < Edificio
+attributes
+	numeroCeldasLibres : Integer
+	numeroInternos : Integer
+operations
+	NuevoInterno(detenidos : Integer) : Boolean
+    Comisaria(nPolicias: Integer, nVehiculos: Integer)
+    Emergencia(policia: Integer, lugar: Via, tipo: Integer): String -- tipo¿?
+end
+
+class Hospital < Edificio
+attributes
+	nCamasLibres : Integer
+	numeroHabitaciones : Integer
+operations
+	OcuparCama(nuevosEnfermos : Integer) : Boolean
+    Hospital(nPersonalMedico: Integer, nvehiculos: Integer)
+    Emergencia(PersonalMedico: Integer, lugar: Via, tipo: Integer): String -- tipo¿?
+end
+
+class Estudiante < Ciudadano
+attributes
+    Cursos: String
+    Horario: Integer
+    Tipo: TipoEstudiante
+    Edificio: Integer
+	Matricula: Set(String)
+operations
+    getCurso(): String
+    getHorario(): Integer
+    getTipo(): String
+    getEdificio(): Integer
+	getMatricula(): Set(String)
+    setCurso(curso: String)
+    setHorario(horario: Integer)
+    setTipo(tipo: String)
+    setEdificio(edificio: Integer)
+	setMatricula(matricula: Set(String))
+end
+
+class Profesor < Trabajador
+attributes
+    Cursos:  String
+	Asignaturas: Set(String)
+    Edificio: Integer --id de Edificio
+operations
+    getCursos():  String
+    getAsignaturas():  String
+    getIdEdificio(): Integer
+    setCursos(cursos:  String)
+    setAsignaturas(asignatura:  String)
+end
+
+
+-- Clases Recursos Naturales
+
+class RecursoNatural
+attributes
+	cantidad:Integer
+	nombre: String
+	Disponibilidad: Boolean
+	CapacidadAlmacenamiento: Real
+operations
+	getCantidad(): Integer
+	setCantidad(cantidad : Integer)
+	getNombre() : String
+	setNombre(nombre : String)
+	getCapacidad(): Real
+	setCapacidad(capacidad : Real)
+	VerificarDisponibilidad(): Boolean
+end
+
+class Energia < RecursoNatural
+attributes
+	nombreEnergia: String
+	coste: Real
+	origen: OrigenEnergia
+operations
+	Energia()
+	getNombre(): String
+	setNombre(nombre: String)
+	getCoste(): Real
+	setCoste(coste: Real)
+	getOrigen(): OrigenEnergia
+	setOrigen(origen: OrigenEnergia)
+end
+
+class Minerales < RecursoNatural
+attributes
+	Nombre: String
+	pureza: Real
+	Origen: OrigenMinerales
+operations
+	Minerales()
+	getPureza(): Real
+	setPureza(pureza: Real)
+	getNombre(): String
+	setNombre(nombre: String)
+	getOrigen(): OrigenMinerales
+	setOrigen(origen: OrigenMinerales)
+	AnadirMineral(Nombre: String, pureza: Real, Origen: OrigenMinerales)
+end
+
+class Alimentos < RecursoNatural
+attributes
+	id: Integer
+	FechaCaducidad: Integer
+	Estado: Boolean
+	tipo: Tipos_Alimentos
+operations
+	AnadirAlimento(id: Integer, Fecha: Integer, tipo: Tipos_Alimentos)
+	EliminarAlimento(id: Integer)
+end
+
+class Oxigeno < RecursoNatural
+attributes
+	Pureza: Real
+	Presion: Real
+	Origen: Origen_Oxigeno
+operations
+	getPureza(): Real
+	setPureza(pureza: Real)
+	getPresion():Real
+	setPresion(presion:Real)
+	getOrigen(): Origen_Oxigeno
+	setOrigen(origen: Origen_Oxigeno)
+	AnadirOxigeno(cantidad: Real)
+	EliminarOxigeno(cantidad: Real)
+end
+
+class Agua < RecursoNatural
+attributes
+	Temperatura: Real
+	ph: Real
+	Origen: OrigenAgua
+operations
+	getTemperatura(): Real
+	setTemperatura(temperatura: Real)
+	getPh(): Real
+	setPh(ph: Real)
+	getOrigen(): Integer
+	SetOrigen(origen: OrigenAgua)
+end
+
+class EnergiaElectrica < Energia
+attributes
+	Voltaje: Real
+	Frecuencia: Real
+	Corriente: Real
+operations
+	getVoltaje(): Real
+	setVoltaje(voltaje: Real)
+	getFrecuencia(): Real
+	setFrecuencia(frecuencia: Real)
+	getCorriente(): Real
+	setCorriente(corriente: Real)
+	CalcularPotencia(corriente: Real, voltaje: Real): Real
+end
+class EnergiaTermica < Energia
+attributes
+	kwGenerado: Real
+	kwHora: Real
+	Trabajadores:  Trabajador
+	temperatura: Real
+operations
+	getKW(): Real
+	setKW(KW: Real)
+	getTemperatura(): Real
+	setTemperatura(temperatura: Real)
+end
+
+class Tratamiento
+attributes
+	NombreTratamiento: String
+	Descripcion: String
+	Coste: Real
+	CantidadAguaTratada: Real
+	DuracionTratamiento: Real
+	Aplicacion: AplicacionesTratamiento
+	Tipo: TipoTratamiento
+operations
+	TratarAgua(nombre: String, desc: String, coste: Real, cantidad: Real, duracion: Real, aplicacion: AplicacionesTratamiento)
+	getNombre():String
+	setNombre(nombre: String)
+	getDescripcion(): String
+	setDescripcion(desc: String)
+	getCoste(): Real
+	setCoste(coste: Real)
+	getCantidad(): Real
+	setCantidad(cant: Real)
+	getDuracion(): Real
+	setDuracion(duracion: Real)
+	getAplicacion(): AplicacionesTratamiento
+	setAplicacion(aplicacion: AplicacionesTratamiento)
+	getTipo(): TipoTratamiento
+	setTipo(tipo: TipoTratamiento)
+end
+
+
+class Fecha_Actual
+attributes
+	FechaActual: Integer
+end
+
+
+
+---- ENUMERACIONES ----
+enum TipoTratamiento{Cloracion, Desalinizacion, filtrado}
+enum TipoProyecto {Biologia_Marina, Contaminacion, Energias_Limpias, Fisica, Geologia_Marina, ImasD, Infraestructura_Marina, IT, Medicina, Oceanografia, Optimizacion_Recursos, Reciclaje, Reutilizacion_del_Agua ,Quimica, Transportes, Viaje_Submarino}
+enum AmbitoLey {Educacion, Sanidad, Laboral, Ambiental}
+enum EstadoLey {Vigente, Derogada, Revision}
+enum TipoImpuesto {IVA,IRPF, Renta, GananciasCapital}
+enum TipoServicios {Salud, Educacion, Transporte, Alimentacion}
+enum Actividades {ExcursionSubmarina, Snorkel, Buceo}
+enum Vehiculos { CochesDeAlquiler, Autobus, Submarinos}
+enum TipoEmergencia {Incendio, Inundacion, Altercado, SubmarinoPerdido}
+enum RangoPolicia {Director ,ComisarioGeneral, JefeDeDivision, Inspector, Policia}
+enum RangoBombero {JefeDeBomberos, Capitan, Teniente, Bombero }
+enum TipoPersonalMedico {MedicoEspecialista, Enfermero, Auxiliar, Farmaceutico}
+enum DivisionPolicia {GrupoEspecialDeOperaciones, UnidadDeCaballeria, BrigadaMovil, MedioSubmarinos}
+enum TipoVia {Calle, Tuneles, Carretera}
+enum TipoEscuela {Primaria, Instituto, Universidad}
+enum TipoEstudiante {Infantil, Primaria, Secundaria, Bachiller, FP, Universidad}
+enum TratamientoAguas {Potable, Residuales}
+enum OrigenEnergia{Solar, Nuclear, CombustiblesFosiles}
+enum OrigenMinerales{CristalizacionMagmaYLava, PrecipitacionQuimica, Sedimentacion, ProcesosHidrotermales}
+enum Tipos_Alimentos{AlgasMarinas, Pescado, Vegetales, Leche}
+enum Origen_Oxigeno{Natural, Artificial}
+enum OrigenAgua{Manantial, Lluvia, Mar, ResidualTratada}
+enum AplicacionesTratamiento{Potabilizacion, AguasResiduales}
+enum Tipo_Tecnologia{OsmosisInversa, Destilacion, ElectroDialisis}
+
+---- ASOCIACIONES ----
+association trabajaCientifico between
+    Proyecto [0..*] role trabaja_en
+    Cientifico [1..*] role trabajan
+end
+
+association trabajaIngeniero between
+    Proyecto [1..*] role trabaja_en
+    Ingeniero [1..*] role es_liderado_por
+end
+
+association trabajaObrero between
+    Proyecto [0..*] role trabaja_en
+    Obrero [1..*] role tiene
+end
+
+association relacion_IngObr between
+    Obrero [1..*] role tiene_al_cargo
+    Ingeniero [1] role tiene_de_superior
+end
+
+
+
+association RecursosUsadosProyectos between
+    Proyecto [0..*] role usado
+    RecursoNatural [0..*] role usa
+end
+
+association PoliticoTrabaja between
+    Gobierno_y_Administracion [1] role pertenece
+    Politico [1..*] role posee
+end
+
+association AdministrativoTrabaja between
+    Gobierno_y_Administracion [1] role pertenece
+    Administrativo [1..*] role tiene
+end
+
+-- asociacion Leyes
+
+association creaLey between
+	Leyes [1..*] role ley
+	Gobierno_y_Administracion [1] role gobierno
+end
+
+association creaServicio between
+	Servicios [1..*] role servicio
+	Gobierno_y_Administracion [1] role gobierno
+end
+
+association creImpuesto between
+	Impuestos [1..*] role impuesto
+	Gobierno_y_Administracion [1] role gobierno
+end
+
+-- asociacion Emergencias
+
+
+association vehiculosEmergencias between
+	CentroEmergencias[1..1] role tieneVeh
+	VehiculoEmergencia[1..*] role sonVeh
+end
+
+association esEdifici between -- No seria mejor una herencia?
+	CentroEmergencias[1]
+	Edificio[1]
+end
+
+association registra between
+	RegistroEmergencias[1..*] role sonRegistradas
+	CentroEmergencias[1..1] role registra
+end
+
+association LeenBom between
+	RegistroEmergencias[1..1] 
+	CuerpoBomberos[0..*] 
+end
+
+association LeenPol between
+	RegistroEmergencias[1..1] role guardaRegistro
+	CuerpoPolicia[0..*] role LeenRegistro
+end
+
+association LeenMed between
+	RegistroEmergencias[1..1]
+	PersonalMedico[0..*]
+end
+
+composition compBom between
+	Bombero[*]
+	CuerpoBomberos[1]
+end
+
+composition comPolicia between
+	Policia[*] role policias
+	CuerpoPolicia[1] role cuerpoPoli
+end
+
+composition comMedico between
+	Medico[*]
+	PersonalMedico[1]
+end
+
+-- asociacion Turista
+
+
+composition formanExc between
+	Excusion[1] role excursion
+	SitioDeInteres[*] role sitios
+end
+
+--association avisa between
+--	Persona[0..*]
+--	RegistroEmergencias[1..1]
+--end
+
+association visita between
+	Turista[0..*]
+	SitioDeInteres[0..*]
+end
+
+association seApunta between
+	Turista[0..*]
+	Excusion[0..*]
+end
+
+association visitaCentro between
+	CentroDeOcio[1..1]
+	Turista[0..*]
+end
+
+association aloja between
+	Turista[0..*] role alojaEn
+	Hotel[0..*] role duermeEn
+end
+
+association turistaRestaurante between
+	Turista[0..*] role daDeComer
+	Restaurante[0..*] role comeEn
+end
+
+association propone between
+	CentroDeOcio[1..1]
+	Excusion[1..*]
+end
+
+association AlumnoEstudia between
+    Estudiante [1..*] role estudian
+    Escuela [1] role estudia_en
+end
+
+association ProfesorEstudia between
+    Profesor [1..*] role imparten_clase
+    Escuela [1..*] role da_clases_en
+end
+
+association EstacionCuerpoBomberos between
+    EstacionBomberos [1..*] role trabajan
+    CuerpoBomberos [1..*] role tiene
+end
+
+association ComisariaCuerpoPolicia between
+    Comisaria [1..*] role trabajan
+    CuerpoPolicia [1..*] role tiene
+end
+
+association HospitalPersonalMedico between
+    Hospital [1..*] role trabajan
+    PersonalMedico [1..*] role tiene
+end
+
+association CiudadanoVive between
+    Edificio [1] role residen
+    Ciudadano [0..*] role viven
+end
+
+-- Asociacion RecursoNatural
+
+association esTratada between
+	Agua [1..*] role agua
+	Tratamiento [1..*] role tratamiento
+end
+
+association dondeSeTrataAgua between
+    Tratamiento [1] role se_hace
+    EdificioDepuradoraAgua [1..*] role trata_en
+end
+
+association EdificioTiene between
+	Edificio [0..*] role tiene
+	Via [0..*] role esta
+end
+
+association relacionfechaActLey between
+	Fecha_Actual [1] role fecha
+	Leyes[1] role ley
+end
+
+association relacionfechaActAlimento between
+	Fecha_Actual [1] role fecha
+	Alimentos[1] role alimento
+end
+---- RESTRICCIONES ----
+
+constraints
+-- 01: DONE Fecha Fin tiene que ser mayor a Fecha Inicio (Trivial?)
+context Proyecto inv:
+	self.FechaInicio < self.FechaFin
+
+-- 02: DONE si el origen es agua del mar el tratamiento debe ser desalinizacion
+context Tratamiento inv:
+	self.agua->forAll(a: Agua | a.Origen= OrigenAgua::Mar implies self.Tipo= TipoTratamiento::Desalinizacion)
+
+-- 03: DONE si la cantidad del recurso natural es 0 no esta disponible (Trivial?)
+context RecursoNatural inv:
+	self.cantidad = 0 implies self.Disponibilidad = false
+
+-- 04:DONE el presupuesto del gobierno y administracion debe ser mayor o igual que el dinero recaudado (Trivial?)
+context Gobierno_y_Administracion inv:
+	self.Presupuesto >= self.DineroRecaudado
+
+-- 05:DONE El numero de habitantes debe ser mayor que 0 (Trivial?)
+context Gobierno_y_Administracion inv:
+	self.nHabitantes>0
+
+-- 06:DONE Un bombero de Rango Jefe debe tener mas de 5 años de experiencia
+context Bombero inv:
+    self.Rango= RangoBombero::JefeDeBomberos implies self.Experiencia > 5
+
+-- 07:DONE Los cientificos no pueden trabajar en un proyecto de Infraestructura
+context Cientifico inv:
+	self.trabaja_en->forAll(pr: Proyecto | pr.Tipo <> TipoProyecto::Infraestructura_Marina)
+
+-- 08:DONE Si algun SitioDeInteres no tiene sitioLibre la excursion no es realizable
+context Excusion inv:
+	self.sitios->forAll(st: SitioDeInteres | st.SitioLibre = true)
+
+-- 09:DONE La fecha de una ley no puede ser posterior a la fecha actual (Trivial?)
+context Leyes inv:
+	self.Fecha < self.fecha.FechaActual
+
+-- 10:DONE Si un alimento esta caducado la disponibilidad es false
+context Alimentos inv:
+	self.FechaCaducidad > self.fecha.FechaActual implies self.Disponibilidad=false
+
+-- 11:DONE Un Ingeniero no puede tener más de 20 obreros al cargo (Trivial?)
+context Ingeniero inv:
+	self.tiene_al_cargo -> size()<30
+
+-- 12:DONE no puede haber mas politicos que habitantes (Trivial?)
+context Gobierno_y_Administracion inv:
+	self.posee->size()<self.nHabitantes
+
+-- 13:DONE para ser trabajador debe ser mayor de edad (Trivial?)
+context Trabajador inv:
+	self.Edad>18
+
+-- 14: WIP Un Proyecto de Reutilizacion de Agua tiene que usar agua con un tratamiento de aguas residuales
+--context Proyecto inv:
+--	self.usa->forAll(ag:Agua | self.Tipo = TipoProyecto::Reutilizacion_del_Agua implies ag.tratramiento.Aplicacion = AplicacionesTratamiento::AguasResiduales)
+--context Proyecto derive:
+--	if self.Tipo = TipoProyecto::Reutilizacion_del_Agua then self.usa.tratamiento.Aplicacion = AplicacionesTratamiento::AguasResiduales
+
+
+-- 15: Para que un turista pueda reservar mesa o una habitacion debe tener el visasdo valido
+context Turista inv:
+	(self.comeEn->size() > 0 or self.duermeEn->size() >0 ) implies self.VisadoValido = true
+
+-- 16:DONE Un edificio no puede estar ubicado en un Tunel (Revisar Mult. asociacion Via/Edificio)
+context Edificio inv:
+	self.esta->forAll(v:Via | v.tipovia=TipoVia::Tuneles)
+
+--17:DONE Un policia no puede usar una ambulancia
+context Policia inv:
+	self.cuerpoPoli.guardaRegistro.registra.sonVeh->forAll(v:VehiculoEmergencia | v.oclIsTypeOf(Ambulancia) implies v.oclIsUndefined())
+
+
+
+--Contratos precondiciones y postcondiciones
+context Comisaria::NuevoInterno(detenidos: Integer): Boolean
+pre: detenidos<self.numeroCeldasLibres
+
+context Hospital::OcuparCama(nuevosEnfermos:Integer): Boolean
+pre: nuevosEnfermos<self.nCamasLibres
+
+context Proyecto::isProyectoRentable():Boolean
+post: CosteFinal<PresupuestoInicial
+
+--He añadido el atributo Matricula a Estudiante y he cambiado asignaturas de profesor a un Set(String)
+--Este metodo comprueba que las asignaturas que quiere cursar un alumno las de algun profesor
+context Estudiante::setMatricula(matricula: Set(String)): 
+pre:
+	not matricula->intersection(Profesor.allInstances()->collect(p | p.Asignaturas))->isEmpty()
+
+
+--**Por si faltan:
+--XX Hay muchas de escuela tipo estudiantes y tipo escuela
+
