@@ -1,0 +1,72 @@
+model personas
+
+---- CLASES -----
+
+class Cientifico
+end
+class Ingeniero
+end
+class Obrero
+end
+class RecursoNatural
+end
+
+class Proyecto
+attributes
+    Id: Integer
+    Tipo: TipoProyecto
+    FechaInicio: Integer
+    FechaFin: Integer
+    Finalizado: Boolean
+    Recursos:  RecursoNatural
+    PresupuestoInicial: Real
+    CosteFinal: Real
+    Descripcion: String
+operations
+    proyecto(id: Integer, tipo: TipoProyecto, fechaini: Integer, fechafin: Integer, finalizado: Boolean, recursos:  RecursoNatural, presupuesto: Real, coste: Real, descripcion: String)
+    getId(): Integer
+    getTipo(): TipoProyecto
+    getFechaInicio(): Integer
+    getFechaFin(): Integer
+    isFinalizado(): Boolean
+    getRescuros():  RecursoNatural
+    getPresupuesto(): Real
+    getCosteFinal(): Real
+    getDescripcion(): String
+    setId(id: Integer)
+    setTipo(tipo: TipoProyecto)
+    setFechaInicio(fecha: Integer)
+    setFechaFin(fecha: Integer)
+    setFinalizado(finalizado: Boolean)
+    setRescuros(recursos:  RecursoNatural)
+    setPresupuesto(presupuesto: Real)
+    setCosteFinal(costefinal: Real)
+    setDescripcion(descripcion: String)
+    upIntegerFechaFin(): Boolean  -- Actualiza con fecha actual si Finalizado=false && FechaFin < fechaSistema
+    isProyectoRentable(): Boolean --PresupuestoInicial - CosteFinal return true si el valor es positivo
+end
+
+---- ENUMERACIONES ----
+
+enum TipoProyecto {Biologia_Marina, Contaminacion, Energias_Limpias, Fisica, Geologia_Marina, ImasD, Infraestructura_Marina, IT, Medicina, Oceanografia, Optimizacion_Recursos, Reciclaje, Reutilizacion_del_Agua ,Quimica, Transportes, Viaje_Submarino}
+
+----- association ----
+association trabajaCientifico between
+    Proyecto [0..*] role trabaja_en
+    Cientifico [1..*] role trabajan
+end
+
+association trabajaIngeniero between
+    Proyecto [1..*] role trabaja_en
+    Ingeniero [1..*] role es_liderado_por
+end
+
+association trabajaObrero between
+    Proyecto [0..*] role trabaja_en
+    Obrero [1..*] role tiene
+end
+
+association RecursosUsadosProyectos between
+    Proyecto [0..*] role usado
+    RecursoNatural [0..*] role usa
+end

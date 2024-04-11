@@ -1,0 +1,164 @@
+model personas
+
+---- CLASES -----
+class RecursoNatural
+attributes
+	cantidad:Integer
+	nombre: String
+	Disponibilidad: Boolean
+	CapacidadAlmacenamiento: Real
+operations
+	getCantidad(): Integer
+	setCantidad(cantidad : Integer)
+	getNombre() : String
+	setNombre(nombre : String)
+	getCapacidad(): Real
+	setCapacidad(capacidad : Real)
+	VerificarDisponibilidad(): Boolean
+end
+
+class Energia < RecursoNatural
+attributes
+	nombreEnergia: String
+	coste: Real
+	origen: OrigenEnergia
+operations
+	Energia()
+	getNombre(): String
+	setNombre(nombre: String)
+	getCoste(): Real
+	setCoste(coste: Real)
+	getOrigen(): OrigenEnergia
+	setOrigen(origen: OrigenEnergia)
+end
+
+class Minerales < RecursoNatural
+attributes
+	Nombre: String
+	pureza: Real
+	Origen: OrigenMinerales
+operations
+	Minerales()
+	getPureza(): Real
+	setPureza(pureza: Real)
+	getNombre(): String
+	setNombre(nombre: String)
+	getOrigen(): OrigenMinerales
+	setOrigen(origen: OrigenMinerales)
+	AnadirMineral(Nombre: String, pureza: Real, Origen: OrigenMinerales)
+end
+
+class Alimentos < RecursoNatural
+attributes
+	id: Integer
+	FechaCaducidad: Integer
+	Estado: Boolean
+	tipo: Tipos_Alimentos
+operations
+	AnadirAlimento(id: Integer, Fecha: Integer, tipo: Tipos_Alimentos)
+	EliminarAlimento(id: Integer)
+end
+
+class Oxigeno < RecursoNatural
+attributes
+	Pureza: Real
+	Presion: Real
+	Origen: Origen_Oxigeno
+operations
+	getPureza(): Real
+	setPureza(pureza: Real)
+	getPresion():Real
+	setPresion(presion:Real)
+	getOrigen(): Origen_Oxigeno
+	setOrigen(origen: Origen_Oxigeno)
+	AnadirOxigeno(cantidad: Real)
+	EliminarOxigeno(cantidad: Real)
+end
+
+class Agua < RecursoNatural
+attributes
+	Temperatura: Real
+	ph: Real
+	Origen: OrigenAgua
+operations
+	getTemperatura(): Real
+	setTemperatura(temperatura: Real)
+	getPh(): Real
+	setPh(ph: Real)
+	getOrigen(): Integer
+	SetOrigen(origen: OrigenAgua)
+end
+
+class EnergiaElectrica < Energia
+attributes
+	Voltaje: Real
+	Frecuencia: Real
+	Corriente: Real
+operations
+	getVoltaje(): Real
+	setVoltaje(voltaje: Real)
+	getFrecuencia(): Real
+	setFrecuencia(frecuencia: Real)
+	getCorriente(): Real
+	setCorriente(corriente: Real)
+	CalcularPotencia(corriente: Real, voltaje: Real): Real
+end
+class EnergiaTermica < Energia
+attributes
+	kwGenerado: Real
+	kwHora: Real
+	Trabajadores:  Trabajador
+	temperatura: Real
+operations
+	getKW(): Real
+	setKW(KW: Real)
+	getTemperatura(): Real
+	setTemperatura(temperatura: Real)
+end
+
+class Tratamiento
+attributes
+	NombreTratamiento: String
+	Descripcion: String
+	Coste: Real
+	CantidadAguaTratada: Real
+	DuracionTratamiento: Real
+	Aplicacion: AplicacionesTratamiento
+	Tipo: TipoTratamiento
+operations
+	TratarAgua(nombre: String, desc: String, coste: Real, cantidad: Real, duracion: Real, aplicacion: AplicacionesTratamiento)
+	getNombre():String
+	setNombre(nombre: String)
+	getDescripcion(): String
+	setDescripcion(desc: String)
+	getCoste(): Real
+	setCoste(coste: Real)
+	getCantidad(): Real
+	setCantidad(cant: Real)
+	getDuracion(): Real
+	setDuracion(duracion: Real)
+	getAplicacion(): AplicacionesTratamiento
+	setAplicacion(aplicacion: AplicacionesTratamiento)
+	getTipo(): TipoTratamiento
+	setTipo(tipo: TipoTratamiento)
+end
+
+class Trabajador
+end
+
+
+---- ENUMERACIONES ----
+
+enum OrigenEnergia{Solar, Nuclear, CombustiblesFosiles}
+enum OrigenMinerales{CristalizacionMagmaYLava, PrecipitacionQuimica, Sedimentacion, ProcesosHidrotermales}
+enum Tipos_Alimentos{AlgasMarinas, Pescado, Vegetales, Leche}
+enum Origen_Oxigeno{Natural, Artificial}
+enum OrigenAgua{Manantial, Lluvia, Mar, ResidualTratada}
+enum AplicacionesTratamiento{Potabilizacion, AguasResiduales}
+enum TipoTratamiento{Cloracion, Desalinizacion, filtrado}
+
+----- association ----
+association esTratada between
+	Agua [1..*] role agua
+	Tratamiento [1..*] role tratamiento
+end

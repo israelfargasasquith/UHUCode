@@ -1,0 +1,106 @@
+model personas
+
+---- CLASES -----
+
+class Gobierno_y_Administracion
+attributes
+	Presupuesto: Real
+	AutoridadResponsable: String
+	nHabitantes: Integer
+	DineroRecaudado: Real
+operations
+	Gobierno_y_Administracion()
+	getPresupuesto(): Real
+	SetPresupuesto(presupuesto : Real)
+	getAutoridad(): String
+	setAutoridad(autoridad : String)
+	getNHabitantes(): Integer
+	setNHabitantes(nHabitantes : Integer)
+	getDineroRecaudado(): Real
+	setDineroRecaudado(dinero : Real)
+end
+
+class Leyes
+attributes
+	Nombre: String
+	Fecha: Integer
+	Estado: EstadoLey
+	Ambito: AmbitoLey
+	descripcion: String
+	sancionIncumplimiento: Real
+operations
+	Leyes()
+	getNombre(): String
+	setNombre(nombre : String)
+	getFecha(): Integer
+	setFecha(fecha : Integer)
+	getEstado(): EstadoLey
+	setEstado(estado : EstadoLey)
+	getAmbito(): AmbitoLey
+	setAmbito(ambito : AmbitoLey)
+	getDescripcion(): String
+	setDescripcion(descripcion : String)
+	getSancionIncumplimiento(): Real
+	setSancionIncumplimiento(sancion : Real)
+	AnadirLey(Nombre: String, fecha: Integer, estado: EstadoLey, ambito:AmbitoLey, descripcion: String, sancion: Real)
+	eliminarLey(Nombre : String)
+end
+
+class Impuestos
+attributes
+	id: Integer
+	tipo: TipoImpuesto
+	porcentaje: Real
+operations
+	Impuestos()
+	getTipo(): TipoImpuesto
+	setTipo(tipo : TipoImpuesto)
+	getPorcentaje(): Real
+	setPorcentaje(porcentaje : Real)
+	AnadirImpuesto(id: Integer, tipo: TipoImpuesto, porcentaje: Real)
+	EliminarImpuesto(id : Integer)
+	RecaudarImpuestos(cantidad: Integer, porcentaje: Real)
+end
+
+class Servicios
+attributes
+	id: Integer
+	tipo: TipoServicios
+	DineroDestinado: Real
+	AreaGeografica: String
+operations
+	Servicios()
+	getTipo(): Integer
+	setTipo(tipo : TipoServicios)
+	getId(): Integer
+	setId(id : Integer)
+	getDineroDestinado(): Real
+	setDineroDestinado(dinero: Real)
+	getAreaGeografica(): String
+	setAreaGeografica(area : String)
+	AnadirServicio(tipo: TipoServicios, dinero: Real, Area: String)
+	eliminarServicio(id: Integer)
+end
+
+---- ENUMERACIONES ----
+
+enum AmbitoLey {Educacion, Sanidad, Laboral, Ambiental}
+enum EstadoLey {Vigente, Derogada, Revision}
+enum TipoImpuesto {IVA,IRPF, Renta, GananciasCapital}
+enum TipoServicios {Salud, Educacion, Transporte, Alimentacion}
+
+----- association ----
+association creaLey between
+	Leyes [1..*] role ley
+	Gobierno_y_Administracion [1] role gobierno
+end
+
+association creaServicio between
+	Servicios [1..*] role servicio
+	Gobierno_y_Administracion [1] role gobierno
+end
+
+association creImpuesto between
+	Impuestos [1..*] role impuesto
+	Gobierno_y_Administracion [1] role gobierno
+end

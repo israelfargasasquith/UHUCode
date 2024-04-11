@@ -1,0 +1,187 @@
+model personas
+
+---- CLASES -----
+class CentroEmergencias
+attributes
+	TelefonoContacto : String
+	zona : String
+	empleados : Integer
+operations
+	RecibirLlamadas(motivo : String)
+	AvisarEmergencias(mensaje : String)
+end
+
+class CuerpoBomberos
+attributes
+operations
+	AtiendeLlamada()
+end
+
+class CuerpoPolicia
+attributes
+operations
+	AtiendeLlamada()
+end
+
+class PersonalMedico
+attributes
+operations
+	AtiendeLlamada()
+end
+
+class Bombero
+end
+
+class Policia
+end
+
+class Medico
+end
+
+abstract class VehiculoEmergencia
+attributes
+	IdVehiculo : String
+	estado : String
+	cantidadVehiculosTotales : Integer
+operations
+	SolicitarVehiculos() : Boolean
+	EnviarVehiculosAZona(zona : String):Boolean
+	LocalizarVehiculos(): String
+end
+
+class VehiculoMarino < VehiculoEmergencia
+attributes
+	FechaAlta : Integer
+	NumeroPasajeros : Integer
+	CapacidadDeCarga : Real
+	DuracionOxigeno : Real
+	TamDeposito : Real
+operations
+	CargarDepositos() : Boolean
+end
+
+abstract class VehiculoTerrestre < VehiculoEmergencia
+attributes
+	FechaAlta : Integer
+	NumeroPasajeros : Integer
+	CapacidadDeCarga : Real
+	KilometrosParaCambioRuedas : Real
+	TamDeposito : Real
+operations
+	CargarDeposito() : Boolean
+	CambiarRuedas() : Boolean
+end
+
+class Ambulancia < VehiculoTerrestre
+attributes
+	NumVendas : Integer
+	LitrosSuero : Integer
+operations
+	
+	CargarVendas() : Boolean
+	CargarSuero() : Boolean
+end
+
+class CamionBomberos < VehiculoTerrestre
+attributes
+	MetrosManguera : Integer
+	LongitudEscala : Integer
+operations
+	CambiarManguera(nueva : Integer) : Boolean
+end
+
+class CochePolicia < VehiculoTerrestre
+attributes
+	Municion : Integer
+	NumEsposas : Integer
+operations
+	AnadirMunicion(municion : Integer) : Boolean
+	ReponerEsposas(esposas : Integer) : Boolean
+end
+
+class SubmarinoPolicial < VehiculoMarino
+attributes
+	NumEsposas : Integer
+operations
+	ReponerEsposas(numEsposas : Integer) : Boolean
+end
+
+class AmbulanciaSubmarina < VehiculoMarino
+attributes
+	numeroVendas : Integer
+	OxigenoExtra : Integer
+operations
+	ReponerVendasYOxigeno(vendas : Integer, oxigeno : Integer) : Boolean
+end
+
+class RegistroEmergencias
+attributes
+	IdRegistro : Integer
+	TlfContacto : Integer
+	Mensaje : String
+	FechaRegistro : String
+	TipoEmergencia : TipoEmergencia
+	Ubicacion : String
+	EstadoRegistro : String
+operations
+	RegistrarEmergencia(TipoEmergencia: TipoEmergencia, ubicacion: String, Mensaje: String): Integer
+	getDetallesRegistro(): String
+	actualizarEstado(estadoRegistro: String): Integer
+	asignarEquipoEmergencias(equipo: String): Integer
+end
+
+class Edificio
+end
+
+
+---- ENUMERACIONES ----
+
+enum TipoEmergencia {Incendio, Inundacion, Altercado, SubmarinoPerdido}
+enum Vehiculos { CochesDeAlquiler, Autobus, Submarinos}
+enum TipoPersonalMedico {MedicoEspecialista, Enfermero, Auxiliar, Farmaceutico}
+
+----- association ----
+association tieneVeh between
+	CentroEmergencias[1..1]
+	VehiculoEmergencia[1..*]
+end
+
+association esEdifici between
+	CentroEmergencias[1]
+	Edificio[1]
+end
+
+association registra between
+	RegistroEmergencias[1..*]
+	CentroEmergencias[1..1]
+end
+
+association LeenBom between
+	RegistroEmergencias[1..1]
+	CuerpoBomberos[0..*]
+end
+
+association LeenPol between
+	RegistroEmergencias[1..1]
+	CuerpoPolicia[0..*]
+end
+
+association LeenMed between
+	RegistroEmergencias[1..1]
+	PersonalMedico[0..*]
+end
+
+composition compBom between
+	Bombero[*]
+	CuerpoBomberos[1]
+end
+
+composition comPolicia between
+	Policia[*]
+	CuerpoPolicia[1]
+end
+
+composition comMedico between
+	Medico[*]
+	PersonalMedico[1]
+end

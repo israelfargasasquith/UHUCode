@@ -1,0 +1,234 @@
+model personas
+
+---- CLASES -----
+
+class Persona
+attributes
+    Id: Integer
+    Nombre : String
+    Edad: Integer
+operations
+    getId() : Integer
+    getNombre() : String
+    getEdad() : Integer
+    setId(nombre: Integer)
+    setNombre(nombre: String)
+    setEdad(edad: Integer)
+end
+
+class Ciudadano < Persona
+attributes
+	Residiencia: Edificio
+    Ocupacion: String
+operations
+	getResidencia(): Edificio
+    getOcupacion(): String
+    setResidencia(residencia: Edificio)
+    setOcupacion(ocupacion: String)
+end
+
+class Turista < Persona
+attributes
+    VisadoValido: Boolean
+    PaisOrigen: String
+    MotivoVisita: String
+operations
+    Turista(visado: Boolean, pais: String, motivo: String)
+    isVisadoValido(): Boolean
+    getPaisOrigen(): String
+    getMotivoVisita(): String
+    setVisadoValido(visado: Boolean)
+    setPaisOrigen(pais: String)
+    setMotivoVisita(motivo: String)
+end
+
+class Trabajador < Ciudadano
+attributes
+    Sueldo: Real
+    Horario: Integer
+	Experiencia: Integer
+operations
+    getSueldo(): Real
+    getHorario():  Integer
+	getExperiencia(): Integer
+    setSueldo(sueldo: Real)
+    setHorario(horario:  Integer)
+	setExperiencia(exp: Integer)
+
+end
+
+class Parado < Ciudadano
+attributes
+    Sueldo: Real
+    fechaVencimiento: Integer
+operations
+    Parado(sueldo: Real, fecha: Integer)
+    getSalario(): Real
+    getFechaVencimiento(): Integer
+    setSueldo(sueldo: Real)
+    setFechaVencimiento(fecha: Integer)
+end
+
+class Pensionista < Ciudadano
+attributes
+    Jubilado: Boolean
+    Pension: Real
+operations
+    Pensionista(jubilado: Boolean, pension: Real)
+    isJubilado(): Boolean
+    getPension(): Real
+    setJubilado(jubilado: Boolean)
+    setPension(pension: Real)
+end
+
+class Politico < Trabajador
+attributes
+    Cargo: String
+operations
+    Politico(cargo: String)
+    getCargo(): String
+    setCargo(cargo: String)
+end
+
+class Ingeniero < Trabajador
+attributes
+    Titulo: String
+    ObrasRealizadas: Integer
+    Trabajando: Boolean
+    LugarTrabajo: Integer
+operations
+    Ingeniero(tituo: String, obras:  String, trabajando: Boolean, lugar: Integer)
+    getTitulo(): String
+    getObrasRealizadas():  Integer
+    isTrabajando(): Boolean
+    getLugarTrabajo(): Integer
+    setTitulo(titulo: String)
+    setObrasRealizadas(obras:  Integer)
+    setTrabajando(trabajando: Boolean)
+    setLugarTrabajo(lugar: Integer)    
+end
+
+class Obrero < Trabajador
+attributes
+    Jefe: Integer
+    Trabajando: Boolean
+    LugarTrabajo: Integer
+operations
+    Obrero(jefe: Integer, trabajando: Boolean, lugar: Integer)
+    getJefe(): Integer
+    isTrabajando(): Boolean
+    getLugarTrabajo(): Integer
+    setJefe(jefe: Integer)
+    setTrabajando(trabajando: Boolean)
+    setLugarTrabajo(lugar: Integer)
+end
+
+class Cientifico < Trabajador
+attributes
+    ProyecoActual: Integer
+    HistorialProyecto:  Integer
+    Especialidad: String
+operations
+    --Cientifico()
+    Cientifico(proyecto: Integer, historial:  Integer, especialidad: String)
+    getProyectoActual(): Integer
+    getHistorialDeInvestigacion():  Integer
+    getEspecialidad(): String
+    setProyectoActual(project:  Integer)
+    setHistorialProyecto(historial:  Integer)
+    setEspecialidad(especialidad: String)
+end
+
+class PersonalMedico < Trabajador
+attributes
+operations
+	AtiendeLlamada()
+end
+
+class Bombero < Trabajador
+attributes
+	Rango : RangoBombero
+	Division : String
+	ZonaActuacion : String
+operations
+    getRango(): RangoBombero
+    getDivision(): String
+    getZonaActuacion(): String
+    setRango(rank: RangoBombero)
+    setDivision(division: String)
+    setZonaActuacion(zones: String)
+end
+
+class Policia < Trabajador
+attributes
+	Rango : String
+	nombre : String
+	edad : Integer
+	fechaNacimiento : String
+	Division : String
+	ZonaActuacion : String
+operations
+end
+
+class Medico < Trabajador
+attributes
+	Rango : String
+	nombre : String
+	edad : Integer
+	fechaNacimiento : String
+	Division : String
+	ZonaActuacion : String
+operations
+end
+
+class Estudiante < Ciudadano
+attributes
+    Cursos: String
+    Horario: Integer
+    Tipo: TipoEstudiante
+    Edificio: Integer
+operations
+    getCurso(): String
+    getHorario(): Integer
+    getTipo(): String
+    getEdificio(): Integer
+    setCurso(curso: String)
+    setHorario(horario: Integer)
+    setTipo(tipo: String)
+    setEdificio(edificio: Integer)
+end
+
+class Profesor < Trabajador
+attributes
+    Cursos:  String
+    Asignaturas:  String
+    Edificio: Integer --id de Edificio
+operations
+    getCursos():  String
+    getAsignaturas():  String
+    getIdEdificio(): Integer
+    setCursos(cursos:  String)
+    setAsignaturas(asignatura:  String)
+end
+
+class Administrativo < Trabajador
+attributes
+	AreaTrabajo : String
+	NivelAcceso : String
+operations
+end
+
+class Edificio
+end
+
+---- ENUMERACIONES ----
+enum RangoPolicia {Director ,ComisarioGeneral, JefeDeDivision, Inspector, Policia}
+enum RangoBombero {JefeDeBomberos, Capitan, Teniente, Bombero }
+enum TipoPersonalMedico {MedicoEspecialista, Enfermero, Auxiliar, Farmaceutico}
+enum TipoEstudiante {Infantil, Primaria, Secundaria, Bachiller, FP, Universidad}
+
+----- association ----
+association relacion_IngObr between
+    Obrero [1..*] role tiene_al_cargo
+    Ingeniero [1] role tiene_de_superior
+end

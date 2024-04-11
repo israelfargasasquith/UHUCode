@@ -1,0 +1,104 @@
+model personas
+
+---- CLASES -----
+class Hotel < Edificio
+attributes
+	zona : String
+	numeroHabitaciones : Integer
+	precioPorNoche : Real
+operations
+	AlojarCliente(turista : Turista) : Boolean
+	DesalojarHabitacion(): Integer
+end
+
+class Restaurante< Edificio
+attributes
+	zona : String
+	numeroMesasLibres : Integer
+	carta : String
+operations
+	ReservarMesas(numero : Integer): Boolean
+	LiberarMesas(numero : Integer) : Boolean
+end
+
+class CentroDeOcio < Edificio
+attributes
+	Actividades : Set(Actividades)
+	Sede : Edificio
+	Vehiculos : Bag(Vehiculos)
+operations
+	OrganizarExcursion(participantes : Integer, sitios : Set(SitioDeInteres)): Integer
+	AvisarEmergencias(mensaje : String): Integer
+end
+
+class SitioDeInteres
+attributes
+	PrecioVisita : Real
+	Lugar : String
+	Horario : String
+	TelefonoContacto : String
+	SitioLibre : Boolean
+operations
+	VenderEntrada(): Boolean
+end
+
+class Excusion
+attributes
+	PrecioTotal : Real
+	LugarInicio : String
+	LugarFin : String
+	SitiosAVisitar : SitioDeInteres
+operations
+	AnadirExcursionista(turista : Turista): Integer
+end
+
+class Turista
+end
+class Edificio
+end
+class Vehiculos
+end
+
+---- ENUMERACIONES ----
+enum Actividades {ExcursionSubmarina, Snorkel, Buceo}
+
+----- association ----
+composition formanExc between
+	Excusion[1] role excursion
+	SitioDeInteres[*] role sitios
+end
+
+--association avisa between
+--	Persona[0..*]
+--	RegistroEmergencias[1..1]
+--end
+
+association visita between
+	Turista[0..*]
+	SitioDeInteres[0..*]
+end
+
+association seApunta between
+	Turista[0..*]
+	Excusion[0..*]
+end
+
+association visitaCentro between
+	CentroDeOcio[1..1]
+	Turista[0..*]
+end
+
+association aloja between
+	Turista[0..*] role alojaEn
+	Hotel[0..*] role duermeEn
+end
+
+association turistaRestaurante between
+	Turista[0..*] role daDeComer
+	Restaurante[0..*] role comeEn
+end
+
+association propone between
+	CentroDeOcio[1..1]
+	Excusion[1..*]
+end

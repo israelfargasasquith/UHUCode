@@ -1,0 +1,112 @@
+model personas
+
+---- CLASES -----
+class Edificio
+attributes
+	IdEdificio: Integer
+    espacio: Real
+    plantas: Integer
+	precio: Integer
+operations
+	getIdEdificio(): Integer
+    getEspacio(): Real
+    getPlantas(): Integer
+    getPrecio(): Integer
+end
+
+class Via
+attributes
+    Idvias: Integer
+    Longitud: Real
+    tipovia: TipoVia
+operations
+    Vias(id: Integer, longitud: Real, tipo: TipoVia)
+    Mantener(id: Integer, tipo: TipoVia): Boolean
+    getId(): Integer
+    getLongitud(): Integer
+    getTipoVia(): TipoVia
+    setId(id: Integer)
+    setLongitug(longitud: Real)
+    setTipo(tipo: TipoVia)
+end
+
+class Escuela < Edificio
+attributes
+    Id: Integer
+    Tipo: TipoEscuela
+    Via: Integer
+operations
+    Escuela(id: Integer, tipo: TipoEscuela, nprof: Integer, nalum: Integer, via: Integer,  profesores:  Integer,  alumnos:  Integer)
+    getId(): Integer
+    getTipoEscuela(): TipoEscuela
+    getVia(): Integer
+    setId(id: Integer)
+    setTipoEscuela(tipo: TipoEscuela)
+   
+end
+
+class EdificioDepuradoraAgua < Edificio
+attributes
+    Tipo: TratamientoAguas
+    LitrosDisponibles: Real
+    LitrosTratamiento: Real
+operations
+    EdificioDepuradoraAgua(tipo: TratamientoAguas, litrosdisponibles: Real, litrostratamiento: Real)
+    getTipo(): TratamientoAguas
+    getLitrosDisponibles(): Real
+    getLitrosTratamiento(): Real
+    setTipo(tipo: TratamientoAguas)
+    setLitrosDisponibles(litrosdisponibles: Real)
+    setLitrosTratamiento(litrostratamiento: Real)
+    trataraguas(tipo: TratamientoAguas, litros: Real): Boolean
+    liberar(tipo: TratamientoAguas): Boolean
+end
+
+class EstacionBomberos < Edificio
+attributes
+	bomberosEnEstacion : Integer
+operations
+	actualizarBomberosEnEstacion(numero : Integer) : Boolean 
+    EstacionBomberos(nbomberos: Integer, nvehiculos: Integer)
+    Emergencia(bomberos:  Integer, lugar: Via, tipo: Integer): String -- tipo¿?
+end
+
+class Comisaria < Edificio
+attributes
+	numeroCeldasLibres : Integer
+	numeroInternos : Integer
+operations
+	NuevoInterno(detenidos : Integer) : Boolean
+    Comisaria(nPolicias: Integer, nVehiculos: Integer)
+    Emergencia(policia: Integer, lugar: Via, tipo: Integer): String -- tipo¿?
+end
+
+class Hospital < Edificio
+attributes
+	nCamasLibres : Integer
+	numeroHabitaciones : Integer
+operations
+	OcuparCama(nuevosEnfermos : Integer) : Boolean
+    Hospital(nPersonalMedico: Integer, nvehiculos: Integer)
+    Emergencia(PersonalMedico: Integer, lugar: Via, tipo: Integer): String -- tipo¿?
+end
+
+class Tratamiento
+end
+
+---- ENUMERACIONES ----
+
+enum TipoVia {Calle, Tuneles, Carretera}
+enum TipoEscuela {Primaria, Instituto, Universidad}
+enum TratamientoAguas {Potable, Residuales}
+
+----- association ----
+association dondeSeTrataAgua between
+    Tratamiento [1] role se_hace
+    EdificioDepuradoraAgua [1..*] role trata_en
+end
+
+association EdificioTiene between
+	Edificio [0..*] role tiene
+	Via [0..*] role esta
+end
