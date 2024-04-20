@@ -8,267 +8,293 @@
 #include <stdbool.h>
 FILE *fdatos = NULL;
 TLibro *Biblioteca = NULL; // Vector dinamico de libros
-int numLibros = 0;		   // Numero de libros almacenados en el vector
-int tama = 0;			   // Tamaño del vector dinamico, crece de 4 en 4 libros
-int idAdmin = -1;		   // Copia del idAdmin mandado al usuario
-Cadena nomFichero = "";	   // Copia del nombre del ultimo fichero binario cargado
-int campoOrdenacion = 0;   // Copia del ultimo campo de ordenacion realizado
+int numLibros = 0;         // Numero de libros almacenados en el vector
+int tama = 0;            // Tamaño del vector dinamico, crece de 4 en 4 libros
+int idAdmin = -1;        // Copia del idAdmin mandado al usuario
+Cadena nomFichero = "";  // Copia del nombre del ultimo fichero binario cargado
+int campoOrdenacion = 0; // Copia del ultimo campo de ordenacion realizado
 
 Cadena contraseñaAdmin = "1234";
 
-bool_t EsMenor(int P1, int P2, int Campo)
-{
-	bool_t salida = FALSE;
-	TLibro L1 = Biblioteca[P1];
-	TLibro L2 = Biblioteca[P2];
+bool_t EsMenor(int P1, int P2, int Campo) {
+    bool_t salida = FALSE;
+    TLibro L1 = Biblioteca[P1];
+    TLibro L2 = Biblioteca[P2];
 
-	switch (Campo)
-	{
-	case 0:
-		salida = strcmp(L1.Isbn, L2.Isbn) < 0 ? TRUE : FALSE;
-		break;
-	case 1:
-		salida = strcmp(L1.Titulo, L2.Titulo) < 0 ? TRUE : FALSE;
-		break;
-	case 2:
-		salida = strcmp(L1.Autor, L2.Autor) < 0 ? TRUE : FALSE;
-		break;
-	case 3:
-		salida = L1.Anio < L2.Anio ? TRUE : FALSE;
-		break;
-	case 4:
-		salida = strcmp(L1.Pais, L2.Pais) < 0 ? TRUE : FALSE;
-		break;
-	case 5:
-		salida = strcmp(L1.Idioma, L2.Idioma) < 0 ? TRUE : FALSE;
-		break;
-	case 6:
-		salida = L1.NoLibros < L2.NoLibros ? TRUE : FALSE;
-		break;
-	case 7:
-		salida = L1.NoPrestados < L2.NoPrestados ? TRUE : FALSE;
-		break;
-	case 8:
-		salida = L1.NoListaEspera < L2.NoListaEspera ? TRUE : FALSE;
-		break;
-	}
-	return salida;
+    switch (Campo) {
+    case 0:
+        salida = strcmp(L1.Isbn, L2.Isbn) < 0 ? TRUE : FALSE;
+        break;
+    case 1:
+        salida = strcmp(L1.Titulo, L2.Titulo) < 0 ? TRUE : FALSE;
+        break;
+    case 2:
+        salida = strcmp(L1.Autor, L2.Autor) < 0 ? TRUE : FALSE;
+        break;
+    case 3:
+        salida = L1.Anio < L2.Anio ? TRUE : FALSE;
+        break;
+    case 4:
+        salida = strcmp(L1.Pais, L2.Pais) < 0 ? TRUE : FALSE;
+        break;
+    case 5:
+        salida = strcmp(L1.Idioma, L2.Idioma) < 0 ? TRUE : FALSE;
+        break;
+    case 6:
+        salida = L1.NoLibros < L2.NoLibros ? TRUE : FALSE;
+        break;
+    case 7:
+        salida = L1.NoPrestados < L2.NoPrestados ? TRUE : FALSE;
+        break;
+    case 8:
+        salida = L1.NoListaEspera < L2.NoListaEspera ? TRUE : FALSE;
+        break;
+    }
+    return salida;
 }
 
-/*Se encarga de verificar la contraseña de administrador y devolverá un número (IDA) dependiendo de las
-siguientes condiciones:
--1: Ya hay un usuario identificado como administrador, solo se permite uno.
--2: La contraseña es errónea.
-N: Un número aleatorio generado como 1+rand()%RAND_MAX
-Este número deberá ser utilizado en todas las operaciones de Administración en el campo Ida. */
+/*Se encarga de verificar la contraseña de administrador y devolverá un número
+(IDA) dependiendo de las siguientes condiciones: -1: Ya hay un usuario
+identificado como administrador, solo se permite uno. -2: La contraseña es
+errónea. N: Un número aleatorio generado como 1+rand()%RAND_MAX Este número
+deberá ser utilizado en todas las operaciones de Administración en el campo Ida.
+*/
 
-int busquedaLineal(Cadena Isbn)
+int busquedaLineal(Cadena Isbn) // Devuelve la posicion en el array
 {
-	if (numLibros > 0)
-	{
-	}
+    int pos = -1;
+    if (numLibros > 0) {
+        for (int i = 0; i < numLibros; ++i) {
+            if (strcmp(Biblioteca[i].Isbn, Isbn) == 0) {
+                pos = i;
+                goto encontrado;
+            }
+        encontrado:
+        }
+    }
+    return pos;
 }
 
-int *conexion_1_svc(char *argp, struct svc_req *rqstp)
-{
-	static int result;
-	printf("\nServidor: El valor de admin ahora mismo es de %d", idAdmin);
-	if (idAdmin == -1)
-	{
-		printf("\nVamos a intentar iniciar sesion con la contraseña %s", argp);
-		if (strcmp(argp, contraseñaAdmin) == 0)
-		{
-			idAdmin = 1 + rand() % RAND_MAX;
-			printf("\nUn admin ha iniciado sesion con ID %d", idAdmin);
-			result = idAdmin;
-		}
-		else
-		{
-			printf("\nServidor: La contraseña introducida ha sido erronea");
-			result = -2;
-		}
-	}
-	else
-	{
-		printf("\nServidor: Ya hay un admin en el sistema");
-		result = -1;
-	}
+int *conexion_1_svc(char *argp, struct svc_req *rqstp) {
+    static int result;
+    printf("\nServidor: El valor de admin ahora mismo es de %d", idAdmin);
+    if (idAdmin == -1) {
+        printf("\nVamos a intentar iniciar sesion con la contraseña %s", argp);
+        if (strcmp(argp, contraseñaAdmin) == 0) {
+            idAdmin = 1 + rand() % RAND_MAX;
+            printf("\nUn admin ha iniciado sesion con ID %d", idAdmin);
+            result = idAdmin;
+        } else {
+            printf("\nServidor: La contraseña introducida ha sido erronea");
+            result = -2;
+        }
+    } else {
+        printf("\nServidor: Ya hay un admin en el sistema");
+        result = -1;
+    }
 
-	return &result;
+    return &result;
 }
-/*Comprueba que el Ida coincide con el almacenado en el servidor. Si no coincide devuelve FALSE y caso
-contrario borra el Ida (lo pone a -1) almacenado en el servidor y devuelve TRUE. */
-bool_t *
-desconexion_1_svc(int *argp, struct svc_req *rqstp)
-{
-	static bool_t result;
+/*Comprueba que el Ida coincide con el almacenado en el servidor. Si no coincide
+devuelve FALSE y caso contrario borra el Ida (lo pone a -1) almacenado en el
+servidor y devuelve TRUE. */
+bool_t *desconexion_1_svc(int *argp, struct svc_req *rqstp) {
+    static bool_t result;
 
-	if (idAdmin == *argp)
-	{
-		printf("\nServidor: Se desconecta el Admin de forma correcta");
-		result = true;
-	}
-	else
-	{
-		printf("\nServidor: El IdAdmin dado no es el correcto, error");
-		result = false;
-	}
+    if (idAdmin == *argp) {
+        printf("\nServidor: Se desconecta el Admin de forma correcta");
+        idAdmin = -1;
+        result = true;
+    } else {
+        printf("\nServidor: El IdAdmin dado no es el correcto, error");
+        result = false;
+    }
 
-	return &result;
+    return &result;
 }
 
-int *cargardatos_1_svc(TConsulta *argp, struct svc_req *rqstp)
-{
-	static int result;
+int *cargardatos_1_svc(TConsulta *argp, struct svc_req *rqstp) {
+    static int result;
 
-	if (argp->Ida > 0 && idAdmin == argp->Ida)
-	{
-		printf("\nIntentamos abrir el fichero %s", argp->Datos);
-		fdatos = fopen(argp->Datos, "r");
-		if (fdatos != NULL)
-		{
-			fread(&numLibros, sizeof(int), 1, fdatos);
-			printf("\nHay %d libros en el fichero y en el array", numLibros);
-			Biblioteca = (TLibro *)malloc(sizeof(TLibro) * numLibros);
-			fread(Biblioteca, sizeof(TLibro), numLibros, fdatos);
-			strcpy(nomFichero, argp->Datos);
-			fclose(fdatos);
-			// falta ordenarlos
-			result = 1;
-		}
-		else
-		{
-			printf("\nError: El nombre pasado por parametro no es un fichero");
-			result = 0;
-		}
-	}
-	else
-	{
-		printf("\nServidor error: El IdAdmin no es correcto");
-		result = -1;
-	}
+    if (argp->Ida > 0 && idAdmin == argp->Ida) {
+        printf("\nIntentamos abrir el fichero %s", argp->Datos);
+        fdatos = fopen(argp->Datos, "r");
+        if (fdatos != NULL) // Deberia de liberar la memoria si no es null
+        {
+            fread(&numLibros, sizeof(int), 1, fdatos);
+            if (numLibros % 4 == 0) {
+                tama = numLibros;
+            } else {
+                tama = ((numLibros / 4) + 1) * 4;
+            }
+            printf("\nHay %d libros en el fichero y en el array", numLibros);
+            Biblioteca = (TLibro *)malloc(sizeof(TLibro) * tama);
+            fread(Biblioteca, sizeof(TLibro), numLibros, fdatos);
+            strcpy(nomFichero, argp->Datos);
+            fclose(fdatos);
+            // falta ordenarlos
+            printf("\nCargado Con exito con exito");
+            result = 1;
+        } else {
+            printf("\nError: El nombre pasado por parametro no es un fichero");
+            result = 0;
+        }
+    } else {
+        printf("\nServidor error: El IdAdmin no es correcto");
+        result = -1;
+    }
 
-	return &result;
+    return &result;
 }
 
-bool_t *
-guardardatos_1_svc(int *argp, struct svc_req *rqstp)
-{
-	static bool_t result;
+bool_t *guardardatos_1_svc(int *argp, struct svc_req *rqstp) {
+    static bool_t result;
 
-	if (*argp == idAdmin)
-	{
-		printf("\nVamos a guardar el array en el fichero %s", nomFichero);
-		fdatos = fopen(nomFichero, "w");
-		fwrite(&numLibros, sizeof(int), 1, fdatos);
-		fwrite(Biblioteca, sizeof(TLibro) * numLibros, 1, fdatos);
-		fclose(fdatos);
-		printf("\n***Server: Se ha guardado el estado actual de la biblioteca.**");
-		printf("\nSe debe haber guardado bien... Comprueba");
-		result = true;
-	}
-	else
-	{
-		printf("\nServidor: Error al intentar guardar el fichero, el idAdmin no es correcto");
-		result = false;
-	}
+    if (*argp == idAdmin) {
+        printf("\nVamos a guardar el array en el fichero %s", nomFichero);
+        fdatos = fopen(nomFichero, "w");
+        fwrite(&numLibros, sizeof(int), 1, fdatos);
+        fwrite(Biblioteca, sizeof(TLibro) * numLibros, 1, fdatos);
+        fclose(fdatos);
+        printf(
+            "\n***Server: Se ha guardado el estado actual de la biblioteca.**");
+        result = true;
+    } else {
+        printf("\nServidor: Error al intentar guardar el fichero, el idAdmin "
+               "no es correcto");
+        result = false;
+    }
 
-	return &result;
+    return &result;
 }
 
-int *nuevolibro_1_svc(TNuevo *argp, struct svc_req *rqstp)
-{
-	static int result;
+int *nuevolibro_1_svc(TNuevo *argp, struct svc_req *rqstp) {
+    static int result;
+    printf("\nHay que comparar con los ISBN que ya hay antes de guardarlo...");
+    if (argp->Ida == idAdmin) {
+        printf("\nEl nlibros %d tama es %d", numLibros, tama);
+        // comprobar isbn
+        if (numLibros + 1 > tama) {
+            tama += 4;
+            printf("\nNuevo Tamaño tama %d", tama);
+            Biblioteca = (TLibro *)realloc(Biblioteca, sizeof(TLibro) * tama);
+        }
+        printf("Metemos el libros %s en la pos %d", argp->Libro.Titulo,
+               numLibros);
+        Biblioteca[numLibros++] = argp->Libro;
+        result = 1;
+    } else {
+        printf("\nError, ya hay un idAdmin o no coincide con el que esta");
+        result = -1;
+    }
+    return &result;
+}
+/*Añadirá un número de ejemplares al libro del vector dinámico cuyo Isbn
+coincida con almacenado en un campo ‘NoLibros’ del tipo TComRet. Verificará que
+el Ida sea correcto y que el libro está en el vector, en cuyo caso le agregará
+el número de unidades indicadas en un campo ‘NoLibros’ teniendo en cuenta que,
+si hay más unidades disponibles que usuarios en espera, todos estos usuarios
+recibirán un libro reduciendo la cantidad de libros disponibles, y si hay menos
+libros disponibles que usuarios en espera, se reducirá dicho usuarios en espera
+en la misma cantidad que libros disponibles. Una vez actualizado el libro se
+ordenarán todos los libros del vector dinámica por el campo almacenado en el
+servidor. Las salidas de este servicio son: -1: Ya hay un usuario identificado
+como administrador o el Ida no coincide con el almacenado en el Servidor. 0: No
+hay un libro en el vector dinámico que tiene el mismo Isbn. 1: Se han agregado
+los nuevos ejemplares del libro y los datos están ordenados. */
+int *comprar_1_svc(TComRet *argp, struct svc_req *rqstp) {
+    static int result;
 
-	return &result;
+    if (idAdmin != -1) {
+        int pos = busquedaLineal(argp->Isbn);
+        if (pos != -1) {
+            Biblioteca[pos].NoLibros += argp->NoLibros;
+        } else {
+            printf("\nNo se ha encontrado el libro en el vector");
+            result = 0;
+        }
+    } else {
+        printf("\nYa hay un admin %d o su ida no coincide con el pasado %d",
+               idAdmin, argp->Ida);
+        result = -1;
+    }
+
+    return &result;
 }
 
-int *comprar_1_svc(TComRet *argp, struct svc_req *rqstp)
-{
-	static int result;
+int *retirar_1_svc(TComRet *argp, struct svc_req *rqstp) {
+    static int result;
 
-	/*
-	 * insert server code here
-	 */
+    /*
+     * insert server code here
+     */
 
-	return &result;
+    return &result;
 }
 
-int *retirar_1_svc(TComRet *argp, struct svc_req *rqstp)
-{
-	static int result;
+bool_t *ordenar_1_svc(TOrdenacion *argp, struct svc_req *rqstp) {
+    static bool_t result;
 
-	/*
-	 * insert server code here
-	 */
+    /*
+     * insert server code here
+     */
 
-	return &result;
+    return &result;
 }
 
-bool_t *
-ordenar_1_svc(TOrdenacion *argp, struct svc_req *rqstp)
-{
-	static bool_t result;
-
-	/*
-	 * insert server code here
-	 */
-
-	return &result;
+int *nlibros_1_svc(int *argp, struct svc_req *rqstp) {
+    static int result;
+    result = numLibros;
+    return &result;
 }
 
-int *nlibros_1_svc(int *argp, struct svc_req *rqstp)
-{
-	static int result;
+int *buscar_1_svc(TConsulta *argp, struct svc_req *rqstp) {
+    static int result;
 
-	/*
-	 * insert server code here
-	 */
+    /*
+     * insert server code here
+     */
 
-	return &result;
+    return &result;
 }
 
-int *buscar_1_svc(TConsulta *argp, struct svc_req *rqstp)
-{
-	static int result;
-
-	/*
-	 * insert server code here
-	 */
-
-	return &result;
+TLibro *descargar_1_svc(TPosicion *argp, struct svc_req *rqstp) {
+    static TLibro result;
+    TLibro tmp;
+    if (argp->Pos < numLibros) {
+        if (argp->Ida == idAdmin) {
+            result = Biblioteca[argp->Pos];
+        } else {
+            result = Biblioteca[argp->Pos];
+            result.NoListaEspera = 0;
+            result.NoPrestados = 0;
+            result.NoLibros = 0;
+        }
+    } else {
+        printf("\nPosicion indicada erronea");
+        tmp.Anio = -1;
+        strcpy(tmp.Autor, "????");
+        result = tmp;
+    }
+    return &result;
 }
 
-TLibro *
-descargar_1_svc(TPosicion *argp, struct svc_req *rqstp)
-{
-	static TLibro result;
+int *prestar_1_svc(TPosicion *argp, struct svc_req *rqstp) {
+    static int result;
 
-	/*
-	 * insert server code here
-	 */
+    /*
+     * insert server code here
+     */
 
-	return &result;
+    return &result;
 }
 
-int *prestar_1_svc(TPosicion *argp, struct svc_req *rqstp)
-{
-	static int result;
+int *devolver_1_svc(TPosicion *argp, struct svc_req *rqstp) {
+    static int result;
 
-	/*
-	 * insert server code here
-	 */
+    /*
+     * insert server code here
+     */
 
-	return &result;
-}
-
-int *devolver_1_svc(TPosicion *argp, struct svc_req *rqstp)
-{
-	static int result;
-
-	/*
-	 * insert server code here
-	 */
-
-	return &result;
+    return &result;
 }

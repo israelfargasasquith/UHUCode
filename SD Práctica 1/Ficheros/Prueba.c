@@ -76,6 +76,24 @@ typedef struct TConsulta TConsulta;
 int main()
 {
     system("clear");
+
+    char id[10] = "0000";
+
+    for (int i = 0; i < 10; i++)
+    {
+        // Convert char array to integer
+        int num = atoi(id);
+
+        // Increment the number
+        num++;
+
+        // Convert integer back to string
+        sprintf(id, "%04d", num);
+
+        // Print the updated id
+        printf("ID: %s\n", id);
+    }
+
     int numLibros = 0;
     TConsulta consulta;
     consulta.Ida = 5;
