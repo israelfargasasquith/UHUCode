@@ -1,0 +1,3 @@
+[Admin Install]
+Admin=1
+Error=Esta instalación sólo puede ser eliminada por un usuario con privilegios de administración. La desinstalación terminará ahora.
