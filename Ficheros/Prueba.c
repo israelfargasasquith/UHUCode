@@ -172,7 +172,7 @@ int main() {
     fread(&numLibros, sizeof(int), 1, fdatos);
     int tama = ((numLibros / 4) + 1) * 4;
     printf("\nTama = %d", tama);
-    getchar();
+    // getchar();
     Biblioteca = (TLibro *)malloc(sizeof(TLibro) * tama);
     TLibro nuevo;
     nuevo.Anio = 200;
@@ -189,7 +189,27 @@ int main() {
     printf("\nVamos a meter el libro %s en la posicion %d", nuevo.Titulo,
            numLibros);
     Biblioteca[numLibros++] = nuevo;
+    Cadena texto;
+    char filtro = 'T'; // filtrados por titulo
     printf("\nVamos a ordenar por isbn");
+    printf("\nIntrouce el texto a filtrar: ");
+    scanf("%s", texto);
+
+    bubbleSort(numLibros);
+    // MostrarLibro(Biblioteca, 0, TRUE);
+    Cadena T, A, B, PI;
+    printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58, "TITULO", 18, "ISBN", 4,
+           "DIS", 4, "PRE", 4, "RES");
+    printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28, "PAIS (IDIOMA)", 12, "AÑO");
+    Formatea(B, "*", 93, '*');
+    printf("%s\n", B);
+
+    for (int i = 0; i < numLibros; i++) {
+        if (strstr(Biblioteca[i].Titulo, texto) != NULL) {
+            MostrarLibro(&Biblioteca[i], i, FALSE);
+        }
+    }
+    free(Biblioteca);
 
     /*for (int i = 0; i < numLibros - 1; ++i) {
         for (int j = i + 1; j < numLibros; ++j) {
@@ -200,17 +220,11 @@ int main() {
             }
         }
     }*/
-    bubbleSort(numLibros);
-    MostrarLibro(Biblioteca, 0, TRUE);
-    for (int i = 1; i < numLibros; i++) {
-        MostrarLibro(&Biblioteca[i], i, FALSE);
-    }
 
     // fdatos = fopen("Biblioteca.cdat", "w");
     // fwrite(&numLibros, sizeof(int), 1, fdatos);
     // fwrite(biblioteca, sizeof(TLibro) * numLibros, 1, fdatos);
     // fclose(fdatos);
-    free(Biblioteca);
     /*
     FILE *fdatos2 = fopen("Biblioteca.cdat", "r");
     fread(&numLibros, sizeof(int), 1, fdatos2);

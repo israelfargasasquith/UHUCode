@@ -372,14 +372,12 @@ int *buscar_1_svc(TConsulta *argp, struct svc_req *rqstp) {
 
     return &result;
 }
-VER COMO BUSCAR POR PALABRAS CON STRSTR Y COMO ORDENAR CON ESE FILTRO
-    /*Devuelve el libro cuya posición es indicada en el campo ‘Pos’
-         del tipo TPosicion.En el caso que la posición sea incorrecta devuelve
-       un libro con los campos de texto puestos a “????” y los numéricos a 0. Si
-       el Ida no es correcto pondrá a 0 los campos ‘NoPresentados’ y
-       ‘NoListaEspera’ del Libro a devolver.*/
-    TLibro *
-    descargar_1_svc(TPosicion *argp, struct svc_req *rqstp) {
+/*Devuelve el libro cuya posición es indicada en el campo ‘Pos’
+     del tipo TPosicion.En el caso que la posición sea incorrecta devuelve
+   un libro con los campos de texto puestos a “????” y los numéricos a 0. Si
+   el Ida no es correcto pondrá a 0 los campos ‘NoPresentados’ y
+   ‘NoListaEspera’ del Libro a devolver.*/
+TLibro *descargar_1_svc(TPosicion *argp, struct svc_req *rqstp) {
     static TLibro result;
     TLibro tmp;
     if (argp->Pos < numLibros) {
@@ -412,6 +410,8 @@ int *prestar_1_svc(TPosicion *argp, struct svc_req *rqstp) {
     static int result;
 
     if (argp->Pos <= numLibros && numLibros > 0) {
+        printf("\nVamos a prestar el libro %s de la posicion %d",
+               Biblioteca[argp->Pos].Titulo, argp->Pos);
         if (Biblioteca[argp->Pos].NoLibros > 0) {
             Biblioteca[argp->Pos].NoPrestados++;
             Biblioteca[argp->Pos].NoLibros--;
@@ -443,7 +443,13 @@ lista de espera ni libros prestados. */
 int *devolver_1_svc(TPosicion *argp, struct svc_req *rqstp) {
     static int result;
     if (argp->Pos <= numLibros && numLibros > 0) {
-        if (Biblioteca[argp->Pos].NoListaEspera == 0) {
+        printf("\nVamos a devolver el libro %s de la posicion %d",
+               Biblioteca[argp->Pos].Titulo, argp->Pos);
+        if (Biblioteca[argp->Pos].NoListaEspera == 0 &&
+            Biblioteca[argp->Pos].NoPrestados == 0) {
+            printf("\nEl numero de prestados y de en espera es 0");
+            result = 2;
+        } else if (Biblioteca[argp->Pos].NoListaEspera == 0) {
             Biblioteca[argp->Pos].NoLibros++;
             result = 1;
         } else {
