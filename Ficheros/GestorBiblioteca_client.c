@@ -208,6 +208,357 @@ antes de la función scanf. La función __fpurge da un warning en el proceso de
 compilación pero se puede ignorar sin problemas.
 */
 
+void cargarFichero(Cadena nomFichero, int idAdmin, CLIENT *clnt) {
+    int cargado = -1;
+    TConsulta tmp;
+    printf("\nIntroduce el nombre del fichero de datos: ");
+    printf("\nMetemos de forma automatica %s", nomFichero);
+    tmp.Ida = idAdmin;
+    strcpy(tmp.Datos, nomFichero);
+    cargado = *cargardatos_1(&tmp, clnt);
+    if (cargado == 1) {
+        printf("\nSe ha cargado correctamente el fichero\n");
+    } else if (cargado == -1) {
+        printf("\nEl fichero no se ha cargado "
+               "correctamente porque ya hay un admin dado "
+               "de alta o el enviado no es correcto\n");
+    } else if (cargado == 0) {
+        printf("\nEl fichero no se ha cargado correctamente "
+               "porque ha habido un error de tratamiento de "
+               "fichero o de memoria dinamica\n");
+    }
+    Pause;
+}
+
+void añadirNuevoLibro(int idAdmin, CLIENT *clnt) {
+    TNuevo nuevoLibro;
+    int resultadoNuevoLibro;
+    printf("\nIntroduce el Isbn: ");
+    scanf("%s", nuevoLibro.Libro.Isbn);
+    printf("\nIntroduce el Autor: ");
+    scanf("%s", nuevoLibro.Libro.Autor);
+    printf("\nIntroduce el Titulo: ");
+    scanf("%s", nuevoLibro.Libro.Titulo);
+    printf("\nIntroduce el año: ");
+    scanf("%d", &nuevoLibro.Libro.Anio);
+    printf("\nIntroduce el Pais: ");
+    scanf("%s", nuevoLibro.Libro.Pais);
+    printf("\nIntroduce el Idioma: ");
+    scanf("%s", nuevoLibro.Libro.Idioma);
+    printf("\nIntroduce el Numero de libros inicial: ");
+    scanf("%d", &nuevoLibro.Libro.NoLibros);
+    nuevoLibro.Libro.NoListaEspera = 0;
+    nuevoLibro.Libro.NoPrestados = 0;
+    nuevoLibro.Ida = idAdmin;
+    resultadoNuevoLibro = *nuevolibro_1(&nuevoLibro, clnt);
+    if (resultadoNuevoLibro == 1) {
+        MostrarAviso("\n*** El libro ha sido añadido "
+                     "correctamente.**\n");
+    } else {
+        MostrarAviso("\nError con el libro a introducir\n");
+    }
+}
+
+void comprarNuevosLibros(int idAdmin, CLIENT *clnt) {
+    TPosicion busquedaConFiltro;
+    TLibro mostrar;
+    int nLibros;
+    Cadena B2;
+    TComRet compLibros;
+    int resultadoComprarLibros;
+    busquedaConFiltro.Ida = idAdmin;
+    busquedaConFiltro.Pos = 0;
+    nLibros = *nlibros_1(&idAdmin, clnt);
+    compLibros.Ida = idAdmin;
+    printf("\nIntroduce el ISBN del libro al que quieres "
+           "añadir ejemplares: ");
+    scanf("%s", compLibros.Isbn);
+
+    printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58, "TITULO", 18, "ISBN", 4,
+           "DIS", 4, "PRE", 4, "RES");
+    printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28, "PAIS (IDIOMA)", 12, "AÑO");
+    Formatea(B2, "*", 93, '*');
+    printf("%s\n", B2);
+    for (int i = 0; i < nLibros; ++i) {
+        mostrar = *descargar_1(&busquedaConFiltro, clnt);
+        busquedaConFiltro.Pos++;
+        if (strstr(mostrar.Isbn, compLibros.Isbn) != NULL) {
+            if (mostrar.Anio != -1 && strcmp(mostrar.Titulo, "????") != 0)
+                MostrarLibro(&mostrar, i, FALSE);
+            else {
+                MostrarAviso("\nError, el libro no existe, "
+                             "posicion erroena enviada\n");
+            }
+        }
+    }
+    printf("\nIntroduce el numero de libros que quieres "
+           "añadir: ");
+    scanf("%d", &compLibros.NoLibros);
+    resultadoComprarLibros = *comprar_1(&compLibros, clnt);
+    if (resultadoComprarLibros == 1) {
+        MostrarAviso("\nTodo correcto\n");
+    } else if (resultadoComprarLibros == 0) {
+        MostrarAviso("\nNo hay ningun libro con dicho ISBN\n");
+    } else if (resultadoComprarLibros == -1) {
+        MostrarAviso("\nIdAdmin administrado erroneo o ya "
+                     "hay otro admin\n");
+    } else {
+        MostrarAviso("\nTodo correcto, se han añadido "
+                     "los libros\n");
+    }
+}
+void retirarLibros(int idAdmin, CLIENT *clnt) {
+    TComRet retLibros;
+    Cadena B2;
+    int resultadoRetirarLibros;
+    TPosicion busquedaConFiltro;
+    TLibro mostrar;
+    int nLibros;
+    nLibros = *nlibros_1(&idAdmin, clnt);
+    retLibros.Ida = idAdmin;
+    busquedaConFiltro.Ida = idAdmin;
+    busquedaConFiltro.Pos = 0;
+
+    printf("\nIntroduce el ISBN del libro al que quieres "
+           "retirar ejemplares: ");
+    scanf("%s", retLibros.Isbn);
+
+    printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58, "TITULO", 18, "ISBN", 4,
+           "DIS", 4, "PRE", 4, "RES");
+    printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28, "PAIS (IDIOMA)", 12, "AÑO");
+    Formatea(B2, "*", 93, '*');
+    printf("%s\n", B2);
+    for (int i = 0; i < nLibros; ++i) {
+        mostrar = *descargar_1(&busquedaConFiltro, clnt);
+        busquedaConFiltro.Pos++;
+        if (strstr(mostrar.Isbn, retLibros.Isbn) != NULL) {
+            if (mostrar.Anio != -1 && strcmp(mostrar.Titulo, "????") != 0)
+                MostrarLibro(&mostrar, i, FALSE);
+            else {
+                MostrarAviso("\nError, el libro no existe, "
+                             "posicion erroena enviada\n");
+            }
+        }
+    }
+    printf("\nIntroduce el numero de libros que quieres "
+           "retirar: ");
+    scanf("%d", &retLibros.NoLibros);
+    resultadoRetirarLibros = *retirar_1(&retLibros, clnt);
+    if (resultadoRetirarLibros == 1) {
+        MostrarAviso("\nTodo correcto\n");
+    } else if (resultadoRetirarLibros == 0) {
+        MostrarAviso("\nNo hay ningun libro con dicho ISBN\n");
+    } else if (resultadoRetirarLibros == -1) {
+        MostrarAviso("\nIdAdmin administrado erroneo o ya "
+                     "hay otro admin\n");
+    } else {
+        MostrarAviso("\nTodo correcto, se han retirado "
+                     "los libros\n");
+    }
+}
+
+void ordenarLibros(int idAdmin, CLIENT *clnt) {
+    TOrdenacion opcionCampo;
+    opcionCampo.Ida = idAdmin;
+    printf("\nElige código de ordenacion\n0.- Por "
+           "Isbn\n1.- Por Título\n2.- Por Autor\n3.- Por "
+           "Año\n4.- Por País\n5.- Por Idioma\n6.- Por nº "
+           "de libros Disponibles\n7.- Por nº de libros "
+           "Prestados\n8.- Por nº de libros en espera "
+           "\n\nElige una opcion: ");
+    scanf("%d", &opcionCampo.Campo);
+    if (opcionCampo.Campo >= 0 || opcionCampo.Campo < 8) {
+        if (*ordenar_1(&opcionCampo, clnt)) {
+        } else {
+            MostrarAviso("\nError al ordenar\n");
+        }
+    } else {
+        MostrarAviso("\nNo es una opcion\n");
+    }
+}
+
+void busquedaConFiltro(int idAdmin, CLIENT *clnt) {
+    TPosicion busquedaConFiltro;
+    busquedaConFiltro.Ida = idAdmin;
+    busquedaConFiltro.Pos = 0;
+    char filtro;
+    TLibro mostrar;
+    Cadena texto;
+    int nLibros;
+    printf("\nIntroduce el texto a buscar: ");
+    scanf("%s", texto);
+    __fpurge(stdin);
+    printf("\nCódigo de busqueda:\nI.- Por ISBN\nT.- Por "
+           "Titulo\nA.- Por Autor\nP.- Por País\nD.- Por "
+           "Idioma\n*.- Por todos los campos.\n\nIntroduce "
+           "Código: ");
+    scanf("%c", &filtro);
+    __fpurge(stdin);
+    nLibros = *nlibros_1(&idAdmin, clnt);
+    Cadena B2;
+    printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58, "TITULO", 18, "ISBN", 4,
+           "DIS", 4, "PRE", 4, "RES");
+    printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28, "PAIS (IDIOMA)", 12, "AÑO");
+    Formatea(B2, "*", 93, '*');
+    printf("%s\n", B2);
+    switch (filtro) {
+    case 'I':
+        for (int i = 0; i < nLibros; ++i) {
+            mostrar = *descargar_1(&busquedaConFiltro, clnt);
+            busquedaConFiltro.Pos++;
+            if (strstr(mostrar.Isbn, texto) != NULL) {
+                if (mostrar.Anio != -1 && strcmp(mostrar.Titulo, "????") != 0)
+                    MostrarLibro(&mostrar, i, FALSE);
+                else {
+                    MostrarAviso("\nError, el libro no existe, "
+                                 "posicion erroena enviada\n");
+                }
+            }
+        }
+        break;
+    case 'T':
+        for (int i = 0; i < nLibros; ++i) {
+            mostrar = *descargar_1(&busquedaConFiltro, clnt);
+            busquedaConFiltro.Pos++;
+            if (strstr(mostrar.Titulo, texto) != NULL) {
+                if (mostrar.Anio != -1 && strcmp(mostrar.Autor, "????") != 0)
+                    MostrarLibro(&mostrar, i, FALSE);
+                else {
+                    MostrarAviso("\nError, el libro no existe, "
+                                 "posicion erroena enviada\n");
+                }
+            }
+        }
+        break;
+    case 'A':
+        for (int i = 0; i < nLibros; ++i) {
+            mostrar = *descargar_1(&busquedaConFiltro, clnt);
+            busquedaConFiltro.Pos++;
+            if (strstr(mostrar.Autor, texto) != NULL) {
+                if (mostrar.Anio != -1 && strcmp(mostrar.Autor, "????") != 0)
+                    MostrarLibro(&mostrar, i, FALSE);
+                else {
+                    MostrarAviso("\nError, el libro no existe, "
+                                 "posicion erroena enviada\n");
+                }
+            }
+        }
+        break;
+    case 'P':
+        for (int i = 0; i < nLibros; ++i) {
+            mostrar = *descargar_1(&busquedaConFiltro, clnt);
+            busquedaConFiltro.Pos++;
+            if (strstr(mostrar.Pais, texto) != NULL) {
+                if (mostrar.Anio != -1 && strcmp(mostrar.Autor, "????") != 0)
+                    MostrarLibro(&mostrar, i, FALSE);
+                else {
+                    MostrarAviso("\nError, el libro no existe, "
+                                 "posicion erroena enviada\n");
+                }
+            }
+        }
+        break;
+    case 'D':
+        for (int i = 0; i < nLibros; ++i) {
+            mostrar = *descargar_1(&busquedaConFiltro, clnt);
+            busquedaConFiltro.Pos++;
+            if (strstr(mostrar.Idioma, texto) != NULL) {
+                if (mostrar.Anio != -1 && strcmp(mostrar.Autor, "????") != 0)
+                    MostrarLibro(&mostrar, i, FALSE);
+                else {
+                    MostrarAviso("\nError, el libro no existe, "
+                                 "posicion erroena enviada\n");
+                }
+            }
+        }
+        break;
+    case '*':
+        for (int i = 0; i < nLibros; ++i) {
+            mostrar = *descargar_1(&busquedaConFiltro, clnt);
+            busquedaConFiltro.Pos++;
+            if (strstr(mostrar.Titulo, texto) != NULL ||
+                strstr(mostrar.Autor, texto) != NULL ||
+                strstr(mostrar.Idioma, texto) != NULL ||
+                strstr(mostrar.Isbn, texto) != NULL ||
+                strstr(mostrar.Pais, texto) != NULL) {
+                if (mostrar.Anio != -1 && strcmp(mostrar.Autor, "????") != 0)
+                    MostrarLibro(&mostrar, i, FALSE);
+                else {
+                    MostrarAviso("\nError, el libro no existe, "
+                                 "posicion erroena enviada\n");
+                }
+            }
+        }
+        break;
+
+    default:
+        MostrarAviso("\nError, no es filtro valido\n");
+        break;
+    }
+    Pause;
+}
+
+void mostrarTodosLibros(int idAdmin, CLIENT *clnt) {
+    TPosicion todosLibros;
+    TLibro libro;
+    todosLibros.Ida = idAdmin;
+    todosLibros.Pos = 0;
+    int nLibrosTodos;
+    nLibrosTodos = *nlibros_1(&idAdmin, clnt);
+    libro = *descargar_1(&todosLibros, clnt);
+    Cadena T, A, B, PI;
+    printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58, "TITULO", 18, "ISBN", 4,
+           "DIS", 4, "PRE", 4, "RES");
+    printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28, "PAIS (IDIOMA)", 12, "AÑO");
+    Formatea(B, "*", 93, '*');
+    printf("%s\n", B);
+    for (int i = 0; i < nLibrosTodos; ++i) {
+        libro = *descargar_1(&todosLibros, clnt);
+        todosLibros.Pos++;
+        if (libro.Anio != -1 && strcmp(libro.Autor, "????") != 0)
+            MostrarLibro(&libro, i, FALSE);
+        else {
+            MostrarAviso("\nError, el libro no existe, "
+                         "posicion erroena enviada\n");
+        }
+    }
+    Pause;
+}
+
+void busquedaPorISBN(int idAdmin, CLIENT *clnt) {
+    TPosicion busquedaConFiltroDevolver;
+    TLibro mostrarDevolver;
+    int nLibrosDevolver;
+    Cadena isbn;
+    Cadena B2;
+    busquedaConFiltroDevolver.Ida = idAdmin;
+    busquedaConFiltroDevolver.Pos = 0;
+
+    printf("\nIntroduce el ISBN del libro a devolver: ");
+    scanf("%s", isbn);
+    __fpurge(stdin);
+    nLibrosDevolver = *nlibros_1(&idAdmin, clnt);
+    printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58, "TITULO", 18, "ISBN", 4,
+           "DIS", 4, "PRE", 4, "RES");
+    printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28, "PAIS (IDIOMA)", 12, "AÑO");
+    Formatea(B2, "*", 93, '*');
+    printf("%s\n", B2);
+
+    for (int i = 0; i < nLibrosDevolver; ++i) {
+        mostrarDevolver = *descargar_1(&busquedaConFiltroDevolver, clnt);
+        busquedaConFiltroDevolver.Pos++;
+        if (strstr(mostrarDevolver.Isbn, isbn) != NULL) {
+            if (mostrarDevolver.Anio != -1 &&
+                strcmp(mostrarDevolver.Titulo, "????") != 0)
+                MostrarLibro(&mostrarDevolver, i, FALSE);
+            else {
+                MostrarAviso("\nError, el libro no existe, "
+                             "posicion erroena enviada\n");
+            }
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     char *host;
 
@@ -219,13 +570,9 @@ int main(int argc, char *argv[]) {
     // gestorbiblioteca_1 (host);
     CLIENT *clnt;
 
-    int *result, opcMenuPrincipal, opcMenuAdmin, idAdmin = -1;
+    int opcMenuPrincipal, opcMenuAdmin, idAdmin = -1;
     Cadena contraseña = "";
     Cadena nomFichero = "Biblioteca.cdat";
-    TConsulta tmp;
-    /*
-    Estructuras de datos
-    */
     clnt = clnt_create(host, GESTORBIBLIOTECA, GESTORBIBLIOTECA_VER, "tcp");
     if (clnt == NULL) {
         clnt_pcreateerror(host);
@@ -240,18 +587,12 @@ int main(int argc, char *argv[]) {
             Cls;
             printf("\nPor favor inserte la contraseña de administracion: ");
             scanf("%s", contraseña);
-            result = conexion_1(contraseña, clnt);
-            idAdmin = *result;
-            printf("\nTenemos de idAdmin %d", idAdmin);
-            fflush(stdout);
+            idAdmin = *conexion_1(contraseña, clnt);
+            printf("\nTenemos de idAdmin %d\n", idAdmin);
             if (idAdmin == -1) {
-                printf("\nCliente: Error, ya hay un admin activo");
-                fflush(stdout);
-                Pause;
+                MostrarAviso("\nCliente: Error, ya hay un admin activo\n");
             } else if (idAdmin == -2) {
-                printf("\nCliente: Error, contraseña equivocada");
-                fflush(stdout);
-                Pause;
+                MostrarAviso("\nCliente: Error, contraseña equivocada\n");
             } else {
                 printf(
                     "\nCliente: Todo OK, hemos iniciado sesion con el ID %d\n",
@@ -262,342 +603,37 @@ int main(int argc, char *argv[]) {
                     opcMenuAdmin = MenuAdministracion();
                     switch (opcMenuAdmin) {
                     case 1:
-                        printf("\nIntroduce el nombre del fichero de datos");
-                        printf("\nMetemos de forma automatica %s", nomFichero);
-                        tmp.Ida = idAdmin;
-                        strcpy(tmp.Datos, nomFichero);
-                        result = cargardatos_1(&tmp, clnt);
-                        if (*result == 1) {
-                            printf("\nSe ha cargado correctamente el fichero");
-                            fflush(stdout);
-                            Pause;
-                        } else if (*result == -1) {
-                            printf("\nEl fichero no se ha cargado "
-                                   "correctamente porque ya hay un admin dado "
-                                   "de alta o el enviado no es correcto");
-                            fflush(stdout);
-                            Pause;
-                        } else if (*result == 0) {
-                            printf(
-                                "\nEl fichero no se ha cargado correctamente "
-                                "porque ha habido un error de tratamiento de "
-                                "fichero o de memoria dinamica");
-                            fflush(stdout);
-                            Pause;
-                        }
+
+                        cargarFichero(nomFichero, idAdmin, clnt);
 
                         break;
                     case 2:
-                        printf("\nPasamos nuestro IdAdmin para guardar el "
-                               "fichero...");
 
                         if (guardardatos_1(&idAdmin, clnt)) {
-                            printf("\nSe ha guardado correctamnete");
-                            fflush(stdout);
-                            Pause;
+                            MostrarAviso("\nSe ha guardado correctamente\n");
                         } else {
-                            printf(
-                                "\nHa ocurrido un error al guardar el fichero");
-                            fflush(stdout);
-                            Pause;
+                            MostrarAviso("\nHa ocurrido un error al guardar el "
+                                         "fichero\n");
                         }
+
                         break;
                     case 3:
-                        TNuevo nuevoLibro;
-                        int resultado;
-                        printf("\nIntroduce el Isbn: ");
-                        //__fpurge(stdin);
-                        scanf("%s", nuevoLibro.Libro.Isbn);
-                        printf("\nIntroduce el Autor: ");
-                        //__fpurge(stdin);
-                        scanf("%s", nuevoLibro.Libro.Autor);
-                        printf("\nIntroduce el Titulo: ");
-                        //__fpurge(stdin);
-                        scanf("%s", nuevoLibro.Libro.Titulo);
-                        printf("\nIntroduce el año: ");
-                        scanf("%d", &nuevoLibro.Libro.Anio);
-                        printf("\nIntroduce el Pais: ");
-                        //__fpurge(stdin);
-                        scanf("%s", nuevoLibro.Libro.Pais);
-                        printf("\nIntroduce el Idioma: ");
-                        //__fpurge(stdin);
-                        scanf("%s", nuevoLibro.Libro.Idioma);
-                        printf("\nIntroduce el Numero de libros inicial: ");
-                        scanf("%d", &nuevoLibro.Libro.NoLibros);
-                        nuevoLibro.Libro.NoListaEspera = 0;
-                        nuevoLibro.Libro.NoPrestados = 0;
-                        printf("\nEl nuevo libro ->\n");
-                        printf("\nIsbn: %s\nTitulo: %s\nAutor: %s\\nAño: "
-                               "%d\nPais: %s\nIdioma: %s\nNumeroLibros: %d",
-                               nuevoLibro.Libro.Isbn, nuevoLibro.Libro.Titulo,
-                               nuevoLibro.Libro.Autor, nuevoLibro.Libro.Anio,
-                               nuevoLibro.Libro.Pais, nuevoLibro.Libro.Idioma,
-                               nuevoLibro.Libro.NoLibros);
-                        nuevoLibro.Ida = idAdmin;
-                        resultado = *nuevolibro_1(&nuevoLibro, clnt);
-                        if (resultado == 1) {
-                            int tmpnum = *nlibros_1(&idAdmin, clnt);
-                            printf("\nAhora hay %d", tmpnum);
-                            MostrarAviso("\n*** El libro ha sido añadido "
-                                         "correctamente.**\n");
-                        } else {
-                            MostrarAviso("\nError con el libro a introducir\n");
-                        }
-                        MostrarAviso("\nFaltaOrdenar\n");
+                        añadirNuevoLibro(idAdmin, clnt);
                         break;
                     case 4:
-                        TComRet compLibros;
-                        int tmpComp;
-                        compLibros.Ida = idAdmin;
-                        printf("\nVamos a meter nCopias  del libro de Fausto");
-                        strcpy(compLibros.Isbn, "4-032706-878590");
-                        printf("\nIntroduce el numero de libros que quieres "
-                               "añadir: ");
-                        scanf("%d", &compLibros.NoLibros);
-                        tmpComp = *comprar_1(&compLibros, clnt);
-                        if (tmpComp == 1) {
-                            MostrarAviso("\nTodo correcto\n");
-                        } else if (tmpComp == 0) {
-                            MostrarAviso(
-                                "\nNo hay ningun libro con dicho ISBN\n");
-                        } else if (tmpComp == -1) {
-                            MostrarAviso("\nIdAdmin administrado erroneo o ya "
-                                         "hay otro admin\n");
-                        } else {
-                            MostrarAviso("\nTodo correcto, se han añadido "
-                                         "los libros\n");
-                        }
-                        MostrarAviso("\nFaltaOrdenar\n");
+                        comprarNuevosLibros(idAdmin, clnt);
                         break;
                     case 5:
-                        TComRet retLibros;
-                        int tmpRet;
-                        retLibros.Ida = idAdmin;
-                        printf("\nVamos a retirar de la biblioteca nCopias  "
-                               "del libro de Fausto");
-                        strcpy(retLibros.Isbn, "4-032706-878590");
-                        printf("\nIntroduce el numero de libros que quieres "
-                               "retirar: ");
-                        scanf("%d", &retLibros.NoLibros);
-                        tmpRet = *retirar_1(&retLibros, clnt);
-                        if (tmpRet == 1) {
-                            MostrarAviso("\nTodo correcto\n");
-                        } else if (tmpRet == 0) {
-                            MostrarAviso(
-                                "\nNo hay ningun libro con dicho ISBN\n");
-                        } else if (tmpRet == -1) {
-                            MostrarAviso("\nIdAdmin administrado erroneo o ya "
-                                         "hay otro admin\n");
-                        } else {
-                            MostrarAviso("\nTodo correcto, se han retirado "
-                                         "los libros\n");
-                        }
-                        MostrarAviso("\nFaltaOrdenar\n");
+                        retirarLibros(idAdmin, clnt);
                         break;
                     case 6:
-                        TOrdenacion opcionCampo;
-                        opcionCampo.Ida = idAdmin;
-                        printf("\nElige código de ordenacion\n0.- Por "
-                               "Isbn\n1.- Por Título\n2.- Por Autor\n3.- Por "
-                               "Año\n4.- Por País\n5.- Por Idioma\n6.- Por nº "
-                               "de libros Disponibles\n7.- Por nº de libros "
-                               "Prestados\n8.- Por nº de libros en espera "
-                               "\n\nElige una opcion: ");
-                        scanf("%d", &opcionCampo.Campo);
-                        switch (opcionCampo.Campo) {
-                        case TODOS:
-                        case TITULO:
-                        case AUTOR:
-                        case AÑO:
-                        case PAIS:
-                        case IDIOMA:
-                        case LIBROSDISPONIBLES:
-                        case LIBROSPRESTADOS:
-                        case LIBROSENESPERA:
-                        case ISBN:
-                            if (*ordenar_1(&opcionCampo, clnt)) {
-                            } else {
-                                MostrarAviso("\nError al ordenar\n");
-                            }
-                            break;
-
-                        default:
-                            MostrarAviso("\nNo es una opcion\n");
-                            break;
-                        }
-
+                        ordenarLibros(idAdmin, clnt);
                         break;
                     case 7:
-                        TPosicion busquedaConFiltro;
-                        busquedaConFiltro.Ida = idAdmin;
-                        busquedaConFiltro.Pos = 0;
-                        char filtro;
-                        TLibro mostrar;
-                        Cadena texto;
-                        int nLibros;
-                        printf("\nIntroduce el texto a buscar: ");
-                        scanf("%s", texto);
-                        __fpurge(stdin);
-                        printf("\nCódigo de busqueda:\nI.- Por ISBN\nT.- Por "
-                               "Titulo\nA.- Por Autor\nP.- Por País\nD.- Por "
-                               "Idioma\n*.- Por todos los campos.\n\nIntroduce "
-                               "Código: ");
-                        scanf("%c", &filtro);
-                        __fpurge(stdin);
-                        nLibros = *nlibros_1(&idAdmin, clnt);
-                        Cadena B2;
-                        printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58,
-                               "TITULO", 18, "ISBN", 4, "DIS", 4, "PRE", 4,
-                               "RES");
-                        printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28,
-                               "PAIS (IDIOMA)", 12, "AÑO");
-                        Formatea(B2, "*", 93, '*');
-                        printf("%s\n", B2);
-                        switch (filtro) {
-                        case 'I':
-                            for (int i = 0; i < nLibros; ++i) {
-                                mostrar =
-                                    *descargar_1(&busquedaConFiltro, clnt);
-                                busquedaConFiltro.Pos++;
-                                if (strstr(mostrar.Isbn, texto) != NULL) {
-                                    if (mostrar.Anio != -1 &&
-                                        strcmp(mostrar.Titulo, "????") != 0)
-                                        MostrarLibro(&mostrar, i, FALSE);
-                                    else {
-                                        MostrarAviso(
-                                            "\nError, el libro no existe, "
-                                            "posicion erroena enviada\n");
-                                    }
-                                }
-                            }
-                            break;
-                        case 'T':
-                            for (int i = 0; i < nLibros; ++i) {
-                                mostrar =
-                                    *descargar_1(&busquedaConFiltro, clnt);
-                                busquedaConFiltro.Pos++;
-                                if (strstr(mostrar.Titulo, texto) != NULL) {
-                                    if (mostrar.Anio != -1 &&
-                                        strcmp(mostrar.Autor, "????") != 0)
-                                        MostrarLibro(&mostrar, i, FALSE);
-                                    else {
-                                        MostrarAviso(
-                                            "\nError, el libro no existe, "
-                                            "posicion erroena enviada\n");
-                                    }
-                                }
-                            }
-                            break;
-                        case 'A':
-                            for (int i = 0; i < nLibros; ++i) {
-                                mostrar =
-                                    *descargar_1(&busquedaConFiltro, clnt);
-                                busquedaConFiltro.Pos++;
-                                if (strstr(mostrar.Autor, texto) != NULL) {
-                                    if (mostrar.Anio != -1 &&
-                                        strcmp(mostrar.Autor, "????") != 0)
-                                        MostrarLibro(&mostrar, i, FALSE);
-                                    else {
-                                        MostrarAviso(
-                                            "\nError, el libro no existe, "
-                                            "posicion erroena enviada\n");
-                                    }
-                                }
-                            }
-                            break;
-                        case 'P':
-                            for (int i = 0; i < nLibros; ++i) {
-                                mostrar =
-                                    *descargar_1(&busquedaConFiltro, clnt);
-                                busquedaConFiltro.Pos++;
-                                if (strstr(mostrar.Pais, texto) != NULL) {
-                                    if (mostrar.Anio != -1 &&
-                                        strcmp(mostrar.Autor, "????") != 0)
-                                        MostrarLibro(&mostrar, i, FALSE);
-                                    else {
-                                        MostrarAviso(
-                                            "\nError, el libro no existe, "
-                                            "posicion erroena enviada\n");
-                                    }
-                                }
-                            }
-                            break;
-                        case 'D':
-                            for (int i = 0; i < nLibros; ++i) {
-                                mostrar =
-                                    *descargar_1(&busquedaConFiltro, clnt);
-                                busquedaConFiltro.Pos++;
-                                if (strstr(mostrar.Idioma, texto) != NULL) {
-                                    if (mostrar.Anio != -1 &&
-                                        strcmp(mostrar.Autor, "????") != 0)
-                                        MostrarLibro(&mostrar, i, FALSE);
-                                    else {
-                                        MostrarAviso(
-                                            "\nError, el libro no existe, "
-                                            "posicion erroena enviada\n");
-                                    }
-                                }
-                            }
-                            break;
-                        case '*':
-                            for (int i = 0; i < nLibros; ++i) {
-                                mostrar =
-                                    *descargar_1(&busquedaConFiltro, clnt);
-                                busquedaConFiltro.Pos++;
-                                if (strstr(mostrar.Titulo, texto) != NULL ||
-                                    strstr(mostrar.Autor, texto) != NULL ||
-                                    strstr(mostrar.Idioma, texto) != NULL ||
-                                    strstr(mostrar.Isbn, texto) != NULL ||
-                                    strstr(mostrar.Pais, texto) != NULL) {
-                                    if (mostrar.Anio != -1 &&
-                                        strcmp(mostrar.Autor, "????") != 0)
-                                        MostrarLibro(&mostrar, i, FALSE);
-                                    else {
-                                        MostrarAviso(
-                                            "\nError, el libro no existe, "
-                                            "posicion erroena enviada\n");
-                                    }
-                                }
-                            }
-                            break;
-
-                        default:
-                            MostrarAviso("\nError, no es filtro valido\n");
-                            break;
-                        }
-                        Pause;
-
+                        busquedaConFiltro(idAdmin, clnt);
                         break;
                     case 8:
-                        TPosicion todosLibros;
-                        TLibro libro;
-                        todosLibros.Ida = idAdmin;
-                        todosLibros.Pos = 0;
-                        int nLibrosTodos;
-                        result = nlibros_1(&idAdmin, clnt);
-                        nLibros = *result;
-                        libro = *descargar_1(&todosLibros, clnt);
-                        Cadena T, A, B, PI;
-                        printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58,
-                               "TITULO", 18, "ISBN", 4, "DIS", 4, "PRE", 4,
-                               "RES");
-                        printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28,
-                               "PAIS (IDIOMA)", 12, "AÑO");
-                        Formatea(B, "*", 93, '*');
-                        printf("%s\n", B);
-                        for (int i = 0; i < nLibros; ++i) {
-                            libro = *descargar_1(&todosLibros, clnt);
-                            todosLibros.Pos++;
-                            if (libro.Anio != -1 &&
-                                strcmp(libro.Autor, "????") != 0)
-                                MostrarLibro(&libro, i, FALSE);
-                            else {
-                                MostrarAviso("\nError, el libro no existe, "
-                                             "posicion erroena enviada\n");
-                            }
-                        }
-                        fflush(stdout);
-                        Pause;
+                        mostrarTodosLibros(idAdmin, clnt);
                         break;
 
                     default:
@@ -615,252 +651,10 @@ int main(int argc, char *argv[]) {
             }
             break;
         case 2:
-            TPosicion busquedaConFiltro;
-            busquedaConFiltro.Ida = idAdmin;
-            busquedaConFiltro.Pos = 0;
-            char filtro;
-            TLibro mostrar;
-            Cadena texto;
-            int nLibros;
-            printf("\nIntroduce el texto a buscar: ");
-            scanf("%s", texto);
-            __fpurge(stdin);
-            printf("\nCódigo de busqueda:\nI.- Por ISBN\nT.- Por "
-                   "Titulo\nA.- Por Autor\nP.- Por País\nD.- Por "
-                   "Idioma\n*.- Por todos los campos.\n\nIntroduce "
-                   "Código: ");
-            scanf("%c", &filtro);
-            __fpurge(stdin);
-            nLibros = *nlibros_1(&idAdmin, clnt);
-            Cadena B2;
-            printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58, "TITULO", 18,
-                   "ISBN", 4, "DIS", 4, "PRE", 4, "RES");
-            printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28, "PAIS (IDIOMA)", 12,
-                   "AÑO");
-            Formatea(B2, "*", 93, '*');
-            printf("%s\n", B2);
-            switch (filtro) {
-            case 'I':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Isbn, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Titulo, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-            case 'T':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Titulo, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Autor, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-            case 'A':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Autor, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Autor, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-            case 'P':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Pais, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Autor, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-            case 'D':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Idioma, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Autor, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-            case '*':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Titulo, texto) != NULL ||
-                        strstr(mostrar.Autor, texto) != NULL ||
-                        strstr(mostrar.Idioma, texto) != NULL ||
-                        strstr(mostrar.Isbn, texto) != NULL ||
-                        strstr(mostrar.Pais, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Autor, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-
-            default:
-                MostrarAviso("\nError, no es filtro valido\n");
-                break;
-            }
-            Pause;
+            busquedaConFiltro(idAdmin, clnt);
             break;
         case 3:
-
-            busquedaConFiltro.Ida = idAdmin;
-            busquedaConFiltro.Pos = 0;
-            printf("\nIntroduce el texto a buscar: ");
-            scanf("%s", texto);
-            __fpurge(stdin);
-            printf("\nCódigo de busqueda:\nI.- Por ISBN\nT.- Por "
-                   "Titulo\nA.- Por Autor\nP.- Por País\nD.- Por "
-                   "Idioma\n*.- Por todos los campos.\n\nIntroduce "
-                   "Código: ");
-            scanf("%c", &filtro);
-            __fpurge(stdin);
-            nLibros = *nlibros_1(&idAdmin, clnt);
-            printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58, "TITULO", 18,
-                   "ISBN", 4, "DIS", 4, "PRE", 4, "RES");
-            printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28, "PAIS (IDIOMA)", 12,
-                   "AÑO");
-            Formatea(B2, "*", 93, '*');
-            printf("%s\n", B2);
-            switch (filtro) {
-            case 'I':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Isbn, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Titulo, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-            case 'T':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Titulo, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Autor, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-            case 'A':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Autor, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Autor, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-            case 'P':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Pais, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Autor, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-            case 'D':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Idioma, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Autor, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-            case '*':
-                for (int i = 0; i < nLibros; ++i) {
-                    mostrar = *descargar_1(&busquedaConFiltro, clnt);
-                    busquedaConFiltro.Pos++;
-                    if (strstr(mostrar.Titulo, texto) != NULL ||
-                        strstr(mostrar.Autor, texto) != NULL ||
-                        strstr(mostrar.Idioma, texto) != NULL ||
-                        strstr(mostrar.Isbn, texto) != NULL ||
-                        strstr(mostrar.Pais, texto) != NULL) {
-                        if (mostrar.Anio != -1 &&
-                            strcmp(mostrar.Autor, "????") != 0)
-                            MostrarLibro(&mostrar, i, FALSE);
-                        else {
-                            MostrarAviso("\nError, el libro no existe, "
-                                         "posicion erroena enviada\n");
-                        }
-                    }
-                }
-                break;
-
-            default:
-                MostrarAviso("\nError, no es filtro valido\n");
-                break;
-            }
+            busquedaConFiltro(idAdmin, clnt);
             char sino;
             TPosicion posSacar;
             posSacar.Ida = idAdmin;
@@ -879,43 +673,12 @@ int main(int argc, char *argv[]) {
                     MostrarAviso("\nError con el prestamos\n");
                 }
             } else {
-                printf("\nEntonces terminamos");
+                MostrarAviso("\nEntonces terminamos\n");
             }
-
-            Pause;
 
             break;
         case 4:
-            TPosicion busquedaConFiltroDevolver;
-            busquedaConFiltroDevolver.Ida = idAdmin;
-            busquedaConFiltroDevolver.Pos = 0;
-            TLibro mostrarDevolver;
-            int nLibrosDevolver;
-            printf("\nIntroduce el ISBN del libro a devolver: ");
-            scanf("%s", texto);
-            __fpurge(stdin);
-            nLibrosDevolver = *nlibros_1(&idAdmin, clnt);
-            printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58, "TITULO", 18,
-                   "ISBN", 4, "DIS", 4, "PRE", 4, "RES");
-            printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28, "PAIS (IDIOMA)", 12,
-                   "AÑO");
-            Formatea(B2, "*", 93, '*');
-            printf("%s\n", B2);
-
-            for (int i = 0; i < nLibrosDevolver; ++i) {
-                mostrarDevolver =
-                    *descargar_1(&busquedaConFiltroDevolver, clnt);
-                busquedaConFiltroDevolver.Pos++;
-                if (strstr(mostrarDevolver.Isbn, texto) != NULL) {
-                    if (mostrarDevolver.Anio != -1 &&
-                        strcmp(mostrarDevolver.Titulo, "????") != 0)
-                        MostrarLibro(&mostrarDevolver, i, FALSE);
-                    else {
-                        MostrarAviso("\nError, el libro no existe, "
-                                     "posicion erroena enviada\n");
-                    }
-                }
-            }
+            busquedaPorISBN(idAdmin, clnt);
             TPosicion devolviendo;
             devolviendo.Ida = idAdmin;
             char sinoDevolver;
@@ -937,9 +700,8 @@ int main(int argc, char *argv[]) {
                     MostrarAviso("\nPosicion incorrecta\n");
                 }
             } else {
-                printf("\nEntonces hemos terminado");
+                MostrarAviso("\nEntonces hemos terminado\n");
             }
-            CHECKEAR QUE TOOD FUNCIONA Y VER QUE FALTA Pause;
             break;
 
         default:

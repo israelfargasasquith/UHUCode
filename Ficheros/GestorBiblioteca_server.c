@@ -10,7 +10,7 @@ FILE *fdatos = NULL;
 TLibro *Biblioteca = NULL; // Vector dinamico de libros
 int numLibros = 0;         // Numero de libros almacenados en el vector
 int tama = 0;           // Tamaño del vector dinamico, crece de 4 en 4 libros
-int idAdmin = -1;       // Copia del idAdmin mandado al usuario
+int idAdmin = -7;       // Copia del idAdmin mandado al usuario
 Cadena nomFichero = ""; // Copia del nombre del ultimo fichero binario cargado
 int campoOrdenacion = TITULO; // Copia del ultimo campo de ordenacion realizado
 
@@ -84,7 +84,7 @@ void ordenar(int campo) {
     for (i = 0; i < numLibros - 1; i++) {
         swapped = false;
         for (j = 0; j < numLibros - i - 1; j++) {
-            if (!EsMenor(i, j, campo)) {
+            if (EsMenor(j, j + 1, campo)) {
                 swap(&Biblioteca[j], &Biblioteca[j + 1]);
                 swapped = true;
             }
@@ -103,7 +103,7 @@ deberá ser utilizado en todas las operaciones de Administración en el campo Id
 int *conexion_1_svc(char *argp, struct svc_req *rqstp) {
     static int result;
     printf("\nServidor: El valor de admin ahora mismo es de %d\n", idAdmin);
-    if (idAdmin == -1) {
+    if (idAdmin == -7) {
         printf("\nVamos a intentar iniciar sesion con la contraseña %s\n",
                argp);
         if (strcmp(argp, contraseñaAdmin) == 0) {
@@ -129,8 +129,8 @@ bool_t *desconexion_1_svc(int *argp, struct svc_req *rqstp) {
 
     if (idAdmin == *argp) {
         printf("\nServidor: Se desconecta el Admin de forma correcta\n");
-        idAdmin = -1;
         result = true;
+        idAdmin = -7;
     } else {
         printf("\nServidor: El IdAdmin dado no es el correcto, error\n");
         result = false;
@@ -275,6 +275,7 @@ int *comprar_1_svc(TComRet *argp, struct svc_req *rqstp) {
             }
             printf("\nTodo bien\n");
             result = 1;
+            ordenar(campoOrdenacion);
         } else {
             printf("\nNo se ha encontrado el libro en el vector\n");
             result = 0;
@@ -313,6 +314,7 @@ int *retirar_1_svc(TComRet *argp, struct svc_req *rqstp) {
                 printf("\nNo hay suficientes libros para borrar\n");
                 result = 2;
             }
+            ordenar(campoOrdenacion);
         } else {
             printf("\nNo existe libro con tal ISBN\n");
             result = 0;
@@ -387,7 +389,6 @@ TLibro *descargar_1_svc(TPosicion *argp, struct svc_req *rqstp) {
             result = Biblioteca[argp->Pos];
             result.NoListaEspera = 0;
             result.NoPrestados = 0;
-            result.NoLibros = 0;
         }
     } else {
         printf("\nPosicion indicada erronea\n");
@@ -408,13 +409,13 @@ libro el libro correctamente. 0: Se ha puesto el usuario en la lista de espera.
 */
 int *prestar_1_svc(TPosicion *argp, struct svc_req *rqstp) {
     static int result;
-
-    if (argp->Pos <= numLibros && numLibros > 0) {
+    int posicion = argp->Pos - 1;
+    if (posicion < numLibros && numLibros > 0) {
         printf("\nVamos a prestar el libro %s de la posicion %d",
-               Biblioteca[argp->Pos].Titulo, argp->Pos);
-        if (Biblioteca[argp->Pos].NoLibros > 0) {
-            Biblioteca[argp->Pos].NoPrestados++;
-            Biblioteca[argp->Pos].NoLibros--;
+               Biblioteca[posicion].Titulo, posicion);
+        if (Biblioteca[posicion].NoLibros > 0) {
+            Biblioteca[posicion].NoPrestados++;
+            Biblioteca[posicion].NoLibros--;
             result = 1;
         } else {
             Biblioteca[argp->Pos].NoListaEspera++;

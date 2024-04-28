@@ -120,20 +120,17 @@ void swap(TLibro *xp, TLibro *yp) {
     *xp = *yp;
     *yp = temp;
 }
-void bubbleSort(int n) {
+void ordenar(int campo, int numLibros) {
     int i, j;
     bool swapped;
-    for (i = 0; i < n - 1; i++) {
+    for (i = 0; i < numLibros - 1; i++) {
         swapped = false;
-        for (j = 0; j < n - i - 1; j++) {
-            if (!EsMenor(i, j, TITULO)) {
+        for (j = 0; j < numLibros - i - 1; j++) {
+            if (EsMenor(j, j + 1, campo)) {
                 swap(&Biblioteca[j], &Biblioteca[j + 1]);
                 swapped = true;
             }
         }
-
-        // If no two elements were swapped by inner loop,
-        // then break
         if (swapped == false)
             break;
     }
@@ -143,7 +140,7 @@ typedef struct TConsulta TConsulta;
 int main() {
     system("clear");
 
-    char id[10] = "0000";
+    /*char id[10] = "0000";
 
     for (int i = 0; i < 10; i++) {
         // Convert char array to integer
@@ -157,7 +154,7 @@ int main() {
 
         // Print the updated id
         printf("ID: %s\n", id);
-    }
+    }*/
 
     int numLibros = 0;
     TConsulta consulta;
@@ -171,14 +168,14 @@ int main() {
     FILE *fdatos = fopen("Biblioteca.cdat", "r");
     fread(&numLibros, sizeof(int), 1, fdatos);
     int tama = ((numLibros / 4) + 1) * 4;
-    printf("\nTama = %d", tama);
-    // getchar();
+    // printf("\nTama = %d", tama);
+    //  getchar();
     Biblioteca = (TLibro *)malloc(sizeof(TLibro) * tama);
     TLibro nuevo;
     nuevo.Anio = 200;
     strcpy(nuevo.Autor, "pepe");
     strcpy(nuevo.Idioma, "esp");
-    strcpy(nuevo.Isbn, id);
+    strcpy(nuevo.Isbn, "FF-69-FF");
     nuevo.NoLibros = 0;
     nuevo.NoListaEspera = 420;
     nuevo.NoPrestados = 69;
@@ -190,12 +187,11 @@ int main() {
            numLibros);
     Biblioteca[numLibros++] = nuevo;
     Cadena texto;
-    char filtro = 'T'; // filtrados por titulo
-    printf("\nVamos a ordenar por isbn");
-    printf("\nIntrouce el texto a filtrar: ");
-    scanf("%s", texto);
+    int campo; // filtrados por titulo
+    printf("\nIntroduce por que campo vamos a ordenar: ");
+    scanf("%d", &campo);
 
-    bubbleSort(numLibros);
+    ordenar(campo, numLibros);
     // MostrarLibro(Biblioteca, 0, TRUE);
     Cadena T, A, B, PI;
     printf("%-*s%-*s%-*s%*s%*s%*s\n", 5, "POS", 58, "TITULO", 18, "ISBN", 4,
@@ -203,12 +199,15 @@ int main() {
     printf("     %-*s%-*s%-*s\n", 30, "AUTOR", 28, "PAIS (IDIOMA)", 12, "AÑO");
     Formatea(B, "*", 93, '*');
     printf("%s\n", B);
-
     for (int i = 0; i < numLibros; i++) {
-        if (strstr(Biblioteca[i].Titulo, texto) != NULL) {
-            MostrarLibro(&Biblioteca[i], i, FALSE);
-        }
+        MostrarLibro(&Biblioteca[i], i, FALSE);
     }
+
+    /* for (int i = 0; i < numLibros; i++) {
+         if (strstr(Biblioteca[i].Titulo, texto) != NULL) {
+             MostrarLibro(&Biblioteca[i], i, FALSE);
+         }
+     }*/
     free(Biblioteca);
 
     /*for (int i = 0; i < numLibros - 1; ++i) {
