@@ -200,21 +200,18 @@ void gestorbiblioteca_1(char *host) {
     clnt_destroy(clnt);
 #endif /* DEBUG */
 }
-/*
-Muy Importante **
-*****************
-Para la entrada de un carácter por teclado utilizar la función __fpurge(stdin)
-antes de la función scanf. La función __fpurge da un warning en el proceso de
-compilación pero se puede ignorar sin problemas.
-*/
 
-void cargarFichero(Cadena nomFichero, int idAdmin, CLIENT *clnt) {
+void cargarFichero(int idAdmin, CLIENT *clnt) {
     int cargado = -1;
     TConsulta tmp;
+    // Cadena nomFichero = "Biblioteca.cdat";
+    Cadena nomFichero = "";
     printf("\nIntroduce el nombre del fichero de datos: ");
-    printf("\nMetemos de forma automatica %s", nomFichero);
-    tmp.Ida = idAdmin;
+    scanf("%s", nomFichero);
+    // printf("\nMetemos de forma automatica %s", nomFichero);
     strcpy(tmp.Datos, nomFichero);
+
+    tmp.Ida = idAdmin;
     cargado = *cargardatos_1(&tmp, clnt);
     if (cargado == 1) {
         printf("\nSe ha cargado correctamente el fichero\n");
@@ -247,15 +244,19 @@ void añadirNuevoLibro(int idAdmin, CLIENT *clnt) {
     scanf("%s", nuevoLibro.Libro.Idioma);
     printf("\nIntroduce el Numero de libros inicial: ");
     scanf("%d", &nuevoLibro.Libro.NoLibros);
-    nuevoLibro.Libro.NoListaEspera = 0;
-    nuevoLibro.Libro.NoPrestados = 0;
-    nuevoLibro.Ida = idAdmin;
-    resultadoNuevoLibro = *nuevolibro_1(&nuevoLibro, clnt);
-    if (resultadoNuevoLibro == 1) {
-        MostrarAviso("\n*** El libro ha sido añadido "
-                     "correctamente.**\n");
+    if (nuevoLibro.Libro.NoLibros >= 0) {
+        nuevoLibro.Libro.NoListaEspera = 0;
+        nuevoLibro.Libro.NoPrestados = 0;
+        nuevoLibro.Ida = idAdmin;
+        resultadoNuevoLibro = *nuevolibro_1(&nuevoLibro, clnt);
+        if (resultadoNuevoLibro == 1) {
+            MostrarAviso("\n*** El libro ha sido añadido "
+                         "correctamente.**\n");
+        } else {
+            MostrarAviso("\nError con el libro a introducir\n");
+        }
     } else {
-        MostrarAviso("\nError con el libro a introducir\n");
+        MostrarAviso("\nNo pude haber un numero incial de libros negativo\n");
     }
 }
 
@@ -294,17 +295,21 @@ void comprarNuevosLibros(int idAdmin, CLIENT *clnt) {
     printf("\nIntroduce el numero de libros que quieres "
            "añadir: ");
     scanf("%d", &compLibros.NoLibros);
-    resultadoComprarLibros = *comprar_1(&compLibros, clnt);
-    if (resultadoComprarLibros == 1) {
-        MostrarAviso("\nTodo correcto\n");
-    } else if (resultadoComprarLibros == 0) {
-        MostrarAviso("\nNo hay ningun libro con dicho ISBN\n");
-    } else if (resultadoComprarLibros == -1) {
-        MostrarAviso("\nIdAdmin administrado erroneo o ya "
-                     "hay otro admin\n");
+    if (compLibros.NoLibros >= 0) {
+        resultadoComprarLibros = *comprar_1(&compLibros, clnt);
+        if (resultadoComprarLibros == 1) {
+            MostrarAviso("\nTodo correcto\n");
+        } else if (resultadoComprarLibros == 0) {
+            MostrarAviso("\nNo hay ningun libro con dicho ISBN\n");
+        } else if (resultadoComprarLibros == -1) {
+            MostrarAviso("\nIdAdmin administrado erroneo o ya "
+                         "hay otro admin\n");
+        } else {
+            MostrarAviso("\nTodo correcto, se han añadido "
+                         "los libros\n");
+        }
     } else {
-        MostrarAviso("\nTodo correcto, se han añadido "
-                     "los libros\n");
+        MostrarAviso("\nNo puedes añadir un numero negativo de libros\n");
     }
 }
 void retirarLibros(int idAdmin, CLIENT *clnt) {
@@ -343,17 +348,20 @@ void retirarLibros(int idAdmin, CLIENT *clnt) {
     printf("\nIntroduce el numero de libros que quieres "
            "retirar: ");
     scanf("%d", &retLibros.NoLibros);
-    resultadoRetirarLibros = *retirar_1(&retLibros, clnt);
-    if (resultadoRetirarLibros == 1) {
-        MostrarAviso("\nTodo correcto\n");
-    } else if (resultadoRetirarLibros == 0) {
-        MostrarAviso("\nNo hay ningun libro con dicho ISBN\n");
-    } else if (resultadoRetirarLibros == -1) {
-        MostrarAviso("\nIdAdmin administrado erroneo o ya "
-                     "hay otro admin\n");
+    if (retLibros.NoLibros >= 0) {
+        resultadoRetirarLibros = *retirar_1(&retLibros, clnt);
+        if (resultadoRetirarLibros == 1) {
+            MostrarAviso("\nTodo correcto\n");
+        } else if (resultadoRetirarLibros == 0) {
+            MostrarAviso("\nNo hay ningun libro con dicho ISBN\n");
+        } else if (resultadoRetirarLibros == -1) {
+            MostrarAviso("\nIdAdmin administrado erroneo o ya "
+                         "hay otro admin\n");
+        } else {
+            MostrarAviso("\nError: no hay suficientes libros para retirar\n");
+        }
     } else {
-        MostrarAviso("\nTodo correcto, se han retirado "
-                     "los libros\n");
+        MostrarAviso("\nNo puedes retirar menos de 0 libros\n");
     }
 }
 
@@ -572,7 +580,6 @@ int main(int argc, char *argv[]) {
 
     int opcMenuPrincipal, opcMenuAdmin, idAdmin = -1;
     Cadena contraseña = "";
-    Cadena nomFichero = "Biblioteca.cdat";
     clnt = clnt_create(host, GESTORBIBLIOTECA, GESTORBIBLIOTECA_VER, "tcp");
     if (clnt == NULL) {
         clnt_pcreateerror(host);
@@ -604,7 +611,7 @@ int main(int argc, char *argv[]) {
                     switch (opcMenuAdmin) {
                     case 1:
 
-                        cargarFichero(nomFichero, idAdmin, clnt);
+                        cargarFichero(idAdmin, clnt);
 
                         break;
                     case 2:
@@ -662,7 +669,7 @@ int main(int argc, char *argv[]) {
             scanf("%c", &sino);
             __fpurge(stdin);
             if (sino == 's' || sino == 'S') {
-                printf("\nIndique la posicon del libro a sacar: ");
+                printf("\nIndique la posicion del libro a sacar: ");
                 scanf("%d", &posSacar.Pos);
                 int resultado = *prestar_1(&posSacar, clnt);
                 if (resultado == 1) {

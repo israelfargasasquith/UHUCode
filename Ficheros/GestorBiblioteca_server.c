@@ -263,12 +263,15 @@ int *comprar_1_svc(TComRet *argp, struct svc_req *rqstp) {
         int pos = busquedaLineal(argp->Isbn);
         if (pos != -1) {
             if (Biblioteca[pos].NoListaEspera > 0) {
-                int diff = argp->NoLibros - Biblioteca[pos].NoListaEspera;
-                if (diff >= 0) {
-                    Biblioteca[pos].NoListaEspera = 0;
-                    Biblioteca[pos].NoLibros += diff;
+                if (Biblioteca[pos].NoListaEspera > argp->NoLibros) {
+                    Biblioteca[pos].NoListaEspera -= argp->NoLibros;
+                    Biblioteca[pos].NoPrestados += argp->NoLibros;
                 } else {
-                    Biblioteca[pos].NoListaEspera = -diff;
+                    Biblioteca[pos].NoLibros +=
+                        argp->NoLibros - Biblioteca[pos].NoListaEspera;
+                    Biblioteca[pos].NoPrestados +=
+                        Biblioteca[pos].NoListaEspera;
+                    Biblioteca[pos].NoListaEspera = 0;
                 }
             } else {
                 Biblioteca[pos].NoLibros += argp->NoLibros;
@@ -303,8 +306,6 @@ int *retirar_1_svc(TComRet *argp, struct svc_req *rqstp) {
 
     if (argp->Ida == idAdmin) {
         int pos = busquedaLineal(argp->Isbn);
-        // printf("\nLa posicion devuelta es %d", pos);
-        // getchar();
         if (pos != -1) {
             if (Biblioteca[pos].NoLibros >= argp->NoLibros) {
                 Biblioteca[pos].NoLibros -= argp->NoLibros;
@@ -418,7 +419,7 @@ int *prestar_1_svc(TPosicion *argp, struct svc_req *rqstp) {
             Biblioteca[posicion].NoLibros--;
             result = 1;
         } else {
-            Biblioteca[argp->Pos].NoListaEspera++;
+            Biblioteca[posicion].NoListaEspera++;
             printf("\nNo hay libros disponibles, se pone en lista de espera\n");
             result = 0;
         }
@@ -443,18 +444,20 @@ disponibles. 2: El libro no se puede devolver, porque no hay ni usuarios en
 lista de espera ni libros prestados. */
 int *devolver_1_svc(TPosicion *argp, struct svc_req *rqstp) {
     static int result;
-    if (argp->Pos <= numLibros && numLibros > 0) {
-        printf("\nVamos a devolver el libro %s de la posicion %d",
-               Biblioteca[argp->Pos].Titulo, argp->Pos);
-        if (Biblioteca[argp->Pos].NoListaEspera == 0 &&
-            Biblioteca[argp->Pos].NoPrestados == 0) {
-            printf("\nEl numero de prestados y de en espera es 0");
+    int posicion = argp->Pos - 1;
+    if (posicion <= numLibros && numLibros > 0) {
+        printf("\nVamos a devolver el libro %s de la posicion %d\n",
+               Biblioteca[posicion].Titulo, posicion);
+        if (Biblioteca[posicion].NoListaEspera == 0 &&
+            Biblioteca[posicion].NoPrestados == 0) {
+            printf("\nEl numero de prestados y de en espera es 0\n");
             result = 2;
-        } else if (Biblioteca[argp->Pos].NoListaEspera == 0) {
-            Biblioteca[argp->Pos].NoLibros++;
+        } else if (Biblioteca[posicion].NoListaEspera == 0) {
+            Biblioteca[posicion].NoLibros++;
+            Biblioteca[posicion].NoPrestados--;
             result = 1;
         } else {
-            Biblioteca[argp->Pos].NoListaEspera--;
+            Biblioteca[posicion].NoListaEspera--;
             printf("\nSe reduce el numero de gente en espera\n");
             result = 0;
         }
